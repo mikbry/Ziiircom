@@ -1,0 +1,7 @@
+{
+  "name": "@ziichat/bot",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": "Mik BRY",
+  "license": "MIT"
+}
