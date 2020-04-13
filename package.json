@@ -1,7 +1,7 @@
 {
-  "name": "ZiiChat",
-  "version": "0.1.0",
-  "description": "Zii webchat platform",
+  "name": "ziichat",
+  "version": "0.0.0",
+  "description": "Zii webchat opensource platform",
   "main": "index.js",
   "repository": "https://github.com/mikbry/ZiiChat.git",
   "author": "mik@mikbry.com",
@@ -11,21 +11,20 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "compile": "yarn workspaces run compile",
-    "lint": "yarn workspaces run lint",
-    "test": "yarn workspaces run test",
-    "coverage": "yarn workspaces run coverage",
-    "report-coverage": "yarn workspaces run report-coverage",
-    "prepublishOnly": "yarn workspaces run compile",
-    "release": "cross-env HUSKY_BYPASS=true lerna publish --contents dist"
+    "start": "yarn workspace @ziichat/webchat start",
+    "build": "yarn workspaces build",
+    "test": "yarn workspaces test",
+    "lint": "yarn workspace @ziichat/components lint",
+    "storybook": "yarn workspace @ziichat/components storybook",
+    "bootstrap": "lerna bootstrap --use-workspaces"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.4",
+    "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "cross-env": "^6.0.3",
-    "husky": "^4.0.6",
-    "lerna": "^3.20.2"
+    "cross-env": "^7.0.2",
+    "husky": "^4.2.5",
+    "lerna": "^3.20.2",
+    "rimraf": "^3.0.2"
   },
   "husky": {
     "hooks": {
