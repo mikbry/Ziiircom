@@ -8,7 +8,7 @@
 import Interface from '../../interface';
 import Theme from '../../Theme';
 
-const List = Interface.styled.div`
+const List = Interface.styled('div')`
   padding: 0px;
   background: ${props => props.theme.palette.background};
   display: flex;

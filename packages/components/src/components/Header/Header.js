@@ -8,7 +8,7 @@
 import Interface from '../../interface';
 import Theme from '../../Theme';
 
-const Header = Interface.styled.header`
+const Header = Interface.styled('header')`
   color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
   line-height: 64px;

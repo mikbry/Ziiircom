@@ -8,7 +8,7 @@
 import Interface from '../../interface';
 import Theme from '../../Theme';
 
-const Styled = Interface.styled.div`
+const Styled = Interface.styled('div')`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -79,7 +79,7 @@ Styled.defaultProps = {
   theme: Theme,
 };
 
-const Avatar = Interface.styled.img`
+const Avatar = Interface.styled('img')`
   z-index: 3;
   flex-shrink: 0;
   width: 40px;
