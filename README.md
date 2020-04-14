@@ -3,7 +3,7 @@
 ## RoadMap
 # v0.1
 - [x] code base
-- [ ] components: minimal
+- [x] components: minimal
 - [ ] webchat : minimal
 - [ ] webchat-react : minimal
 - [ ] bot : parse conversation.json
