@@ -6,33 +6,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 import Interface from '../../interface';
+import Theme from '../../Theme';
 
 const Header = Interface.styled.header`
-  color: white;
+  color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
   line-height: 64px;
-  background: ${props => props.theme.main};
+  background: ${props => props.theme.palette.primary};
   min-height: 64px;
   padding-left: 1.2em;
   padding-right: 0.3em;
   display: flex;
-  & > button {
-    align-self: flex-end;
-    line-height: 24px;
-  }
-  & > h6 {
-    color: white;
-    flex-grow: 1;
-    margin: 0;
-    padding: 0;
-    text-align: left;
-  }
 `;
 
 Header.defaultProps = {
-  theme: {
-    main: 'palevioletred',
-  },
+  theme: Theme,
 };
 
 export default Header;
