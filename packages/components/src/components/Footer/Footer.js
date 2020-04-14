@@ -6,12 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import Interface from '../../interface';
+import Theme from '../../Theme';
 
 const Footer = Interface.styled.div`
-  font-size: 1.25em;
-  line-height: 64px;
-  border: 1px solid ${props => props.theme.main};
-  min-height: 64px;
+  color: ${props => props.theme.palette.disabledText};
+  font-size: 1em;
+  line-height: 36px;
+  min-height: 36px;
   padding-left: 1.2em;
   padding-right: 0.3em;
   display: flex;
@@ -23,9 +24,7 @@ const Footer = Interface.styled.div`
 `;
 
 Footer.defaultProps = {
-  theme: {
-    main: 'palevioletred',
-  },
+  theme: Theme,
 };
 
 export default Footer;

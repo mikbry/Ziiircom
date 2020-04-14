@@ -6,26 +6,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 import Interface from '../../interface';
+import Theme from '../../Theme';
 
 const List = Interface.styled.div`
   padding: 0px;
-  background: ${props => props.theme.mainBackground};
+  background: ${props => props.theme.palette.background};
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   overflow-y: auto;
   & > div {
-    line-height: 64px;
-    min-height: 64px;
-    padding: 1.2em;
-    border: 1px solid ${props => props.theme.main};
   }
 `;
 
 List.defaultProps = {
-  theme: {
-    mainBackground: 'papayawhip',
-    main: 'palevioletred',
-  },
+  theme: Theme,
 };
 
 export default List;
