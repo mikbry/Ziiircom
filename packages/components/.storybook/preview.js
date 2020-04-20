@@ -5,9 +5,9 @@ import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 import { addDecorator } from '@storybook/react';
 import { withKnobs } from "@storybook/addon-knobs";
 
-import { initInterface } from '../src/interface';
+import { setup } from '../src/interface';
 
-initInterface({ styled, createElement });
+setup({ styled, createElement });
 
 addDecorator(withKnobs);
 addDecorator(storyFn => <div style={{ padding: '48px' }}>{storyFn()}</div>);

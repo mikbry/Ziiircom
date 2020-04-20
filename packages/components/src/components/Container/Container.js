@@ -7,7 +7,7 @@
  */
 import Interface from '../../interface';
 
-const Container = Interface.styled.div`
+const Container = Interface.styled('div')`
   position: absolute;
   top: 50%;
   left: 50%;

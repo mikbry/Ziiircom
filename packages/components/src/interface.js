@@ -8,7 +8,7 @@
 
 const Interface = {};
 
-export const initInterface = ({ html, styled, createElement }) => {
+export const setup = ({ html, styled, createElement }) => {
   Interface.html = html;
   Interface.styled = styled;
   Interface.createElement = createElement;
