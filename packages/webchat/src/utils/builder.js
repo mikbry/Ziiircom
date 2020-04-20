@@ -7,10 +7,15 @@
  */
 
 export const createElement = (element, props, children) => {
-  console.log('createElement', element, props, children);
-  return {};
+  console.log('TODO createElement', element, props, children);
+  const definition = { element, props };
+  if (children) {
+    // TODO createChildren
+    definition.children = children;
+  }
+  return definition;
 };
 
 export const render = element => {
-  console.log('render', element);
+  console.log('TODO render', element);
 };

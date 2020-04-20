@@ -10,10 +10,11 @@ import { createElement } from './builder';
 const styled = (element, props) => {
   console.log('TODO styled', element, props);
   // eslint-disable-next-line no-unused-vars
-  return (strings, ...parameters) => {
+  return (styles, ...parameters) => {
     const v = element;
     const el = createElement(v, props);
     // TODO parse strings and parameters
+    el.styled = { styles, parameters };
     return el;
   };
 };
