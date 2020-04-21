@@ -10,10 +10,7 @@ import { createElement } from './utils/builder';
 
 const e = createElement;
 const App = async () => {
-  // TODO
-  console.log('app', UI);
-  const Messenger = await UI();
-  console.log('app', Messenger);
+  const Messenger = (await UI()).default;
   return e('div', null, Messenger);
 };
 

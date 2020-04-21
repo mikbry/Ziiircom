@@ -35,7 +35,6 @@ const Styled = Interface.styled('div')`
     margin-bottom: 4px;
     padding: 16px;
     border-radius: ${props => (props.fromUser ? '12px 12px 4px 12px' : '12px 12px 12px 4px')};
-  }
     overflow-wrap: break-word;
     line-height: 1.44;
   }
