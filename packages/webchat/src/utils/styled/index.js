@@ -8,11 +8,11 @@
 import { createElement } from '../builder';
 import { genStyle } from './genStyle';
 
-const styled = (element, props) => (styles, ...parameters) => {
+const styled = (element, props, ...children) => (styles, ...parameters) => {
   const v = element;
-  const el = createElement(v, props);
+  const el = createElement(v, props, ...children);
   if (el.styled) {
-    el.styled.push({ styles, parameters });
+    el.styled.unshift({ styles, parameters });
   } else {
     el.styled = [{ styles, parameters }];
   }

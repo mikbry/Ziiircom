@@ -13,5 +13,5 @@ import App from './app';
 (async () => {
   setup({ createElement, styled });
   const el = await App();
-  render(el, document.getElementById('root'));
+  render(el, document.body);
 })();
