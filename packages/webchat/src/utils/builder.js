@@ -68,9 +68,25 @@ export const render = (element, container) => {
         render(child, el);
       });
     }
-    if (element.props && element.props.onClick) {
-      el.onclick = element.props.onClick;
+    if (element.props) {
+      const { props } = element;
+      if (props.onClick) {
+        el.onclick = props.onClick;
+      }
+      if (props.ref) {
+        props.ref.setCurrent(el);
+      }
     }
     container.appendChild(el);
   }
+};
+
+export const useRef = current => {
+  const ref = {
+    current,
+    setCurrent: el => {
+      ref.current = el;
+    },
+  };
+  return ref;
 };
