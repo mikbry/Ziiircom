@@ -11,5 +11,6 @@ export { setup, Interface };
 
 export default async function() {
   const Messenger = await import('./Messenger/index.js');
-  return Messenger;
+  const FAButton = await import('./components/FAButton/index.js');
+  return { Messenger, FAButton };
 }
