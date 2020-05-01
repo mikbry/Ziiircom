@@ -9,6 +9,14 @@ import UI from '@ziichat/components';
 import { styled } from './utils/styled';
 
 const App = async () => {
+  let isOpen = true;
+  const handleFabClick = () => {
+    isOpen = !isOpen;
+    const messenger = document.getElementsByClassName('messengerbox')[0];
+    messenger.classList.toggle('isclosed');
+    messenger.classList.toggle('isopen');
+  };
+
   const ui = await UI();
 
   const Messenger = styled(ui.Messenger.default)`
@@ -17,7 +25,7 @@ const App = async () => {
     height: 80%;
   `;
 
-  const MessengerContainer = styled('div', null, Messenger)`
+  const MessengerContainer = styled('div', { className: `messengerbox is${isOpen ? 'open' : 'closed'}` }, Messenger)`
     display: flex;
     position: fixed;
     top: 0;
@@ -29,9 +37,17 @@ const App = async () => {
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
+
+    &.isopen {
+      display: flex;
+    }
+
+    &.isclosed {
+      display: none;
+    }
   `;
 
-  const Fab = styled(ui.FAButton.default)`
+  const Fab = styled(ui.FAButton.default, { className: 'messengerfab', onClick: handleFabClick })`
     position: absolute;
     right: 32px;
     bottom: 32px;

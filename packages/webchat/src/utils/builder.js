@@ -68,6 +68,9 @@ export const render = (element, container) => {
         render(child, el);
       });
     }
+    if (element.props && element.props.onClick) {
+      el.onclick = element.props.onClick;
+    }
     container.appendChild(el);
   }
 };
