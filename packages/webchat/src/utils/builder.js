@@ -40,26 +40,25 @@ export const render = (element, container) => {
   let { children } = element;
   if (typeof element.element === 'string') {
     el = document.createElement(element.element);
-    // let style;
     if (element.styled) {
       let className = genClassRules(element.styled, { ...element.props }, { ...element.defaultProps });
       if (element.props.className) {
         className += ` ${element.props.className}`;
       }
       el.className = className;
-      // el.classList.add(className);
-    } /* else {
-      style = 'border: 1px solid black; margin: 4px; max-width: 512px';
-    } */
-    // el.setAttribute('style', style);
-    // el.innerText = element.element;
+    }
   } else if (typeof element === 'function') {
     const e = element({ ...element.props, children });
+    if (element.styled) {
+      e.styled = [...element.styled, ...e.styled];
+    }
     render(e, container);
     children = null;
   } else if (element.element && typeof element.element === 'function') {
     const e = element.element({ ...element.props, children });
-
+    if (element.styled) {
+      e.styled = [...element.styled, ...e.styled];
+    }
     render(e, container);
     children = null;
   }

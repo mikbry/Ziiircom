@@ -20,24 +20,30 @@ const App = async () => {
   const MessengerContainer = styled('div', null, Messenger)`
     display: flex;
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
     flex-direction: column;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
   `;
 
   const Fab = styled(ui.FAButton.default)`
     position: absolute;
-    z-index: 9;
     right: 32px;
     bottom: 32px;
+    z-index: 9;
   `;
 
   return styled('div', null, MessengerContainer, Fab)`
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     margin: 0;
     padding: 0;
   `;
