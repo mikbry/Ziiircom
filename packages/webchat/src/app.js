@@ -8,9 +8,10 @@
 import UI from '@ziichat/components';
 import { styled } from './utils/styled';
 import { useRef } from './utils/builder';
+import { useSelector } from './utils/store';
 
 const App = async () => {
-  let isOpen = true;
+  let [isOpen] = useSelector(state => [state.isOpen]);
   const messengerRef = useRef(null);
   const handleFabClick = () => {
     isOpen = !isOpen;

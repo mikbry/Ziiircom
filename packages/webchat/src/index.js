@@ -8,10 +8,12 @@
 import { setup } from '@ziichat/components';
 import { createElement, render } from './utils/builder';
 import { styled } from './utils/styled';
+import createStore from './utils/store';
 import App from './app';
 
 (async () => {
   setup({ createElement, styled });
+  createStore({ isOpen: true });
   const el = await App();
   render(el, document.body);
 })();
