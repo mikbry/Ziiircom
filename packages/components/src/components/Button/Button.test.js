@@ -8,9 +8,9 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import FAButton from './FAButton';
+import Button from './Button';
 
-test('FAButton should render correctly', () => {
-  const { asFragment } = render(<FAButton />);
+test('Button should render correctly', () => {
+  const { asFragment } = render(<Button>button</Button>);
   expect(asFragment()).toMatchSnapshot();
 });
