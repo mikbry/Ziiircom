@@ -71,7 +71,7 @@ module.exports = env => {
       new HtmlReplaceWebpackPlugin([
         {
           pattern: '%PUBLIC_URL%',
-          replacement: isDevelopment ? config.public_url.dev + config.port.dev : config.public_url.prod,
+          replacement: isDevelopment ? `${config.public_url.dev}:${config.port.dev}` : config.public_url.prod,
         },
         {
           pattern: '%TITLE%',
