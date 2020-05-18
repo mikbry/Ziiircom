@@ -1,4 +1,4 @@
-# ZiiChat open-source Webchat platform
+# ziiir.com open-source Webchat platform
 
 ## RoadMap
 # v0.1

@@ -1,5 +1,5 @@
 {
-  "name": "@ziichat/webchat",
+  "name": "@ziiircom/webchat",
   "version": "0.0.0",
   "main": "index.js",
   "author": "Mik BRY",
@@ -13,7 +13,7 @@
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors"
   },
   "dependencies": {
-    "@ziichat/components": "0.0.0"
+    "@ziiircom/components": "0.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
