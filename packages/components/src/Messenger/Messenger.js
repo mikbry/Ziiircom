@@ -87,7 +87,7 @@ const Messenger = ({ isExpanded = true }) => {
     { className: isExpanded ? 'isExpanded' : undefined },
     e(MessengerHeader, null, 'Hello !'),
     Messages,
-    e(MessengerFooter, null, 'ZiiChat'),
+    e(MessengerFooter, null, 'ziiir.com'),
   );
 };
 

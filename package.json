@@ -1,9 +1,9 @@
 {
-  "name": "ziichat",
+  "name": "ziiircom",
   "version": "0.0.0",
-  "description": "Zii webchat opensource platform",
+  "description": "Ziiir webchat opensource platform",
   "main": "index.js",
-  "repository": "https://github.com/mikbry/ZiiChat.git",
+  "repository": "https://github.com/mikbry/ziiircom.git",
   "author": "mik@mikbry.com",
   "license": "MIT",
   "private": true,
@@ -11,11 +11,11 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "yarn workspace @ziichat/webchat start",
+    "start": "yarn workspace @ziiircom/webchat start",
     "build": "yarn workspaces build",
     "test": "yarn workspaces test",
-    "lint": "yarn workspace @ziichat/components lint",
-    "storybook": "yarn workspace @ziichat/components storybook",
+    "lint": "yarn workspace @ziiircom/components lint",
+    "storybook": "yarn workspace @ziiircom/components storybook",
     "bootstrap": "lerna bootstrap --use-workspaces"
   },
   "devDependencies": {

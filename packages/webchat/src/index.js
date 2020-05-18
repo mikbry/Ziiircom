@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { setup } from '@ziichat/components';
+import { setup } from '@ziiircom/components';
 import { createElement, render } from './utils/builder';
 import { styled } from './utils/styled';
 import createStore from './utils/store';
