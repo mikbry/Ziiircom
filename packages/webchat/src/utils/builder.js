@@ -6,12 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { genClassRules } from './styled/genStyle';
+import deepCopy from './deepCopy';
 
 export const createElement = (element, props, ...children) => {
   let definition;
   if (element.element) {
-    definition = { ...element };
-    definition.props = { ...definition.props, ...props };
+    definition = deepCopy({}, element);
+    definition.props = deepCopy({}, definition.props, props);
   } else {
     definition = { props: {} };
     definition.element = element;
@@ -27,7 +28,7 @@ export const createElement = (element, props, ...children) => {
   return definition;
 };
 
-export const render = (element, container) => {
+export const render = (element, container, state = {}) => {
   if (!element) {
     return;
   }
@@ -41,7 +42,10 @@ export const render = (element, container) => {
   if (typeof element.element === 'string') {
     el = document.createElement(element.element);
     if (element.styled) {
-      let className = genClassRules(element.styled, { ...element.props }, { ...element.defaultProps });
+      const defaultProps = { ...element.defaultProps };
+      const theme = state.theme || {};
+      const props = deepCopy(defaultProps, element.props, { theme });
+      let className = genClassRules(element.styled, props, defaultProps);
       if (element.props.className) {
         className += ` ${element.props.className}`;
       }
@@ -52,20 +56,20 @@ export const render = (element, container) => {
     if (element.styled) {
       e.styled = [...element.styled, ...e.styled];
     }
-    render(e, container);
+    render(e, container, state);
     children = null;
   } else if (element.element && typeof element.element === 'function') {
     const e = element.element({ ...element.props, children });
     if (element.styled) {
       e.styled = [...element.styled, ...e.styled];
     }
-    render(e, container);
+    render(e, container, state);
     children = null;
   }
   if (el) {
     if (children) {
       children.forEach(child => {
-        render(child, el);
+        render(child, el, state);
       });
     }
     if (element.props) {

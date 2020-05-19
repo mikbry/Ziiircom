@@ -23,10 +23,9 @@ const c = 'abcdefghijklmnopqrstuvwxyz';
 // eslint-disable-next-line no-bitwise
 const genSelector = () => [...Array(5)].map(() => c[~~(Math.random() * c.length)]).join('');
 
-const genStyle = (styledObj, _props, defaultProps) => {
+const genStyle = (styledObj, props) => {
   let style = '';
   if (styledObj && Array.isArray(styledObj.styles)) {
-    const props = { ...defaultProps, ..._props };
     styledObj.styles.forEach((s, i) => {
       style += s;
       if (styledObj.parameters[i]) {
@@ -60,8 +59,8 @@ const findMedias = (_obj, rules) => {
   obj.main += rules.substring(index).trim();
 };
 
-const genClassRule = (obj, styledObj, props, defaultProps) => {
-  const rules = genStyle(styledObj, props, defaultProps);
+const genClassRule = (obj, styledObj, props) => {
+  const rules = genStyle(styledObj, props);
 
   let index = 0;
   let subIndex = rules.indexOf('&', index);
@@ -86,7 +85,7 @@ const genClassRules = (styled, props, defaultProps) => {
   styled.forEach(styledObj => {
     const selector = defaultProps.selector || genSelector();
     const obj = { main: '', sub: [], medias: [] };
-    genClassRule(obj, styledObj, props, defaultProps);
+    genClassRule(obj, styledObj, props);
     if (obj.main && obj.main.length > 0) {
       let css = `.${selector} { ${obj.main} }`;
       sheet.insertRule(css);

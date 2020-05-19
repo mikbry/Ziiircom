@@ -10,6 +10,7 @@ let store;
 
 export default initialState => {
   store = { ...initialState };
+  return store;
 };
 
 export const useSelector = selector => selector({ ...store });

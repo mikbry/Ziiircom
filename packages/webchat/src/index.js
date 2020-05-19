@@ -12,8 +12,17 @@ import createStore from './utils/store';
 import App from './app';
 
 (async () => {
+  let config;
+  try {
+    config = await import('./config.json');
+  } catch (err) {
+    // console.log('no config found');
+  }
+  if (!config) {
+    config = { isOpen: true };
+  }
   setup({ createElement, styled });
-  createStore({ isOpen: true });
+  const store = createStore(config);
   const el = await App();
-  render(el, document.body);
+  render(el, document.body, { ...store });
 })();
