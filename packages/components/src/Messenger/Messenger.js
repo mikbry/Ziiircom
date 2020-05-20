@@ -82,7 +82,7 @@ const FooterInput = Interface.styled(Input)`
 
 const e = Interface.createElement;
 const m = (msg, meta, fromUser, avatar) => e(Message, { key: msg, meta, avatar, fromUser }, msg);
-const Messenger = ({ isExpanded = true, input = { display: true } }) => {
+const Messenger = ({ isExpanded = true, input = { display: true }, onMessage }) => {
   const Messages = e(Conversation, { isExpanded, className: 'ziiir-conversation' }, [
     m('msg1', '1min ago'),
     m('msg2', '1min ago', false),
@@ -91,8 +91,22 @@ const Messenger = ({ isExpanded = true, input = { display: true } }) => {
     m('msg5', '1min ago', false),
   ]);
   let inputComponent = 'ziiir.com';
+  const handleKey = event => {
+    const value = event.target.value || '';
+    if (event.key === 'Enter' && value.length > 0) {
+      if (onMessage) {
+        onMessage(value);
+      }
+      // eslint-disable-next-line no-param-reassign
+      event.target.value = '';
+    }
+  };
   if (input.display) {
-    inputComponent = e(FooterInput, { className: 'ziir-input', placeholder: input.placeholder || 'Your message' });
+    inputComponent = e(FooterInput, {
+      className: 'ziir-input',
+      onKeyup: handleKey,
+      placeholder: input.placeholder || 'Your message',
+    });
   }
   return e(
     StyledMessenger,
