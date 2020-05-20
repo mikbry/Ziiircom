@@ -11,6 +11,7 @@ import Header from '../components/Header';
 import List from '../components/List';
 import Footer from '../components/Footer';
 import Message from '../components/Message';
+import Input from '../components/Input';
 import Theme from '../Theme';
 
 const StyledMessenger = Interface.styled(Box)`
@@ -30,7 +31,7 @@ const StyledMessenger = Interface.styled(Box)`
   flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
 
-  &.isExpanded .zii-conversation {
+  &.isExpanded .ziiir-conversation {
     animation: 0.675s cubic-bezier(0.4, 0, 0.2, 1) 0.45s 1 normal both running enterConversation;
     animation-delay: 0.45s;
     animation-fill-mode: both;
@@ -72,22 +73,33 @@ const Conversation = Interface.styled(List)`
   scroll-behavior: smooth;
 `;
 
+const FooterInput = Interface.styled(Input)`
+  width: 100%;
+  padding: 4px;
+  margin: 0;
+  border: none;
+`;
+
 const e = Interface.createElement;
 const m = (msg, meta, fromUser, avatar) => e(Message, { key: msg, meta, avatar, fromUser }, msg);
-const Messenger = ({ isExpanded = true }) => {
-  const Messages = e(Conversation, { isExpanded, className: 'zii-conversation' }, [
+const Messenger = ({ isExpanded = true, input = { display: true } }) => {
+  const Messages = e(Conversation, { isExpanded, className: 'ziiir-conversation' }, [
     m('msg1', '1min ago'),
     m('msg2', '1min ago', false),
     m('msg3', '1min ago'),
     m('msg4', '1min ago'),
     m('msg5', '1min ago', false),
   ]);
+  let inputComponent = 'ziiir.com';
+  if (input.display) {
+    inputComponent = e(FooterInput, { className: 'ziir-input', placeholder: input.placeholder || 'Your message' });
+  }
   return e(
     StyledMessenger,
     { className: isExpanded ? 'isExpanded' : undefined },
     e(MessengerHeader, null, 'Hello !'),
     Messages,
-    e(MessengerFooter, null, 'ziiir.com'),
+    e(MessengerFooter, null, inputComponent),
   );
 };
 
