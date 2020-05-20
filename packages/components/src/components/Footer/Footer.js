@@ -13,8 +13,8 @@ const Footer = Interface.styled('div')`
   font-size: 1em;
   line-height: 36px;
   min-height: 36px;
-  padding-left: 1.2em;
-  padding-right: 0.3em;
+  padding-left: 16px;
+  padding-right: 16px;
   display: flex;
   margin-top: auto;
   & > button {

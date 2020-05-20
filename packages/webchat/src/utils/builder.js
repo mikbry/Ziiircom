@@ -37,10 +37,28 @@ export const render = (element, container, state = {}) => {
     c.innerText = element;
     return;
   }
-  let el;
+  // let el;
   let { children } = element;
   if (typeof element.element === 'string') {
-    el = document.createElement(element.element);
+    const el = document.createElement(element.element);
+    if (element.props) {
+      Object.keys(element.props).forEach(n => {
+        const v = element.props[n];
+        const type = typeof v;
+        const isAttribute = type === 'string' || type === 'number' || type === 'boolean';
+        if (n === 'ref') {
+          v.setCurrent(el);
+        } else if (n === 'className') {
+          el.className = v;
+        } else if (type === 'function') {
+          if (n.substring(0, 2) === 'on') {
+            el[n.toLowerCase()] = v;
+          }
+        } else if (isAttribute) {
+          el.setAttribute(n, v);
+        }
+      });
+    }
     if (element.styled) {
       const defaultProps = { ...element.defaultProps };
       const theme = state.theme || {};
@@ -51,6 +69,12 @@ export const render = (element, container, state = {}) => {
       }
       el.className = className;
     }
+    if (children) {
+      children.forEach(child => {
+        render(child, el, state);
+      });
+    }
+    container.appendChild(el);
   } else if (typeof element === 'function') {
     const e = element({ ...element.props, children });
     if (element.styled) {
@@ -65,23 +89,6 @@ export const render = (element, container, state = {}) => {
     }
     render(e, container, state);
     children = null;
-  }
-  if (el) {
-    if (children) {
-      children.forEach(child => {
-        render(child, el, state);
-      });
-    }
-    if (element.props) {
-      const { props } = element;
-      if (props.onClick) {
-        el.onclick = props.onClick;
-      }
-      if (props.ref) {
-        props.ref.setCurrent(el);
-      }
-    }
-    container.appendChild(el);
   }
 };
 
