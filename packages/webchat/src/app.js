@@ -20,9 +20,13 @@ const App = async () => {
     messenger.classList.toggle('isopen');
   };
 
+  const handleMessage = message => {
+    console.log('message=', message);
+  };
+
   const ui = await UI();
 
-  const Messenger = styled(ui.Messenger.default)`
+  const Messenger = styled(ui.Messenger.default, { onMessage: handleMessage })`
     width: 100%;
     max-width: 600px;
     height: 80%;

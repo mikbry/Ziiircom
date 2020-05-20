@@ -37,7 +37,7 @@ export const render = (element, container, state = {}) => {
     c.innerText = element;
     return;
   }
-  // let el;
+
   let { children } = element;
   if (typeof element.element === 'string') {
     const el = document.createElement(element.element);
@@ -52,7 +52,7 @@ export const render = (element, container, state = {}) => {
           el.className = v;
         } else if (type === 'function') {
           if (n.substring(0, 2) === 'on') {
-            el[n.toLowerCase()] = v;
+            el.addEventListener(n.substring(2).toLowerCase(), v);
           }
         } else if (isAttribute) {
           el.setAttribute(n, v);
