@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist && mkdir dist",
-    "start": "cross-env PACKAGE_DIR=webchat webpack-dev-server --progress --colors --config ../../scripts/webpack.dev.js",
+    "start": "cross-env NODE_ENV=development PACKAGE_DIR=webchat webpack-dev-server --progress --colors --config ../../scripts/webpack.dev.js",
     "build": "yarn clean && cross-env PACKAGE_DIR=webchat BABEL_ENV=production webpack --progress --colors --config .../../scripts/webpack.prod.js",
     "test": "cross-env NODE_ENV=test jest",
     "lint": "$(yarn bin)/eslint src --ext=js",

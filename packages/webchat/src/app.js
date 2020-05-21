@@ -5,12 +5,12 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import UI from '@ziiircom/components';
+import useUI from './hooks/ui';
 import { styled } from './utils/styled';
 import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
-const App = async () => {
+const App = async (messages, onMessage) => {
   let [isOpen] = useSelector(state => [state.isOpen]);
   const messengerRef = useRef(null);
   const handleFabClick = () => {
@@ -21,12 +21,12 @@ const App = async () => {
   };
 
   const handleMessage = message => {
-    console.log('message=', message);
+    onMessage(message);
   };
 
-  const ui = await UI();
+  const ui = await useUI();
 
-  const Messenger = styled(ui.Messenger.default, { onMessage: handleMessage })`
+  const Messenger = styled(ui.Messenger, { onMessage: handleMessage })`
     width: 100%;
     max-width: 600px;
     height: 80%;
@@ -58,7 +58,7 @@ const App = async () => {
     }
   `;
 
-  const Fab = styled(ui.FAButton.default, { className: 'messengerfab', onClick: handleFabClick })`
+  const Fab = styled(ui.FAButton, { className: 'messengerfab', onClick: handleFabClick })`
     position: absolute;
     right: 32px;
     bottom: 32px;
