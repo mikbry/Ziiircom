@@ -8,7 +8,7 @@
 import deepCopy from '../utils/deepCopy';
 
 // simple Echo Messaging service
-const useEcho = (handleReceived = () => {}) => {
+const useEcho = (listener = () => {}) => {
   const messages = [];
 
   const createMessage = (from, text) =>
@@ -16,15 +16,20 @@ const useEcho = (handleReceived = () => {}) => {
     ({ from, text });
   const sendMessage = async message => {
     messages.push(deepCopy(message));
-    handleReceived(deepCopy(message));
+    listener({ type: 'newMessage', message: deepCopy(message) });
     const echo = createMessage('bot', `You say : ${message.text}`);
     messages.push(echo);
-    handleReceived(deepCopy(echo));
+    listener({ type: 'newMessage', message: deepCopy(echo) });
   };
 
+  const action = async type => {
+    if (type === '#reset') {
+      listener({ type: 'resetMessages' });
+    }
+  };
   const getMessages = async () => deepCopy(messages);
 
-  return [getMessages, createMessage, sendMessage];
+  return [getMessages, createMessage, sendMessage, action];
 };
 
 export default useEcho;
