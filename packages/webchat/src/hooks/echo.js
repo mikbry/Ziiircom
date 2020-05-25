@@ -13,7 +13,7 @@ const useEcho = (listener = () => {}) => {
 
   const createMessage = (from, text) =>
     // TODO id, date
-    ({ from, text });
+    ({ from, text, created_time: Date.now() });
   const sendMessage = async message => {
     messages.push(deepCopy(message));
     listener({ type: 'newMessage', message: deepCopy(message) });

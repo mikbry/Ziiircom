@@ -18,9 +18,10 @@ const ZiiirClient = async (config, messageHook) => {
   const store = createStore(config);
   const handleEventMessage = ({ type, message }) => {
     if (type === 'newMessage') {
+      const meta = new Date(message.created_time).toLocaleString();
       const m = createElement(
         ui.Message,
-        { key: message.id, meta: message.date, avatar: message.avatar, fromUser: message.from === 'user' },
+        { key: message.id, meta, avatar: message.avatar, fromUser: message.from === 'user' },
         message.text,
       );
       render(m, document.getElementsByClassName('ziiir-conversation')[0]);
