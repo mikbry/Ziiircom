@@ -11,9 +11,8 @@ import deepCopy from '../utils/deepCopy';
 const useEcho = (listener = () => {}) => {
   const messages = [];
 
-  const createMessage = (from, text) =>
-    // TODO id, date
-    ({ from, text, created_time: Date.now() });
+  const createMessage = (from, text) => ({ from, text, created_time: Date.now() });
+
   const sendMessage = async message => {
     messages.push(deepCopy(message));
     listener({ type: 'newMessage', message: deepCopy(message) });
