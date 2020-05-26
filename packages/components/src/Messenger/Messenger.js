@@ -81,12 +81,14 @@ const FooterInput = Interface.styled(Input)`
 `;
 
 const e = Interface.createElement;
-const m = (id, msg, meta, fromUser, avatar) => e(Message, { key: id, meta, avatar, fromUser }, msg);
+const m = (createdtime, msg, fromUser, avatar) => e(Message, { key: createdtime, createdtime, avatar, fromUser }, msg);
 const Messenger = ({ isExpanded = true, input = { display: true }, messages = [], onMessage }) => {
   const Messages = e(
     Conversation,
     { isExpanded, className: 'ziiir-conversation' },
-    messages.map(msg => m(msg.id, msg.text, msg.date, msg.from === 'user')),
+    messages
+      .sort((m1, m2) => m1.createdtime > m2.createdtime)
+      .map(msg => m(msg.createdtime, msg.text, msg.from === 'user')),
   );
   let inputComponent = 'ziiir.com';
   const handleKey = event => {
