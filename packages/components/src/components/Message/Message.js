@@ -110,12 +110,14 @@ const Avatar = Interface.styled('img')`
 `;
 
 const e = Interface.createElement;
-const Message = ({ meta, avatar, fromUser = true, children }) =>
-  e(
+const Message = ({ createdtime, avatar, fromUser = true, children }) => {
+  const meta = new Date(createdtime).toLocaleString();
+  return e(
     Styled,
-    { fromUser },
+    { fromUser, 'created-time': createdtime },
     e('div', null, e('p', null, children), e('span', null, meta)),
     avatar && e(Avatar, { src: avatar.src, alt: avatar.name }),
   );
+};
 
 export default Message;

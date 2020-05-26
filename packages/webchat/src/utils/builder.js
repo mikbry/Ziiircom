@@ -28,7 +28,7 @@ export const createElement = (element, props, ...children) => {
   return definition;
 };
 
-export const render = (element, container, state = {}) => {
+export const render = (element, container, state = {}, insert) => {
   if (!element) {
     return;
   }
@@ -74,7 +74,11 @@ export const render = (element, container, state = {}) => {
         render(child, el, state);
       });
     }
-    container.appendChild(el);
+    if (insert && insert.before) {
+      container.insertBefore(insert.before, el);
+    } else {
+      container.appendChild(el);
+    }
   } else if (typeof element === 'function') {
     const e = element({ ...element.props, children });
     if (element.styled) {

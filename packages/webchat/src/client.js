@@ -16,23 +16,40 @@ const ZiiirClient = async (config, messageHook) => {
   setup({ createElement, styled });
   const ui = await useUI();
   const store = createStore(config);
+  let messages;
   const handleEventMessage = ({ type, message }) => {
+    const container = document.getElementsByClassName('ziiir-conversation')[0];
     if (type === 'newMessage') {
-      const meta = new Date(message.created_time).toLocaleString();
       const m = createElement(
         ui.Message,
-        { key: message.id, meta, avatar: message.avatar, fromUser: message.from === 'user' },
+        {
+          key: message.created_time,
+          createdtime: message.created_time,
+          avatar: message.avatar,
+          fromUser: message.from === 'user',
+        },
         message.text,
       );
-      render(m, document.getElementsByClassName('ziiir-conversation')[0]);
+      let insert;
+      if (messages && messages.length) {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const c of container.children) {
+          const createdtime = parseInt(c.getAttribute('created-time'), 10);
+          if (message.created_time < createdtime) {
+            insert = { before: c };
+            break;
+          }
+        }
+      }
+      render(m, container, {}, insert);
     } else if (type === 'resetMessages') {
-      const parent = document.getElementsByClassName('ziiir-conversation')[0];
-      while (parent.firstChild) {
-        parent.firstChild.remove();
+      while (container.firstChild) {
+        container.firstChild.remove();
       }
     }
   };
-  const [messages, createMessage, sendMessage, action] = messageHook(handleEventMessage);
+  const [_messages, createMessage, sendMessage, action] = messageHook(handleEventMessage);
+  messages = _messages;
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
       action(text);
