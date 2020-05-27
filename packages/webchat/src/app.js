@@ -20,13 +20,17 @@ const App = async (messages, onMessage) => {
     messenger.classList.toggle('isopen');
   };
 
+  const handlePrevClick = event => {
+    event.stopPropagation();
+  };
+
   const handleMessage = message => {
     onMessage(message);
   };
 
   const ui = await useUI();
 
-  const Messenger = styled(ui.Messenger, { onMessage: handleMessage })`
+  const Messenger = styled(ui.Messenger, { onMessage: handleMessage, onClick: handlePrevClick })`
     width: 100%;
     max-width: 600px;
     height: 80%;
@@ -34,7 +38,7 @@ const App = async (messages, onMessage) => {
 
   const MessengerContainer = styled(
     'div',
-    { ref: messengerRef, className: `messengerbox is${isOpen ? 'open' : 'closed'}` },
+    { ref: messengerRef, className: `messengerbox is${isOpen ? 'open' : 'closed'}`, onClick: handleFabClick },
     Messenger,
   )`
     display: flex;
