@@ -5,6 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { friendlyDate } from '@ziiircom/common';
 import Interface from '../../interface';
 import Theme from '../../Theme';
 
@@ -111,7 +112,7 @@ const Avatar = Interface.styled('img')`
 
 const e = Interface.createElement;
 const Message = ({ createdtime, avatar, fromUser = true, children }) => {
-  const meta = new Date(createdtime).toLocaleString();
+  const meta = friendlyDate(createdtime);
   return e(
     Styled,
     { fromUser, 'created-time': createdtime },
