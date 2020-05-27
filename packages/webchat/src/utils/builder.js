@@ -5,8 +5,8 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { deepCopy } from '@ziiircom/common';
 import { genClassRules } from './styled/genStyle';
-import deepCopy from './deepCopy';
 
 export const createElement = (element, props, ...children) => {
   let definition;
