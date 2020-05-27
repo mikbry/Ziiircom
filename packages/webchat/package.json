@@ -13,7 +13,8 @@
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors"
   },
   "dependencies": {
-    "@ziiircom/components": "0.0.0"
+    "@ziiircom/components": "0.0.0",
+    "@ziiircom/common": "0.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
