@@ -8,7 +8,7 @@
 import Interface from '../../interface';
 import Theme from '../../Theme';
 
-const Box = Interface.styled('section')`
+const Box = Interface.styled('div')`
   padding: 1.2em;
   background: ${props => props.theme.palette.background};
   color: #292c45;

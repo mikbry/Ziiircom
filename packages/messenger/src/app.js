@@ -36,9 +36,9 @@ const App = async (messages, onMessage) => {
     height: 80%;
   `;
 
-  const MessengerContainer = styled(
+  const MessengerFrame = styled(
     'div',
-    { ref: messengerRef, className: `messengerbox is${isOpen ? 'open' : 'closed'}`, onClick: handleFabClick },
+    { ref: messengerRef, className: `ziiircom-messenger is${isOpen ? 'open' : 'closed'}`, onClick: handleFabClick },
     Messenger,
   )`
     display: flex;
@@ -62,14 +62,14 @@ const App = async (messages, onMessage) => {
     }
   `;
 
-  const Fab = styled(ui.FAButton, { className: 'messengerfab', onClick: handleFabClick })`
+  const Fab = styled(ui.FAButton, { className: 'ziiircom-messenger-fab', onClick: handleFabClick })`
     position: absolute;
     right: 32px;
     bottom: 32px;
     z-index: 9;
   `;
 
-  return styled('div', null, MessengerContainer, Fab)`
+  return styled('div', { className: 'ziiircom-messenger-frame' }, MessengerFrame, Fab)`
     position: fixed;
     top: 0;
     left: 0;
