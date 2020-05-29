@@ -104,7 +104,7 @@ const Messenger = ({ isExpanded = true, input = { display: true }, messages = []
   if (input.display) {
     inputComponent = e(FooterInput, {
       className: 'ziir-input',
-      onKeyup: handleKey,
+      onKeyUp: handleKey,
       placeholder: input.placeholder || 'Your message',
     });
   }
