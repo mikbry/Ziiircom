@@ -12,7 +12,7 @@ import { styled } from './utils/styled';
 import createStore from './utils/store';
 import App from './app';
 
-const ZiiirClient = async (config, messageHook) => {
+const ZiiirClient = async (config, messageHook, root) => {
   setup({ createElement, styled });
   const ui = await useUI();
   const store = createStore(config);
@@ -60,7 +60,7 @@ const ZiiirClient = async (config, messageHook) => {
     }
   };
   const el = await App(messages, handleNewMessage);
-  render(el, document.body, { ...store });
+  render(el, root, { ...store });
 };
 
 export default ZiiirClient;

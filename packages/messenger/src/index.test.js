@@ -6,8 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import client from './index';
+import client, { defaultClient } from './index';
 
 test('client should be defined"', () => {
   expect(client).toBeDefined();
+});
+
+test('defaultClient should be started"', async () => {
+  const cl = await defaultClient(document.body);
+  expect(cl).toBeDefined();
 });
