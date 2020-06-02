@@ -25,7 +25,10 @@ color: ${props => props.theme.palette.onSecondary};
 font-size: 1.25em;
 line-height: 64px;
 background: ${props => props.theme.palette.secondary};
-background-image: ${props => (props.icon ? `url("${props.icon}")` : `url("${icon(props.theme.palette.secondary)}")`)};
+background-image: ${props =>
+  props.icon
+    ? `url("${props.icon}")`
+    : `url("${icon(props.theme.palette.secondary, props.theme.palette.bubbleColor)}")`};
 background-repeat:no-repeat;
 background-position:50%;
 background-size:cover;

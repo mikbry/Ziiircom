@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import Header from './Header';
+import Header from './index';
 
 test('Header should render correctly', () => {
   const { asFragment } = render(<Header>Title</Header>);

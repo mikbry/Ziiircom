@@ -1,0 +1,7 @@
+{
+  "name": "@ziiircom/test",
+  "version": "0.0.0",
+  "description": "Internal test utils",
+  "main": "src/index.js",
+  "license": "MIT"
+}

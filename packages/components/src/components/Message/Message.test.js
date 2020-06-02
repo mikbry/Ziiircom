@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import Message from './Message';
+import Message from './index';
 
 test('Message should render correctly', () => {
   const { asFragment } = render(<Message>message</Message>);
