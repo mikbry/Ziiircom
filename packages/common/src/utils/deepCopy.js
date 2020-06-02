@@ -20,6 +20,8 @@ const deepCopy = (..._elements) => {
         e.forEach(sub => {
           copy.push(assign(sub));
         });
+      } else if (e instanceof Date) {
+        copy = new Date(e.getTime());
       } else if (e && typeof e === 'object') {
         stack.push(e);
         if (!copy) {
@@ -36,8 +38,6 @@ const deepCopy = (..._elements) => {
           }
         });
         stack.pop();
-      } else if (e instanceof Date) {
-        copy = new Date(e.getTime());
       } else if (e !== null && e !== undefined) {
         copy = e;
       }

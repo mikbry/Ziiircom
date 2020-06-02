@@ -4,5 +4,42 @@
   "description": "Common utils for Ziiircom",
   "main": "src/index.js",
   "author": "Mik BRy",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf dist && mkdir dist",
+    "build": "yarn clean &  cross-env NODE_ENV=production rollup -c && packito",
+    "lint": "$(yarn bin)/eslint src",
+    "test": "cross-env NODE_ENV=test  jest",
+    "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
+    "prepublishOnly": "yarn build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "html"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/config/"
+    ]
+  }
 }

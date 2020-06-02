@@ -13,7 +13,7 @@ const SECONDS_IN_DAY = 86400;
 const SECONDS_IN_HOUR = 3600;
 const SECONDS_IN_MINUTE = 60;
 
-export const friendlyDate = (date, locale = 'en') => {
+export const friendlyDate = (date, locale) => {
   let remaining = (Date.now() - date) * MILLISECONDS_TO_SECONDS;
   const years = Math.floor(remaining / SECONDS_IN_YEAR);
   remaining -= years * SECONDS_IN_YEAR;
@@ -32,13 +32,19 @@ export const friendlyDate = (date, locale = 'en') => {
   }
   const hours = Math.floor(remaining / SECONDS_IN_HOUR);
   remaining -= hours * SECONDS_IN_HOUR;
-  if (hours > 0) {
+  if (hours > 1) {
     return `${hours} hours ago`;
+  }
+  if (hours === 1) {
+    return `${hours} hour ago`;
   }
   const mins = Math.floor(remaining / SECONDS_IN_MINUTE);
   remaining -= mins * SECONDS_IN_MINUTE;
-  if (mins > 0) {
+  if (mins > 1) {
     return `${mins} mins ago`;
+  }
+  if (mins === 1) {
+    return `${mins} min ago`;
   }
   if (remaining > 10) {
     return `${remaining} secs ago`;
