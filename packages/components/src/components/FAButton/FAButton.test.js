@@ -8,9 +8,16 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import FAButton from './FAButton';
+import FAButton from './index';
 
 test('FAButton should render correctly', () => {
-  const { asFragment } = render(<FAButton />);
+  const { asFragment } = render(
+    <>
+      <FAButton />
+      <FAButton icon='test' />
+      <FAButton theme={{ palette: { secondary: 'red' } }} />
+      <FAButton theme={{ palette: { secondary: '#eee', bubbleColor: '#000' } }} />
+    </>,
+  );
   expect(asFragment()).toMatchSnapshot();
 });

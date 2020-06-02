@@ -88,7 +88,7 @@ const Messenger = ({ isExpanded = true, input = { display: true }, messages = []
     { isExpanded, className: 'ziiir-conversation' },
     messages
       .sort((m1, m2) => m1.createdtime > m2.createdtime)
-      .map(msg => m(msg.createdtime, msg.text, msg.from === 'user')),
+      .map(msg => m(msg.createdtime, msg.text, msg.from === 'user', msg.avatar)),
   );
   let inputComponent = 'ziiir.com';
   const handleKey = event => {

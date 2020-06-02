@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import Box from './Box';
+import Box from './index';
 
 test('Box should render correctly', () => {
   const { asFragment } = render(<Box>Content</Box>);

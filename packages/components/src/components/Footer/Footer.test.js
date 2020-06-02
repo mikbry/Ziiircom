@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import Footer from './Footer';
+import Footer from './index';
 
 test('Footer should render correctly', () => {
   const { asFragment } = render(<Footer>Title</Footer>);
