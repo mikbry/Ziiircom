@@ -40,4 +40,4 @@ jobs:
           TARGET_FOLDER: /
 
       - name: Codecov
-        run: bash <(curl -s https://codecov.io/bash) -f './coverage/clover.xml' -t ${{ secrets.CODECOV_TOKEN }} || echo 'Codecov failed to upload'
+        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }} || echo 'Codecov failed to upload'
