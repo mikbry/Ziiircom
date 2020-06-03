@@ -12,8 +12,9 @@
   ],
   "scripts": {
     "start": "yarn workspace @ziiircom/messenger start",
-    "build": "yarn workspaces build",
-    "test": "yarn workspaces test",
+    "build": "yarn workspaces run build",
+    "test": "yarn workspaces run test",
+    "coverage": "yarn workspaces run coverage",
     "lint": "yarn workspace @ziiircom/components lint",
     "storybook": "yarn workspace @ziiircom/components storybook",
     "bootstrap": "lerna bootstrap --use-workspaces"
