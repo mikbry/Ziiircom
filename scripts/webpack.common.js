@@ -14,7 +14,12 @@ module.exports = env => {
   if (process.env.PACKAGE_DIR || env.PACKAGE_DIR) {
     packagePath = path.join(__dirname, packagesPath, process.env.PACKAGE_DIR || env.PACKAGE_DIR);
   }
-  const config = require(path.join(packagePath, '/config.json'));
+  let config = {};
+  try {
+    config = require(path.join(packagePath, '/config.json'));
+  } catch {
+    //
+  }
 
   const { version } = require(path.join(packagePath, '/package.json'));
 
