@@ -8,21 +8,21 @@
 
 import client from './client';
 
-export const defaultClient = async root => {
+export const defaultClient = async (root, messageListener, initialState) => {
   let config;
   let messageHook;
   try {
-    config = await import('./config.json');
+    config = (await import('./config.json')).default;
     // TODO load from config another messageHook
-    messageHook = await import('./hooks/echo');
+    messageHook = (await import('./hooks/echo')).default;
   } catch (err) {
     // console.log('no config found');
   }
   if (!config) {
     config = { isOpen: true };
   }
-  client(config, messageHook.default, root);
-  return client;
+  const state = { ...config, ...initialState };
+  return client({ state, messageHook, root, messageListener });
 };
 
 if (process.env.NODE_ENV === 'development') {

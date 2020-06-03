@@ -7,17 +7,21 @@
  */
 import { setup } from '@ziiircom/components';
 import useUI from './hooks/ui';
-import { createElement, render } from './utils/builder';
+import { html, createElement, render } from './utils/builder';
 import { styled } from './utils/styled';
 import createStore from './utils/store';
 import App from './app';
 
-const ZiiirClient = async (config, messageHook, root) => {
-  setup({ createElement, styled });
+const ZiiirClient = async ({
+  state,
+  messageHook,
+  root,
+  messageListener = ({ type, message }) => ({ type, message }),
+}) => {
+  setup({ html, createElement, styled });
   const ui = await useUI();
-  const store = createStore(config);
-  let messages;
-  const handleEventMessage = ({ type, message }) => {
+  const store = createStore(state);
+  const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
     if (type === 'newMessage') {
       const m = createElement(
@@ -31,36 +35,36 @@ const ZiiirClient = async (config, messageHook, root) => {
         message.text,
       );
       let insert;
-      if (messages && messages.length) {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const c of container.children) {
-          const createdtime = parseInt(c.getAttribute('created-time'), 10);
-          if (message.created_time < createdtime) {
-            insert = { before: c };
-            break;
-          }
+      // eslint-disable-next-line no-restricted-syntax
+      for (const c of container.children) {
+        const createdtime = parseInt(c.getAttribute('created-time'), 10);
+        if (message.created_time < createdtime) {
+          insert = { before: c };
+          break;
         }
       }
-      render(m, container, {}, insert);
+      render(m, container, undefined, insert);
       container.scrollTop = container.scrollHeight;
     } else if (type === 'resetMessages') {
       while (container.firstChild) {
         container.firstChild.remove();
       }
     }
+    messageListener({ type, message });
   };
-  const [_messages, createMessage, sendMessage, action] = messageHook(handleEventMessage);
-  messages = _messages;
+  const [getMessages, createMessage, sendMessage, command] = messageHook(handleEventMessage);
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
-      action(text);
+      command(text);
     } else {
       const message = createMessage('user', text);
       sendMessage(message);
     }
   };
+  const messages = await getMessages();
   const el = await App(messages, handleNewMessage);
   render(el, root, { ...store });
+  return [store, getMessages, createMessage, sendMessage, command, handleEventMessage];
 };
 
 export default ZiiirClient;
