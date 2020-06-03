@@ -13,14 +13,19 @@ export const defaultClient = async (root, messageListener, initialState) => {
   let messageHook;
   try {
     config = (await import('./config.json')).default;
-    // TODO load from config another messageHook
-    messageHook = (await import('./hooks/echo')).default;
   } catch (err) {
     // console.log('no config found');
   }
   if (!config) {
     config = { isOpen: true };
   }
+  try {
+    // TODO load from config another messageHook
+    messageHook = (await import('./hooks/echo')).default;
+  } catch (err) {
+    // console.log('no config found');
+  }
+
   const state = { ...config, ...initialState };
   return client({ state, messageHook, root, messageListener });
 };
