@@ -17,7 +17,7 @@ export const defaultClient = async (root, messageListener, initialState) => {
     // console.log('no config found');
   }
   if (!config) {
-    config = { isOpen: true };
+    config = {};
   }
   try {
     // TODO load from config another messageHook
