@@ -29,34 +29,79 @@ test('deepCopy with a date should return a copy of this date', () => {
   expect(copy).toEqual(date);
 });
 
-test('deepCopy with an array should return a copy of this array', () => {
-  const array = ['element1', 'element2'];
-  const copy = deepCopy(array);
-  expect(copy).toEqual(array);
+test('deepCopy with 2 string should return last one ', () => {
+  const copy = deepCopy('one', 'two');
+  expect(copy).toBe('two');
 });
 
-test('deepCopy with two arrays should return a concate of theses arrays', () => {
-  const array = ['element1', 'element2'];
-  const copy = deepCopy(array, []);
-  expect(copy).toEqual(array);
+test('deepCopy with 2 empty objects should return an empty object ', () => {
+  const copy = deepCopy({}, {});
+  expect(copy).toStrictEqual({});
 });
 
-test('deepCopy with an object should return a copy of this object', () => {
-  const obj = { name: 'element1', next: 'element2' };
-  const copy = deepCopy(obj);
-  expect(copy).toEqual(obj);
+test('deepCopy with 2 empty arrays should return an empty array ', () => {
+  const copy = deepCopy([], []);
+  expect(copy).toStrictEqual([]);
 });
 
-test('deepCopy with objects should return a concat of these objects', () => {
-  const obj = { name: 'element1' };
-  const obj2 = { next: 'element2' };
-  const copy = deepCopy(obj, obj2);
-  expect(copy).toEqual({ ...obj, ...obj2 });
+test('deepCopy with an obj and an array should return an empty obj ', () => {
+  const copy = deepCopy({}, []);
+  expect(copy).toStrictEqual({});
 });
 
-test('deepCopy with circual ref in objects should return a correct copy', () => {
-  const obj = { name: 'element1' };
-  const obj2 = { next: 'element2', circular: obj };
-  const copy = deepCopy(obj, obj2);
-  expect(copy).toEqual({ ...obj, ...obj2 });
+test('deepCopy with an array and a obj should return an empty array ', () => {
+  const copy = deepCopy([], {});
+  expect(copy).toStrictEqual([]);
+});
+
+test('deepCopy with 2 objects should return an object ', () => {
+  const copy = deepCopy({ a: 'v' }, { b: 'w' });
+  expect(copy).toStrictEqual({ a: 'v', b: 'w' });
+});
+
+test('deepCopy with 2 objects with same values should return a merged object ', () => {
+  const copy = deepCopy({ a: 'v', b: 'v' }, { b: 'w' });
+  expect(copy).toStrictEqual({ a: 'v', b: 'w' });
+});
+
+test('deepCopy with 1 objects and a null should return first object ', () => {
+  const copy = deepCopy({ a: 'v', b: 'v' }, null);
+  expect(copy).toStrictEqual({ a: 'v', b: 'v' });
+});
+
+test('deepCopy with 2 complexe objects should return a merged object ', () => {
+  const obj1 = {
+    a: 1,
+    b: 1,
+    c: { x: 1, y: 1 },
+    d: [1, 1],
+  };
+  const obj2 = {
+    b: 2,
+    c: { y: 2, z: 2 },
+    d: [2, 2],
+    e: 2,
+  };
+  const copy = deepCopy(obj1, obj2);
+  expect(copy).toStrictEqual({ a: 1, b: 2, c: { x: 1, y: 2, z: 2 }, d: [1, 1, 2, 2], e: 2 });
+});
+
+test('deepCopy with 2 objects and a circular ref should return a merged object ', () => {
+  const obj = { a: 1, b: 2 };
+  const obj1 = {
+    a: 1,
+    b: 1,
+    c: { x: 1, y: 1 },
+    d: [1, 1],
+    obj,
+  };
+  const obj2 = {
+    b: 2,
+    c: { y: 2, z: 2, obj1 },
+    d: [2, 2],
+    e: 2,
+  };
+  obj1.obj2 = obj2;
+  const copy = deepCopy(obj1, obj2);
+  expect(copy).toStrictEqual({ a: 1, b: 2, c: { x: 1, y: 2, z: 2, obj1 }, d: [1, 1, 2, 2], e: 2, obj, obj2 });
 });

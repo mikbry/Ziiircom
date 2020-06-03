@@ -9,10 +9,13 @@
 const Interface = {};
 
 export const setup = ({ html, styled, createElement }) => {
-  Interface.html = html;
-  Interface.styled = styled;
-  Interface.createElement = createElement;
-  Object.freeze(Interface);
+  if (!Interface.html) {
+    Interface.html = html;
+    Interface.styled = styled;
+    Interface.createElement = createElement;
+    Object.freeze(Interface);
+  }
+  return Interface;
 };
 
 export default Interface;

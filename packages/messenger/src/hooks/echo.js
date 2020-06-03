@@ -8,27 +8,29 @@
 import { deepCopy } from '@ziiircom/common';
 
 // simple Echo Messaging service
-const useEcho = (listener = () => {}) => {
+const useEcho = listener => {
   const messages = [];
 
   const createMessage = (from, text) => ({ from, text, created_time: Date.now() });
 
   const sendMessage = async message => {
     messages.push(deepCopy(message));
-    listener({ type: 'newMessage', message: deepCopy(message) });
+    await listener({ type: 'newMessage', message: deepCopy(message) });
     const echo = createMessage('bot', `You say : ${message.text}`);
     messages.push(echo);
-    listener({ type: 'newMessage', message: deepCopy(echo) });
+    await listener({ type: 'newMessage', message: deepCopy(echo) });
   };
 
-  const action = async type => {
+  const command = async type => {
     if (type === '#reset') {
       listener({ type: 'resetMessages' });
+    } else {
+      listener({ type: 'unknownCommand' });
     }
   };
   const getMessages = async () => deepCopy(messages);
 
-  return [getMessages, createMessage, sendMessage, action];
+  return [getMessages, createMessage, sendMessage, command];
 };
 
 export default useEcho;

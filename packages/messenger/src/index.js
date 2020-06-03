@@ -8,22 +8,25 @@
 
 import client from './client';
 
+export const defaultClient = async (root, messageListener, initialState) => {
+  let config;
+  let messageHook;
+  try {
+    config = (await import('./config.json')).default;
+    // TODO load from config another messageHook
+    messageHook = (await import('./hooks/echo')).default;
+  } catch (err) {
+    // console.log('no config found');
+  }
+  if (!config) {
+    config = { isOpen: true };
+  }
+  const state = { ...config, ...initialState };
+  return client({ state, messageHook, root, messageListener });
+};
+
 if (process.env.NODE_ENV === 'development') {
-  (async () => {
-    let config;
-    let messageHook;
-    try {
-      config = await import('./config.json');
-      // TODO load from config another messageHook
-      messageHook = await import('./hooks/echo');
-    } catch (err) {
-      // console.log('no config found');
-    }
-    if (!config) {
-      config = { isOpen: true };
-    }
-    client(config, messageHook.default);
-  })();
+  defaultClient(document.body);
 }
 
 export default client;

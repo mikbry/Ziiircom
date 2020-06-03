@@ -8,6 +8,10 @@
 import { deepCopy } from '@ziiircom/common';
 import { genClassRules } from './styled/genStyle';
 
+export const html = () => {
+  // TODO
+};
+
 export const createElement = (element, props, ...children) => {
   let definition;
   if (element.element) {
@@ -75,15 +79,12 @@ export const render = (element, container, state = {}, insert) => {
       });
     }
     if (insert && insert.before) {
-      container.insertBefore(insert.before, el);
+      container.insertBefore(el, insert.before);
     } else {
       container.appendChild(el);
     }
   } else if (typeof element === 'function') {
-    const e = element({ ...element.props, children });
-    if (element.styled) {
-      e.styled = [...element.styled, ...e.styled];
-    }
+    const e = element({ ...element.props, children, styled: element.styled });
     render(e, container, state);
     children = null;
   } else if (element.element && typeof element.element === 'function') {

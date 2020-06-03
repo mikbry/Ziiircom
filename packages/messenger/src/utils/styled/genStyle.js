@@ -48,9 +48,9 @@ const findMedias = (_obj, rules) => {
       index = s;
     } else {
       index = rules.lastIndexOf('}') + 1;
-      if (index === -1) {
+      /* if (index === -1) {
         index = rules.length;
-      }
+      } */
     }
     // Insert media query
     obj.medias.push(rules.substring(subIndex, index));
@@ -79,7 +79,7 @@ const genClassRule = (obj, styledObj, props) => {
   }
 };
 
-const genClassRules = (styled, props, defaultProps) => {
+const genClassRules = (styled, props, defaultProps = {}) => {
   const sheet = getStylesheet();
   let selectors = '';
   styled.forEach(styledObj => {

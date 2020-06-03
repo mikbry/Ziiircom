@@ -31,7 +31,7 @@ const StyledMessenger = Interface.styled(Box)`
   flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
 
-  &.isExpanded .ziiir-conversation {
+  &.isexpanded .ziiir-conversation {
     animation: 0.675s cubic-bezier(0.4, 0, 0.2, 1) 0.45s 1 normal both running enterConversation;
     animation-delay: 0.45s;
     animation-fill-mode: both;
@@ -110,7 +110,7 @@ const Messenger = ({ isExpanded = true, input = { display: true }, messages = []
   }
   return e(
     StyledMessenger,
-    { className: isExpanded ? 'isExpanded' : undefined, onClick },
+    { className: isExpanded ? 'isexpanded' : undefined, onClick },
     e(MessengerHeader, null, 'Hello !'),
     Messages,
     e(MessengerFooter, null, inputComponent),
