@@ -1,0 +1,22 @@
+coverage:
+  status:
+    project:
+      common:
+        flags:
+          - common
+      components:
+        flags:
+          - components
+      messenger:
+        flags:
+          - messenger
+flags:
+  common:
+    paths:
+      - packages/common/coverage/clover.xml
+  components:
+    paths:
+      - packages/components/coverage/clover.xml
+  messenger:
+    paths:
+      - packages/messenger/coverage/clover.xml  
