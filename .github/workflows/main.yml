@@ -27,6 +27,8 @@ jobs:
         env:
           PUBLIC_URL: https://mikbry.github.io
           CONTENT_BASE: /ziiircom
+          TITLE: ziiircom.com
+          CONTENT: "ultimate messenger toolkit"
           NODE_ENV: production
 
       - name: Deploy app
