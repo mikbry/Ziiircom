@@ -3,5 +3,10 @@
   "version": "0.0.0",
   "description": "Internal test utils",
   "main": "src/index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "echo ''",
+    "test": "echo ''",
+    "coverage": "echo ''"
+  }
 }
