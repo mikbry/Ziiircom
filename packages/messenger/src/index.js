@@ -12,7 +12,8 @@ export const defaultClient = async (root, messageListener, initialState) => {
   let config;
   let messageHook;
   try {
-    config = (await import('./config.json')).default;
+    config = await import('./config.json');
+    config = config.default;
   } catch (err) {
     // console.log('no config found');
   }
