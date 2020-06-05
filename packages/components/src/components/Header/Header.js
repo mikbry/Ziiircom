@@ -11,9 +11,9 @@ import Theme from '../../Theme';
 const Header = Interface.styled('header')`
   color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
-  line-height: 64px;
   background: ${props => props.theme.palette.primary};
   min-height: 64px;
+  padding-top: 1.2em;
   padding-left: 1.2em;
   padding-right: 0.3em;
   display: flex;
