@@ -84,19 +84,19 @@ test('message #dummy should do nothing"', async () => {
 });
 
 test('Messenger by default should be closed"', async () => {
-  await defaultClient(document.body);
+  await defaultClient(document.body, null, { messenger: {} });
   const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
   expect(messenger).toHaveClass('isclosed');
 });
 
 test('Messenger with state.isOpen=true should be opened"', async () => {
-  await defaultClient(document.body, null, { isOpen: true });
+  await defaultClient(document.body, null, { messenger: { isOpen: true } });
   const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
   expect(messenger).toHaveClass('isopen');
 });
 
 test('Messenger click on fab should open messenger"', async () => {
-  await defaultClient(document.body);
+  await defaultClient(document.body, null, { messenger: {} });
   const fab = document.body.getElementsByClassName('ziiircom-messenger-fab')[0];
   fireEvent.click(fab);
   const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
@@ -104,7 +104,7 @@ test('Messenger click on fab should open messenger"', async () => {
 });
 
 test('Messenger opened click outside should close it"', async () => {
-  await defaultClient(document.body, null, { isOpen: true });
+  await defaultClient(document.body, null, { mesenger: { isOpen: true } });
   const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
   expect(messenger).toHaveClass('isopen');
   fireEvent.click(messenger.firstChild);

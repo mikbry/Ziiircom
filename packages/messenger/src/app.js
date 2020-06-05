@@ -11,7 +11,8 @@ import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
 const App = async (messages, onMessage) => {
-  let [isOpen] = useSelector(state => [state.isOpen]);
+  const [_isOpen, header] = useSelector(state => [state.messenger.isOpen, state.messenger.header]);
+  let isOpen = _isOpen;
   const messengerRef = useRef(null);
   const handleFabClick = () => {
     isOpen = !isOpen;
@@ -30,7 +31,7 @@ const App = async (messages, onMessage) => {
 
   const ui = await useUI();
 
-  const Messenger = styled(ui.Messenger, { onMessage: handleMessage, onClick: handlePrevClick })`
+  const Messenger = styled(ui.Messenger, { onMessage: handleMessage, onClick: handlePrevClick, header })`
     width: 100%;
     max-width: 600px;
     height: 80%;

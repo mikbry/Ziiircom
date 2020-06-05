@@ -82,7 +82,14 @@ const FooterInput = Interface.styled(Input)`
 
 const e = Interface.createElement;
 const m = (createdtime, msg, fromUser, avatar) => e(Message, { key: createdtime, createdtime, avatar, fromUser }, msg);
-const Messenger = ({ isExpanded = true, input = { display: true }, messages = [], onMessage, onClick }) => {
+const Messenger = ({
+  isExpanded = true,
+  input = { display: true },
+  header = {},
+  messages = [],
+  onMessage,
+  onClick,
+}) => {
   const Messages = e(
     Conversation,
     { isExpanded, className: 'ziiir-conversation' },
@@ -111,7 +118,7 @@ const Messenger = ({ isExpanded = true, input = { display: true }, messages = []
   return e(
     StyledMessenger,
     { className: isExpanded ? 'isexpanded' : undefined, onClick },
-    e(MessengerHeader, null, 'Hello !'),
+    e(MessengerHeader, null, header.text || ''),
     Messages,
     e(MessengerFooter, null, inputComponent),
   );
