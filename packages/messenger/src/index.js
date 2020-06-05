@@ -8,7 +8,7 @@
 
 import client from './client';
 
-export const defaultClient = async (root, messageListener, initialState) => {
+export const defaultClient = async (root, messageListener, initialState = { messenger: {} }) => {
   let config;
   let messageHook;
   try {
