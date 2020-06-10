@@ -1,7 +1,7 @@
 {
-  "name": "@ziiircom/common",
+  "name": "@ziiircom/dialog",
   "version": "0.0.0",
-  "description": "Common utils for Ziiircom",
+  "description": "Ziiircom Dialog engine",
   "main": "src/index.js",
   "author": "Mik BRY",
   "license": "MIT",
