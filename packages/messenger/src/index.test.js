@@ -33,7 +33,7 @@ test('defaultClient should be started and respond to input"', async (done) => {
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener, { intents: undefined });
+  await defaultClient(document.body, messageListener, { intents: undefined, messenger: {} });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -59,7 +59,10 @@ test("defaultClient withut matching should return I don't understand", async don
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener, { intents: [{ input: 'hello', output: 'hello' }] });
+  await defaultClient(document.body, messageListener, {
+    intents: [{ input: 'hello', output: 'hello' }],
+    messenger: {},
+  });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'Yup';
   fireEvent(
