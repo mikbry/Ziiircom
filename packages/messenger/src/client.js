@@ -17,6 +17,7 @@ const ZiiirClient = async ({
   messageHook,
   root,
   messageListener = ({ type, message }) => ({ type, message }),
+  dataset,
 }) => {
   setup({ html, createElement, styled });
   const ui = await useUI();
@@ -52,7 +53,7 @@ const ZiiirClient = async ({
     }
     messageListener({ type, message });
   };
-  const [getMessages, createMessage, sendMessage, command] = messageHook(handleEventMessage);
+  const [getMessages, createMessage, sendMessage, command] = messageHook(handleEventMessage, dataset);
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
       command(text);

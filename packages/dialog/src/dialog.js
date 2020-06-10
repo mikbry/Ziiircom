@@ -18,8 +18,8 @@ const Dialog = intents => {
         if ((typeof intent.input === 'string' && simpleMatch(intent.input, message.text)) || i >= 0) {
           matchs.push({ intent });
         }
-        return matchs;
       });
+      return matchs;
     };
     resp = [matchIntent];
   }

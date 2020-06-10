@@ -33,7 +33,7 @@ test('defaultClient should be started and respond to input"', async (done) => {
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener);
+  await defaultClient(document.body, messageListener, { intents: undefined });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
