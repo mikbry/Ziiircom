@@ -53,10 +53,10 @@ const ZiiirClient = async ({
     }
     messageListener({ type, message });
   };
-  const [getMessages, createMessage, sendMessage, command] = messageHook(handleEventMessage, dataset);
+  const [getMessages, createMessage, sendMessage, commands] = messageHook(handleEventMessage, dataset);
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
-      command(text);
+      commands(text);
     } else {
       const message = createMessage('user', text);
       sendMessage(message);
@@ -65,7 +65,7 @@ const ZiiirClient = async ({
   const messages = await getMessages();
   const el = await App(messages, handleNewMessage);
   render(el, root, { ...store });
-  return [store, getMessages, createMessage, sendMessage, command, handleEventMessage];
+  return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
 };
 
 export default ZiiirClient;

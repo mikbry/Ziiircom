@@ -6,31 +6,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { deepCopy } from '@ziiircom/common';
+import useMessaging from './messaging';
 
 // simple Echo Messaging service
 const useEcho = listener => {
-  const messages = [];
-
-  const createMessage = (from, text) => ({ from, text, created_time: Date.now() });
+  const [addMessage, getMessages, createMessage, , commands] = useMessaging(listener);
 
   const sendMessage = async message => {
-    messages.push(deepCopy(message));
+    addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const echo = createMessage('bot', `You say : ${message.text}`);
-    messages.push(echo);
-    await listener({ type: 'newMessage', message: deepCopy(echo) });
+    addMessage(echo);
+    await listener({ type: 'newMessage', message: echo });
   };
-
-  const command = async type => {
-    if (type === '#reset') {
-      listener({ type: 'resetMessages' });
-    } else {
-      listener({ type: 'unknownCommand' });
-    }
-  };
-  const getMessages = async () => deepCopy(messages);
-
-  return [getMessages, createMessage, sendMessage, command];
+  return [getMessages, createMessage, sendMessage, commands];
 };
 
 export default useEcho;

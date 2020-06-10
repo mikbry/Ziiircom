@@ -14,7 +14,7 @@ const Dialog = intents => {
     const matchIntent = message => {
       const matchs = [];
       intents.forEach(intent => {
-        const i = Array.isArray(intent.input) ? intent.input.find(input => simpleMatch(input, message.text)) : 0;
+        const i = Array.isArray(intent.input) ? intent.input.findIndex(input => simpleMatch(input, message.text)) : -1;
         if ((typeof intent.input === 'string' && simpleMatch(intent.input, message.text)) || i >= 0) {
           matchs.push({ intent });
         }
