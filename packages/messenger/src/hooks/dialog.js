@@ -5,21 +5,29 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import Dialog from '@ziiircom/dialog';
 import { deepCopy } from '@ziiircom/common';
 import useMessaging from './messaging';
 
-// simple Echo Messaging service
-const useEcho = listener => {
+// simple Dialog Messaging service
+const useDialog = (listener, intents) => {
   const [addMessage, getMessages, createMessage, , commands] = useMessaging(listener);
+  const [matchIntents] = Dialog(intents);
 
   const sendMessage = async message => {
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
-    const echo = createMessage('bot', `You say : ${message.text}`);
-    addMessage(echo);
-    await listener({ type: 'newMessage', message: echo });
+    const matchs = matchIntents(message);
+    let response = "I don't understand";
+    if (matchs[0]) {
+      response = matchs[0].intent.output;
+    }
+    const msg = createMessage('bot', response);
+    addMessage(msg);
+    await listener({ type: 'newMessage', message: msg });
   };
+
   return [getMessages, createMessage, sendMessage, commands];
 };
 
-export default useEcho;
+export default useDialog;

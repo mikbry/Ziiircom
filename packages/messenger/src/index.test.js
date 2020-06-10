@@ -33,9 +33,35 @@ test('defaultClient should be started and respond to input"', async (done) => {
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener);
+  await defaultClient(document.body, messageListener, { intents: undefined });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
+  fireEvent(
+    input,
+    new MockupEvent('keyup', {
+      bubbles: true,
+      key: 'Enter',
+    }),
+  );
+  expect(input.value).toBe('');
+});
+
+test("defaultClient withut matching should return I don't understand", async done => {
+  let count = 0;
+  const messageListener = ({ type, message }) => {
+    count += 1;
+    if (count === 2) {
+      const conversation = document.getElementsByClassName('ziiir-conversation')[0];
+      expect(conversation.children.length).toBe(2);
+      expect(conversation.children[0].firstChild.firstChild.innerText).toBe('Yup');
+      expect(conversation.children[1].firstChild.firstChild.innerText).toBe("I don't understand");
+      done();
+    }
+    return { type, message };
+  };
+  await defaultClient(document.body, messageListener, { intents: [{ input: 'hello', output: 'hello' }] });
+  const input = await screen.findByPlaceholderText('Your message');
+  input.value = 'Yup';
   fireEvent(
     input,
     new MockupEvent('keyup', {
