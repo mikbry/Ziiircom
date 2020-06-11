@@ -10,6 +10,13 @@ const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === senten
 
 const Dialog = intents => {
   let resp;
+  const buildOutput = matchs => {
+    let response = "I don't understand";
+    if (matchs[0]) {
+      response = matchs[0].intent.output;
+    }
+    return response;
+  };
   if (intents && Array.isArray(intents) && intents.length) {
     const matchIntent = message => {
       const matchs = [];
@@ -21,8 +28,9 @@ const Dialog = intents => {
       });
       return matchs;
     };
-    resp = [matchIntent];
+    resp = [matchIntent, buildOutput];
   }
+
   return resp;
 };
 

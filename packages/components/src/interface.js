@@ -13,7 +13,7 @@ export const setup = ({ html, styled, createElement }) => {
     Interface.html = html;
     Interface.styled = styled;
     Interface.createElement = createElement;
-    Object.freeze(Interface);
+    // Object.freeze(Interface);
   }
   return Interface;
 };

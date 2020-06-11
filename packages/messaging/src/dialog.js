@@ -12,16 +12,13 @@ import useMessaging from './messaging';
 // simple Dialog Messaging service
 const useDialog = async (listener, intents) => {
   const [addMessage, getMessages, createMessage, , commands] = await useMessaging(listener);
-  const [matchIntents] = Dialog(intents);
+  const [matchIntents, buildResponse] = Dialog(intents);
 
   const sendMessage = async message => {
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const matchs = matchIntents(message);
-    let response = "I don't understand";
-    if (matchs[0]) {
-      response = matchs[0].intent.output;
-    }
+    const response = buildResponse(matchs);
     const msg = createMessage('bot', response);
     addMessage(msg);
     await listener({ type: 'newMessage', message: msg });
