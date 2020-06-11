@@ -19,9 +19,18 @@ test('Dialog without empty intents array should return undefined', () => {
 });
 
 test('Dialog with one intent should return matchIntent', () => {
-  const [matchIntent] = Dialog([{ input: 'hello', output: 'hello' }]);
+  const [matchIntent, buildOutput] = Dialog([{ input: 'hello', output: 'hello' }]);
   const matchs = matchIntent({ text: 'hello' });
   expect(matchs[0].intent.output).toBe('hello');
+  const response = buildOutput(matchs);
+  expect(response).toBe('hello');
+});
+
+test("Dialog not understand should return I don't understand", () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: 'hello', output: 'hello' }]);
+  const matchs = matchIntent({ text: 'Yup' });
+  const response = buildOutput(matchs);
+  expect(response).toBe("I don't understand");
 });
 
 test("Dialog matchIntent don't match should return empty matchs", () => {
