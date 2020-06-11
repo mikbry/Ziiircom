@@ -23,18 +23,28 @@ export const defaultClient = async (root, messageListener, initialState = { mess
   }
   const state = { ...config, ...initialState };
   if (state.intents) {
+    if (state.intents.src) {
+      try {
+        const response = await fetch(state.intents.src);
+        dataset = await response.json();
+      } catch (err) {
+        // console.log('no intents found', err);
+      }
+    } else {
+      dataset = state.intents;
+    }
     try {
       messageHook = (await import('./hooks/dialog')).default;
-      dataset = state.intents;
     } catch (err) {
-      // console.log('no config found');
+      // console.log('no dialog found');
     }
   }
   if (!messageHook) {
     try {
       messageHook = (await import('./hooks/echo')).default;
+      dataset = undefined;
     } catch (err) {
-      // console.log('no config found');
+      // console.log('no echo found');
     }
   }
 
