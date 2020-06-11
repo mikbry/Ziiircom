@@ -6,5 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 import MockupEvent from './MockupEvent';
+import mockFetch from './mockFetch';
 
-export { MockupEvent };
+export { MockupEvent, mockFetch };

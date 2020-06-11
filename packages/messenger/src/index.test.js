@@ -8,7 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { screen, fireEvent } from '@testing-library/dom';
-import { MockupEvent } from '@ziiircom/test';
+import { MockupEvent, mockFetch } from '@ziiircom/test';
 import client, { defaultClient } from './index';
 
 beforeEach(() => {
@@ -34,6 +34,35 @@ test('defaultClient should be started and respond to input"', async (done) => {
     return { type, message };
   };
   await defaultClient(document.body, messageListener, { intents: undefined, messenger: {} });
+  const input = await screen.findByPlaceholderText('Your message');
+  input.value = 'hello';
+  fireEvent(
+    input,
+    new MockupEvent('keyup', {
+      bubbles: true,
+      key: 'Enter',
+    }),
+  );
+  expect(input.value).toBe('');
+});
+
+test('defaultClient should load intents if state.intents.src', async done => {
+  let count = 0;
+  const closeMockFetch = mockFetch([{ input: 'hello', output: 'hello' }]);
+  const messageListener = ({ type, message }) => {
+    count += 1;
+    if (count === 2) {
+      const conversation = document.getElementsByClassName('ziiir-conversation')[0];
+      expect(conversation.children.length).toBe(2);
+      expect(conversation.children[0].firstChild.firstChild.innerText).toBe('hello');
+      expect(conversation.children[1].firstChild.firstChild.innerText).toBe('hello');
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      closeMockFetch();
+      done();
+    }
+    return { type, message };
+  };
+  await defaultClient(document.body, messageListener, { intents: { src: 'url' }, messenger: {} });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
