@@ -5,6 +5,9 @@ module.exports = {
       {
         modules: 'commonjs',
         debug: false,
+        targets: {
+          node: 'current',
+        },
       },
     ],
   ],
