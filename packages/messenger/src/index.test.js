@@ -75,7 +75,7 @@ test('defaultClient should load intents if state.intents.src', async done => {
   expect(input.value).toBe('');
 });
 
-test("defaultClient withut matching should return I don't understand", async done => {
+test("defaultClient without matching should return I don't understand", async done => {
   let count = 0;
   const messageListener = ({ type, message }) => {
     count += 1;

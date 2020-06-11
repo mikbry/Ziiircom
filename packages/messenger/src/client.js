@@ -14,7 +14,7 @@ import App from './app';
 
 const ZiiirClient = async ({
   state,
-  messageHook,
+  messaging,
   root,
   messageListener = ({ type, message }) => ({ type, message }),
   dataset,
@@ -53,7 +53,7 @@ const ZiiirClient = async ({
     }
     messageListener({ type, message });
   };
-  const [getMessages, createMessage, sendMessage, commands] = messageHook(handleEventMessage, dataset);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage, dataset);
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
       commands(text);

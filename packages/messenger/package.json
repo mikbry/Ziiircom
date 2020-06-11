@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@ziiircom/common": "0.0.0",
-    "@ziiircom/components": "0.0.0"
+    "@ziiircom/components": "0.0.0",
+    "@ziiircom/messaging": "0.0.0"
   },
   "peerDependencies": {
     "@ziiircom/dialog": "0.0.0"

@@ -5,12 +5,12 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import useMessaging from '@ziiircom/messaging';
 
 import client from './client';
 
 export const defaultClient = async (root, messageListener, initialState = { messenger: {} }) => {
   let config;
-  let messageHook;
   let dataset;
   try {
     config = await import('./config.json');
@@ -33,22 +33,10 @@ export const defaultClient = async (root, messageListener, initialState = { mess
     } else {
       dataset = state.intents;
     }
-    try {
-      messageHook = (await import('./hooks/dialog')).default;
-    } catch (err) {
-      // console.log('no dialog found');
-    }
   }
-  if (!messageHook) {
-    try {
-      messageHook = (await import('./hooks/echo')).default;
-      dataset = undefined;
-    } catch (err) {
-      // console.log('no echo found');
-    }
-  }
-
-  return client({ state, messageHook, root, messageListener, dataset });
+  const messagingType = dataset ? 'dialog' : undefined;
+  const messaging = await useMessaging(messagingType);
+  return client({ state, messaging, root, messageListener, dataset });
 };
 
 if (process.env.NODE_ENV === 'development') {
