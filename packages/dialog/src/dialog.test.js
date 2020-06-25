@@ -76,3 +76,10 @@ test('Dialog intents with set should update context', () => {
   const response = buildOutput({ matchs });
   expect(response).toBe('ok');
 });
+
+test('Dialog intents variables should udisplay correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok {{var}}{{dummy}}', set: { var: 'value' } }]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const response = buildOutput({ matchs, context });
+  expect(response).toBe('ok value');
+});

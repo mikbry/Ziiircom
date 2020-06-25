@@ -6,6 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+const renderTemplate = (template, context) =>
+  template.replace(/{{\s*([\w.]+)\s*}}/g, (match, name) => {
+    const value = context[name] || '';
+    return value;
+  });
+
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
 const Dialog = (intents, initialContexts) => {
@@ -34,7 +40,8 @@ const Dialog = (intents, initialContexts) => {
       }
       // TODO handle mustache templating / variables #128
       // TODO handle condtion #129
-      response = intent.output;
+      const { output } = intent;
+      response = renderTemplate(output, context);
     } else {
       response = "I don't understand";
     }
