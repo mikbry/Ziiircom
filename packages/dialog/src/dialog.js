@@ -38,9 +38,24 @@ const Dialog = (intents, initialContexts) => {
       if (intent.set) {
         context = { ...context, ...intent.set };
       }
-      // TODO handle mustache templating / variables #128
-      // TODO handle condtion #129
-      const { output } = intent;
+      // handle condition #129
+      let { output } = intent;
+      if (Array.isArray(output)) {
+        output.forEach(o => {
+          if (o.type === 'condition') {
+            output = null;
+            let value;
+            o.children.forEach(child => {
+              if ((!output || !value) && (child.value === context[child.name] || !child.value)) {
+                ({ value } = child);
+                output = child.text;
+              }
+            });
+          } else {
+            output = o;
+          }
+        });
+      }
       response = renderTemplate(output, context);
     } else {
       response = "I don't understand";
