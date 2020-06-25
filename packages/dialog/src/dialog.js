@@ -8,26 +8,42 @@
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
-const Dialog = intents => {
+const Dialog = (intents, initialContexts) => {
   let resp;
-  const buildOutput = matchs => {
-    let response;
+  const contexts = initialContexts || {};
+  const buildOutput = ({ matchs, context: c, userId }) => {
+    let context = c;
+    // TODO handle order #133
+    let match;
     if (matchs && matchs.length > 1) {
       matchs.forEach(m => {
-        if (!m.any && !response) {
-          response = m.intent.output;
+        if (!m.any && !match) {
+          match = m;
         }
       });
     }
-    if (!response && matchs[0]) {
-      response = matchs[0].intent.output;
-    } else if (!response) {
+    if (!match && matchs[0]) {
+      [match] = matchs;
+    }
+    let response;
+    if (match) {
+      const { intent } = match;
+      // Store in context all variables changed
+      if (intent.set) {
+        context = { ...context, ...intent.set };
+      }
+      // TODO handle mustache templating / variables #128
+      // TODO handle condtion #129
+      response = intent.output;
+    } else {
       response = "I don't understand";
     }
+    contexts[userId] = context;
     return response;
   };
   if (intents && Array.isArray(intents) && intents.length) {
-    const matchIntent = message => {
+    const matchIntent = (message, userId = 'user') => {
+      const context = contexts[userId] || {};
       const matchs = [];
       intents.forEach(intent => {
         let any = false;
@@ -52,7 +68,7 @@ const Dialog = intents => {
           matchs.push({ intent, any, inputIndex: i });
         }
       });
-      return matchs;
+      return { matchs, context, userId };
     };
     resp = [matchIntent, buildOutput];
   }
