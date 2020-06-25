@@ -77,9 +77,38 @@ test('Dialog intents with set should update context', () => {
   expect(response).toBe('ok');
 });
 
-test('Dialog intents variables should udisplay correctly', () => {
+test('Dialog intents variables should display correctly', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok {{var}}{{dummy}}', set: { var: 'value' } }]);
   const { matchs, context } = matchIntent({ text: 'hello' });
   const response = buildOutput({ matchs, context });
   expect(response).toBe('ok value');
+});
+
+test('Dialog intents output array should display correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: ['ok {{var}}'], set: { var: 'Bob' } }]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const response = buildOutput({ matchs, context });
+  expect(response).toBe('ok Bob');
+});
+
+test('Dialog intents output condition should display correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([
+    {
+      input: ['*'],
+      output: [
+        {
+          type: 'condition',
+          children: [
+            { name: 'var', value: 'notok', text: 'not ok {{var}}' },
+            { name: 'var', text: 'not ok {{var}}' },
+            { name: 'var', value: 'Bob', text: 'ok {{var}}' },
+          ],
+        },
+      ],
+      set: { var: 'Bob' },
+    },
+  ]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const response = buildOutput({ matchs, context });
+  expect(response).toBe('ok Bob');
 });
