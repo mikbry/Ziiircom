@@ -19,7 +19,6 @@ const Dialog = (intents, initialContexts) => {
   const contexts = initialContexts || {};
   const buildOutput = ({ matchs, context: c, userId }) => {
     let context = c;
-    // TODO handle order #133
     let match;
     if (matchs && matchs.length > 1) {
       matchs.forEach(m => {
@@ -90,7 +89,7 @@ const Dialog = (intents, initialContexts) => {
           matchs.push({ intent, any, inputIndex: i });
         }
       });
-      return { matchs, context, userId };
+      return { matchs: matchs.sort((a, b) => (a.intent.order || 0) - (b.intent.order || 0)), context, userId };
     };
     resp = [matchIntent, buildOutput];
   }
