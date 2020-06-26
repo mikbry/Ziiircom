@@ -172,3 +172,35 @@ test('Messenger opened click outside should close it"', async () => {
   // Click outside close
   expect(messenger).toHaveClass('isclosed');
 });
+
+test('defaultClient should respond to input button', async done => {
+  let count = 0;
+  const messageListener = ({ type, message }) => {
+    count += 1;
+    if (count === 2) {
+      const conversation = document.getElementsByClassName('ziiir-conversation')[0];
+      expect(conversation.children.length).toBe(2);
+      expect(conversation.children[0].firstChild.firstChild.innerText).toBe('hello');
+      // expect(conversation.children[1].firstChild.firstChild.innerText).toBe('hello ok');
+    } else if (count === 3) {
+      done();
+    }
+    return { type, message };
+  };
+  await defaultClient(document.body, messageListener, {
+    intents: [{ input: 'hello', output: 'hello<button>ok</button>' }],
+    messenger: {},
+  });
+  const input = await screen.findByPlaceholderText('Your message');
+  input.value = 'hello';
+  fireEvent(
+    input,
+    new MockupEvent('keyup', {
+      bubbles: true,
+      key: 'Enter',
+    }),
+  );
+  expect(input.value).toBe('');
+  const button = await screen.findByRole('button');
+  button.click();
+});

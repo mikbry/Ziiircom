@@ -111,18 +111,31 @@ const Avatar = Interface.styled('img')`
 `;
 
 const e = Interface.createElement;
-const Message = ({ createdtime, avatar, fromUser = true, children }) => {
+const Message = ({ createdtime, avatar, fromUser = true, children, onAction = () => {} }) => {
   const meta = friendlyDate(createdtime);
-  let html;
+  let html = children;
   let body = children;
-  if (typeof children[0] === 'string' && (children[0].indexOf('/>') > 0 || children[0].indexOf('</') > 0)) {
-    html = { __html: children };
-    body = undefined;
+  if (Array.isArray(html)) {
+    [html] = children;
   }
+  if (
+    typeof html === 'string' &&
+    (html.indexOf('/>') > 0 || html.indexOf('</') > 0 || html.indexOf('/&gt;') > 0 || html.indexOf('&lt;/') > 0)
+  ) {
+    html = { __html: html };
+    body = undefined;
+  } else {
+    html = undefined;
+  }
+  const handleClick = event => {
+    if (event.target.tagName === 'BUTTON') {
+      onAction(event.target.tagName, event.target.textContent);
+    }
+  };
   return e(
     Styled,
     { fromUser, 'created-time': createdtime },
-    e('div', null, e('p', { dangerouslySetInnerHTML: html }, body), e('span', null, meta)),
+    e('div', { onClick: handleClick }, e('p', { dangerouslySetInnerHTML: html }, body), e('span', null, meta)),
     avatar && e(Avatar, { src: avatar.src, alt: avatar.name }),
   );
 };
