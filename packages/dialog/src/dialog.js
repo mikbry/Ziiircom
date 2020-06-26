@@ -17,12 +17,12 @@ const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === senten
 const Dialog = (intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
-  const buildOutput = ({ matchs, context: c, userId }) => {
+  const buildOutput = ({ matchs, context: c = {}, userId }) => {
     let context = c;
     let match;
     if (matchs && matchs.length > 1) {
       matchs.forEach(m => {
-        if (!m.any && !match) {
+        if (!m.any && !match && m.intent.topic === context.topic) {
           match = m;
         }
       });
