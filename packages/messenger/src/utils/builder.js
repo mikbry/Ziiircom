@@ -73,6 +73,10 @@ export const render = (element, container, state = {}, insert) => {
       }
       el.className = className;
     }
+    if (element.props && element.props.dangerouslySetInnerHTML) {
+      // eslint-disable-next-line no-underscore-dangle
+      el.innerHTML = element.props.dangerouslySetInnerHTML.__html;
+    }
     if (children) {
       children.forEach(child => {
         render(child, el, state);

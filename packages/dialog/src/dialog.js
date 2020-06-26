@@ -17,7 +17,7 @@ const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === senten
 const Dialog = (intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
-  const buildOutput = ({ matchs, context: c = {}, userId }) => {
+  const buildOutput = ({ matchs, context: c = {}, userId }, renderer = message => message) => {
     let context = c;
     let match;
     if (matchs && matchs.length > 1) {
@@ -60,7 +60,7 @@ const Dialog = (intents, initialContexts) => {
       response = "I don't understand";
     }
     contexts[userId] = context;
-    return response;
+    return renderer(response);
   };
   if (intents && Array.isArray(intents) && intents.length) {
     const matchIntent = (message, userId = 'user') => {
