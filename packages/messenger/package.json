@@ -13,6 +13,9 @@
     "lint": "$(yarn bin)/eslint src --ext=js",
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@ziiircom/common": "^0.1.0",
     "@ziiircom/components": "^0.1.0",

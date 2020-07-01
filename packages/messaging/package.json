@@ -12,6 +12,9 @@
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
     "prepublishOnly": "yarn build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@ziiircom/common": "0.0.0",
     "@ziiircom/dialog": "0.0.0"
