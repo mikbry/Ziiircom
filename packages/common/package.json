@@ -13,6 +13,9 @@
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
     "prepublishOnly": "yarn build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
