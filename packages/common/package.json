@@ -1,6 +1,6 @@
 {
   "name": "@ziiircom/common",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Common utils for Ziiircom",
   "main": "src/index.js",
   "author": "Mik BRY",

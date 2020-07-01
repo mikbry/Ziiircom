@@ -1,6 +1,6 @@
 {
   "name": "@ziiircom/messenger",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "author": "Mik BRY",
   "license": "MIT",
@@ -14,9 +14,9 @@
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors"
   },
   "dependencies": {
-    "@ziiircom/common": "0.0.0",
-    "@ziiircom/components": "0.0.0",
-    "@ziiircom/messaging": "0.0.0"
+    "@ziiircom/common": "^0.1.0",
+    "@ziiircom/components": "^0.1.0",
+    "@ziiircom/messaging": "^0.1.0"
   },
   "peerDependencies": {
     "@ziiircom/dialog": "0.0.0"
@@ -26,7 +26,7 @@
     "@babel/preset-env": "^7.10.2",
     "@testing-library/dom": "^7.9.0",
     "@testing-library/jest-dom": "^5.9.0",
-    "@ziiircom/dialog": "0.0.0",
+    "@ziiircom/dialog": "^0.1.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.3.0",
     "babel-loader": "^8.1.0",

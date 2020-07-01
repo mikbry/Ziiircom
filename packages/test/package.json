@@ -1,6 +1,6 @@
 {
   "name": "@ziiircom/test",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Internal test utils",
   "main": "src/index.js",
   "private": true,

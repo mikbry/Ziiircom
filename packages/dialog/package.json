@@ -1,6 +1,6 @@
 {
   "name": "@ziiircom/dialog",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Ziiircom Dialog engine",
   "main": "src/index.js",
   "author": "Mik BRY",
