@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Internal test utils",
   "main": "src/index.js",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "build": "echo ''",
