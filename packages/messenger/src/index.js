@@ -41,6 +41,8 @@ export const defaultClient = async (root, messageListener, initialState = { mess
 
 if (process.env.NODE_ENV === 'development') {
   defaultClient(document.body);
+} else {
+  defaultClient(document.body);
 }
 
 export default client;
