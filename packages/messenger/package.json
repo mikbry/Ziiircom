@@ -8,7 +8,7 @@
     "clean": "rimraf dist && mkdir dist",
     "init-config": "../../scripts/create.config.js ./src/config.json",
     "start": "cross-env NODE_ENV=development PACKAGE_DIR=messenger webpack-dev-server --progress --colors --config ../../scripts/webpack.dev.js",
-    "build": "yarn clean && yarn init-config && cross-env PACKAGE_DIR=messenger BABEL_ENV=production webpack --progress --colors --config ../../scripts/webpack.prod.js",
+    "build": "yarn clean && yarn init-config && cross-env PACKAGE_DIR=messenger NODE_ENV=production BABEL_ENV=production webpack --progress --colors --config ../../scripts/webpack.prod.js",
     "test": "cross-env NODE_ENV=test jest",
     "lint": "$(yarn bin)/eslint src --ext=js",
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors"

@@ -9,12 +9,14 @@ import useMessaging from '@ziiircom/messaging';
 
 import client from './client';
 
-export const defaultClient = async (root, messageListener, initialState = { messenger: {} }) => {
+const messenger = async (root, messageListener, initialState = { messenger: {} }) => {
   let config;
   let dataset;
   try {
-    config = await import('./config.json');
-    config = config.default;
+    // config = await import('./config.json');
+    // config = config.default;
+    const response = await fetch('./config.json');
+    config = await response.json();
   } catch (err) {
     // console.log('no config found');
   }
@@ -40,7 +42,7 @@ export const defaultClient = async (root, messageListener, initialState = { mess
 };
 
 if (process.env.NODE_ENV === 'development') {
-  defaultClient(document.body);
+  messenger(document.body);
 }
 
-export default client;
+export default messenger;
