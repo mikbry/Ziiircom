@@ -24,6 +24,9 @@ module.exports = env => {
   const { version } = require(path.join(packagePath, '/package.json'));
 
   const isDevelopment = process.env.NODE_ENV !== 'production';
+  const isLibrary = !isDevelopment && !!(process.env.PACKAGE_DIR || env.PACKAGE_DIR);
+
+  console.log('isDev=', isDevelopment, isLibrary, process.env.NODE_ENV);
 
   return {
     config,
@@ -55,9 +58,10 @@ module.exports = env => {
     },
     output: {
       path: path.resolve('./dist'),
-      filename: '[name].[hash].js',
+      filename: isDevelopment ? '[name].[hash].js' : '[name].js',
       sourceMapFilename: '[file].map[query]',
       publicPath: '',
+      library: isLibrary ? process.env.PACKAGE_DIR : undefined,
     },
     devtool: 'source-map',
     plugins: [

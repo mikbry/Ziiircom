@@ -9,14 +9,14 @@
  */
 import { screen, fireEvent } from '@testing-library/dom';
 import { MockupEvent, mockFetch } from '@ziiircom/test';
-import client, { defaultClient } from './index';
+import messenger from './index';
 
 beforeEach(() => {
   document.body.innerHTML = '<div></div>';
 });
 
 test('client should be defined"', () => {
-  expect(client).toBeDefined();
+  expect(messenger).toBeDefined();
 });
 
 // eslint-disable-next-line prettier/prettier
@@ -33,7 +33,7 @@ test('defaultClient should be started and respond to input"', async (done) => {
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener, { intents: undefined, messenger: {} });
+  await messenger(document.body, messageListener, { intents: undefined, messenger: {} });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -56,13 +56,13 @@ test('defaultClient should load intents if state.intents.src', async done => {
       expect(conversation.children.length).toBe(2);
       expect(conversation.children[0].firstChild.firstChild.innerText).toBe('hello');
       expect(conversation.children[1].firstChild.firstChild.innerText).toBe('hello');
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
       closeMockFetch();
       done();
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener, { intents: { src: 'url' }, messenger: {} });
+  await messenger(document.body, messageListener, { intents: { src: 'url' }, messenger: {} });
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -88,7 +88,7 @@ test("defaultClient without matching should return I don't understand", async do
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener, {
+  await messenger(document.body, messageListener, {
     intents: [{ input: 'hello', output: 'hello' }],
     messenger: {},
   });
@@ -105,7 +105,7 @@ test("defaultClient without matching should return I don't understand", async do
 });
 
 test('message #reset should reset conversation"', async () => {
-  const [, getMessages, createMessage, sendMessage] = await defaultClient(document.body);
+  const [, getMessages, createMessage, sendMessage] = await messenger(document.body);
   const messages = await getMessages();
   expect(messages.length).toBe(0);
   let msg = createMessage('user', 'hello');
@@ -128,7 +128,7 @@ test('message #reset should reset conversation"', async () => {
 });
 
 test('message #dummy should do nothing"', async () => {
-  await defaultClient(document.body);
+  await messenger(document.body);
   const input = await screen.findByPlaceholderText('Your message');
   input.value = '#dummy';
   fireEvent(
@@ -142,35 +142,35 @@ test('message #dummy should do nothing"', async () => {
 });
 
 test('Messenger by default should be closed"', async () => {
-  await defaultClient(document.body);
-  const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
-  expect(messenger).toHaveClass('isclosed');
+  await messenger(document.body);
+  const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
+  expect(container).toHaveClass('isclosed');
 });
 
 test('Messenger with state.isOpen=true should be opened"', async () => {
-  await defaultClient(document.body, null, { messenger: { isOpen: true } });
-  const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
-  expect(messenger).toHaveClass('isopen');
+  await messenger(document.body, null, { messenger: { isOpen: true } });
+  const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
+  expect(container).toHaveClass('isopen');
 });
 
 test('Messenger click on fab should open messenger"', async () => {
-  await defaultClient(document.body);
+  await messenger(document.body);
   const fab = document.body.getElementsByClassName('ziiircom-messenger-fab')[0];
   fireEvent.click(fab);
-  const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
-  expect(messenger).toHaveClass('isopen');
+  const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
+  expect(container).toHaveClass('isopen');
 });
 
 test('Messenger opened click outside should close it"', async () => {
-  await defaultClient(document.body, null, { messenger: { isOpen: true } });
-  const messenger = document.body.getElementsByClassName('ziiircom-messenger')[0];
-  expect(messenger).toHaveClass('isopen');
-  fireEvent.click(messenger.firstChild);
+  await messenger(document.body, null, { messenger: { isOpen: true } });
+  const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
+  expect(container).toHaveClass('isopen');
+  fireEvent.click(container.firstChild);
   // Click inside don't close
-  expect(messenger).toHaveClass('isopen');
-  fireEvent.click(messenger);
+  expect(container).toHaveClass('isopen');
+  fireEvent.click(container);
   // Click outside close
-  expect(messenger).toHaveClass('isclosed');
+  expect(container).toHaveClass('isclosed');
 });
 
 test('defaultClient should respond to input button', async done => {
@@ -187,7 +187,7 @@ test('defaultClient should respond to input button', async done => {
     }
     return { type, message };
   };
-  await defaultClient(document.body, messageListener, {
+  await messenger(document.body, messageListener, {
     intents: [{ input: 'hello', output: 'hello<button>ok</button>' }],
     messenger: {},
   });
