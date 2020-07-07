@@ -24,7 +24,21 @@ const messenger = async (root, messageListener, initialState = { messenger: {} }
     config = {};
   }
   const state = { ...config, ...initialState };
-  if (state.intents) {
+  if (state.dataset) {
+    if (state.dataset.src) {
+      try {
+        const response = await fetch(state.dataset.src);
+        dataset = await response.json();
+      } catch (err) {
+        // console.log('no intents found', err);
+      }
+    } else {
+      ({ dataset } = state);
+    }
+    if (dataset && dataset.intents) {
+      dataset = dataset.intents;
+    }
+  } else if (state.intents) {
     if (state.intents.src) {
       try {
         const response = await fetch(state.intents.src);
