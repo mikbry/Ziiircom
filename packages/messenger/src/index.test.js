@@ -33,7 +33,7 @@ test('defaultClient should be started and respond to input"', async (done) => {
     }
     return { type, message };
   };
-  await messenger(document.body, messageListener, { intents: undefined, messenger: {} });
+  await messenger({ intents: undefined, messenger: {} }, messageListener);
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -62,7 +62,7 @@ test('defaultClient should load intents if state.intents.src', async done => {
     }
     return { type, message };
   };
-  await messenger(document.body, messageListener, { intents: { src: 'url' }, messenger: {} });
+  await messenger({ intents: { src: 'url' }, messenger: {} }, messageListener);
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -91,7 +91,7 @@ test('defaultClient should load intents if state.dataset.src', async done => {
     }
     return { type, message };
   };
-  await messenger(document.body, messageListener, { dataset: { src: 'url' }, messenger: {} });
+  await messenger({ dataset: { src: 'url' }, messenger: {} }, messageListener);
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -117,10 +117,13 @@ test("defaultClient without matching should return I don't understand", async do
     }
     return { type, message };
   };
-  await messenger(document.body, messageListener, {
-    intents: [{ input: 'hello', output: 'hello' }],
-    messenger: {},
-  });
+  await messenger(
+    {
+      intents: [{ input: 'hello', output: 'hello' }],
+      messenger: {},
+    },
+    messageListener,
+  );
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'Yup';
   fireEvent(
@@ -134,7 +137,7 @@ test("defaultClient without matching should return I don't understand", async do
 });
 
 test('message #reset should reset conversation"', async () => {
-  const [, getMessages, createMessage, sendMessage] = await messenger(document.body);
+  const [, getMessages, createMessage, sendMessage] = await messenger();
   const messages = await getMessages();
   expect(messages.length).toBe(0);
   let msg = createMessage('user', 'hello');
@@ -157,7 +160,7 @@ test('message #reset should reset conversation"', async () => {
 });
 
 test('message #dummy should do nothing"', async () => {
-  await messenger(document.body);
+  await messenger();
   const input = await screen.findByPlaceholderText('Your message');
   input.value = '#dummy';
   fireEvent(
@@ -171,19 +174,19 @@ test('message #dummy should do nothing"', async () => {
 });
 
 test('Messenger by default should be closed"', async () => {
-  await messenger(document.body);
+  await messenger();
   const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
   expect(container).toHaveClass('isclosed');
 });
 
 test('Messenger with state.isOpen=true should be opened"', async () => {
-  await messenger(document.body, null, { messenger: { isOpen: true } });
+  await messenger({ messenger: { isOpen: true } });
   const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
   expect(container).toHaveClass('isopen');
 });
 
 test('Messenger click on fab should open messenger"', async () => {
-  await messenger(document.body);
+  await messenger();
   const fab = document.body.getElementsByClassName('ziiircom-messenger-fab')[0];
   fireEvent.click(fab);
   const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
@@ -191,7 +194,7 @@ test('Messenger click on fab should open messenger"', async () => {
 });
 
 test('Messenger opened click outside should close it"', async () => {
-  await messenger(document.body, null, { messenger: { isOpen: true } });
+  await messenger({ messenger: { isOpen: true } });
   const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
   expect(container).toHaveClass('isopen');
   fireEvent.click(container.firstChild);
@@ -216,10 +219,13 @@ test('defaultClient should respond to input button', async done => {
     }
     return { type, message };
   };
-  await messenger(document.body, messageListener, {
-    intents: [{ input: 'hello', output: 'hello<button>ok</button>' }],
-    messenger: {},
-  });
+  await messenger(
+    {
+      intents: [{ input: 'hello', output: 'hello<button>ok</button>' }],
+      messenger: {},
+    },
+    messageListener,
+  );
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(

@@ -9,7 +9,7 @@ import useMessaging from '@ziiircom/messaging';
 
 import client from './client';
 
-const messenger = async (root, messageListener, initialState = { messenger: {} }) => {
+const messenger = async (initialState = { messenger: {} }, messageListener, root = document.body) => {
   let config;
   let dataset;
   try {
@@ -56,7 +56,7 @@ const messenger = async (root, messageListener, initialState = { messenger: {} }
 };
 
 if (process.env.NODE_ENV === 'development') {
-  messenger(document.body);
+  messenger();
 }
 
 export default messenger;
