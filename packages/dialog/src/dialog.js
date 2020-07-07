@@ -5,16 +5,42 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { deepCopy } from '@ziiircom/common';
+
+const preprocessOutput = (output, set) =>
+  output.replace(/{{\s*([\w.]+)\s*}}/g, (match, op) => {
+    const eq = op.indexOf('=');
+    const name = eq > 0 ? op.substring(0, eq).trim() : op;
+    const value = eq > 0 ? op.substring(eq + 1).trim() : op;
+    // eslint-disable-next-line no-param-reassign
+    set[name] = value;
+    return '';
+  });
+
+const preprocessIntent = _intent => {
+  const intent = deepCopy(_intent);
+  intent.output.forEach((o, i) => {
+    if (o.type === 'condition') {
+      o.children.forEach(c => {
+        // eslint-disable-next-line no-param-reassign
+        c.text = preprocessOutput(c.text);
+      });
+    } else {
+      intent.output[i] = preprocessOutput(o);
+    }
+  });
+  return intent;
+};
 
 const renderTemplate = (template, context) =>
   template.replace(/{{\s*([\w.]+)\s*}}/g, (match, name) => {
-    const value = context[name] || '';
+    const value = context[name.trim()] || '';
     return value;
   });
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
-const Dialog = (intents, initialContexts) => {
+const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
   const buildOutput = ({ matchs, context: c = {}, userId }, renderer = message => message) => {
@@ -62,7 +88,8 @@ const Dialog = (intents, initialContexts) => {
     contexts[userId] = context;
     return renderer(response);
   };
-  if (intents && Array.isArray(intents) && intents.length) {
+  if (_intents && Array.isArray(_intents) && _intents.length) {
+    const intents = _intents.map(i => preprocessIntent(i));
     const matchIntent = (message, userId = 'user') => {
       const context = contexts[userId] || {};
       const matchs = [];
