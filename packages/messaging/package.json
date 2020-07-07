@@ -16,8 +16,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@ziiircom/common": "0.0.0",
-    "@ziiircom/dialog": "0.0.0"
+    "@ziiircom/common": "0.1.0",
+    "@ziiircom/dialog": "0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

@@ -22,7 +22,7 @@
     "@ziiircom/messaging": "^0.1.0"
   },
   "peerDependencies": {
-    "@ziiircom/dialog": "0.0.0"
+    "@ziiircom/dialog": "0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
