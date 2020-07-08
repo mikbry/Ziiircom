@@ -8,10 +8,7 @@
 import { deepCopy } from '@ziiircom/common';
 
 const preprocessOutput = (output, set) =>
-  output.replace(/{{\s*([\w.]+)\s*}}/g, (match, op) => {
-    const eq = op.indexOf('=');
-    const name = eq > 0 ? op.substring(0, eq).trim() : op;
-    const value = eq > 0 ? op.substring(eq + 1).trim() : op;
+  output.replace(/<<\s*([\w.]+)\s*=\s*(.+)\s*>>/g, (match, name, value) => {
     // eslint-disable-next-line no-param-reassign
     set[name] = value;
     return '';
@@ -19,16 +16,42 @@ const preprocessOutput = (output, set) =>
 
 const preprocessIntent = _intent => {
   const intent = deepCopy(_intent);
-  intent.output.forEach((o, i) => {
-    if (o.type === 'condition') {
-      o.children.forEach(c => {
-        // eslint-disable-next-line no-param-reassign
-        c.text = preprocessOutput(c.text);
-      });
+  const { output } = intent;
+  if (Array.isArray(output)) {
+    output.forEach((o, i) => {
+      if (o.type === 'condition') {
+        o.children.forEach(c => {
+          // eslint-disable-next-line no-param-reassign
+          const set = c.set || {};
+          // eslint-disable-next-line no-param-reassign
+          const text = preprocessOutput(c.text, set);
+          if (Object.keys(set).length === 0) {
+            intent.output[i] = text;
+          } else {
+            intent.output[i] = { set, text };
+          }
+        });
+      } else {
+        const set = {};
+        intent.output[i] = { set };
+        const text = preprocessOutput(o, set);
+        if (Object.keys(set).length === 0) {
+          intent.output[i] = text;
+        } else {
+          intent.output[i] = { set, text };
+        }
+      }
+    });
+  } else {
+    const set = {};
+    const text = preprocessOutput(output, set);
+    if (Object.keys(set).length === 0) {
+      intent.output = text;
     } else {
-      intent.output[i] = preprocessOutput(o);
+      intent.output = { set, text };
     }
-  });
+  }
+
   return intent;
 };
 
@@ -76,6 +99,8 @@ const Dialog = (_intents, initialContexts) => {
                 output = child.text;
               }
             });
+          } else if (o.text) {
+            output = o.text;
           } else {
             output = o;
           }
