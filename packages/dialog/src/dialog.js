@@ -7,15 +7,61 @@
  */
 import { deepCopy } from '@ziiircom/common';
 
+const preprocessOutput = (output, set = {}) => {
+  const text = output.replace(/<<\s*([\w.]+)\s*=\s*(.+)\s*>>/g, (match, name, value) => {
+    // eslint-disable-next-line no-param-reassign
+    set[name] = value;
+    return '';
+  });
+  return { text, set };
+};
+
+const preprocessIntent = _intent => {
+  const intent = deepCopy(_intent);
+  const { output } = intent;
+  if (Array.isArray(output)) {
+    output.forEach((o, i) => {
+      if (o.type === 'condition') {
+        o.children.forEach((c, j) => {
+          // eslint-disable-next-line no-param-reassign
+          const { text, set } = preprocessOutput(c.text, c.set);
+          if (Object.keys(set).length === 0) {
+            intent.output[i].children[j] = { ...c, text };
+          } else {
+            intent.output[i].children[j] = { ...c, set, text };
+          }
+        });
+      } else {
+        const { text, set } = preprocessOutput(o);
+        intent.output[i] = { set };
+        if (Object.keys(set).length === 0) {
+          intent.output[i] = text;
+        } else {
+          intent.output[i] = { set, text };
+        }
+      }
+    });
+  } else {
+    const { text, set } = preprocessOutput(output);
+    if (Object.keys(set).length === 0) {
+      intent.output = text;
+    } else {
+      intent.output = { set, text };
+    }
+  }
+
+  return intent;
+};
+
 const renderTemplate = (template, context) =>
   template.replace(/{{\s*([\w.]+)\s*}}/g, (match, name) => {
-    const value = context[name] || '';
+    const value = context[name.trim()] || '';
     return value;
   });
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
-const Dialog = (intents, initialContexts) => {
+const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
   const buildOutput = ({ matchs, context: c = {}, userId }, renderer = message => message) => {
@@ -40,6 +86,7 @@ const Dialog = (intents, initialContexts) => {
       }
       // handle condition #129
       let { output } = intent;
+      let set;
       if (Array.isArray(output)) {
         output.forEach(o => {
           if (o.type === 'condition') {
@@ -48,7 +95,7 @@ const Dialog = (intents, initialContexts) => {
             o.children.forEach(child => {
               if ((!output || !value) && (child.value === context[child.name] || !child.value)) {
                 ({ value } = child);
-                output = child.text;
+                output = child;
               }
             });
           } else {
@@ -56,7 +103,14 @@ const Dialog = (intents, initialContexts) => {
           }
         });
       }
+      if (output.text) {
+        set = output.set;
+        output = output.text;
+      }
       response = renderTemplate(output, context);
+      if (set) {
+        context = { ...context, ...set };
+      }
     } else {
       response = "I don't understand";
     }
@@ -64,7 +118,8 @@ const Dialog = (intents, initialContexts) => {
     response = renderer(response);
     return { response, context };
   };
-  if (intents && Array.isArray(intents) && intents.length) {
+  if (_intents && Array.isArray(_intents) && _intents.length) {
+    const intents = _intents.map(i => preprocessIntent(i));
     const matchIntent = (message, userId = 'user') => {
       const context = contexts[userId] || {};
       const matchs = [];
