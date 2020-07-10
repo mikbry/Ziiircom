@@ -18,7 +18,7 @@ const useDialog = async (listener, intents) => {
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const matchs = matchIntents(message);
-    const response = buildResponse(matchs);
+    const { response } = buildResponse(matchs);
     const msg = createMessage('bot', response);
     addMessage(msg);
     await listener({ type: 'newMessage', message: msg });

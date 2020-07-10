@@ -5,6 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { deepCopy } from '@ziiircom/common';
 
 const renderTemplate = (template, context) =>
   template.replace(/{{\s*([\w.]+)\s*}}/g, (match, name) => {
@@ -18,7 +19,7 @@ const Dialog = (intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
   const buildOutput = ({ matchs, context: c = {}, userId }, renderer = message => message) => {
-    let context = c;
+    let context = deepCopy(c);
     let match;
     if (matchs && matchs.length > 1) {
       matchs.forEach(m => {
@@ -59,8 +60,9 @@ const Dialog = (intents, initialContexts) => {
     } else {
       response = "I don't understand";
     }
-    contexts[userId] = context;
-    return renderer(response);
+    contexts[userId] = deepCopy(context);
+    response = renderer(response);
+    return { response, context };
   };
   if (intents && Array.isArray(intents) && intents.length) {
     const matchIntent = (message, userId = 'user') => {
