@@ -7,12 +7,14 @@
  */
 import { deepCopy } from '@ziiircom/common';
 
-const preprocessOutput = (output, set) =>
-  output.replace(/<<\s*([\w.]+)\s*=\s*(.+)\s*>>/g, (match, name, value) => {
+const preprocessOutput = (output, set = {}) => {
+  const text = output.replace(/<<\s*([\w.]+)\s*=\s*(.+)\s*>>/g, (match, name, value) => {
     // eslint-disable-next-line no-param-reassign
     set[name] = value;
     return '';
   });
+  return { text, set };
+};
 
 const preprocessIntent = _intent => {
   const intent = deepCopy(_intent);
@@ -20,21 +22,18 @@ const preprocessIntent = _intent => {
   if (Array.isArray(output)) {
     output.forEach((o, i) => {
       if (o.type === 'condition') {
-        o.children.forEach(c => {
+        o.children.forEach((c, j) => {
           // eslint-disable-next-line no-param-reassign
-          const set = c.set || {};
-          // eslint-disable-next-line no-param-reassign
-          const text = preprocessOutput(c.text, set);
+          const { text, set } = preprocessOutput(c.text, c.set);
           if (Object.keys(set).length === 0) {
-            intent.output[i] = text;
+            intent.output[i].children[j] = { ...c, text };
           } else {
-            intent.output[i] = { set, text };
+            intent.output[i].children[j] = { ...c, set, text };
           }
         });
       } else {
-        const set = {};
+        const { text, set } = preprocessOutput(o);
         intent.output[i] = { set };
-        const text = preprocessOutput(o, set);
         if (Object.keys(set).length === 0) {
           intent.output[i] = text;
         } else {
@@ -43,8 +42,7 @@ const preprocessIntent = _intent => {
       }
     });
   } else {
-    const set = {};
-    const text = preprocessOutput(output, set);
+    const { text, set } = preprocessOutput(output);
     if (Object.keys(set).length === 0) {
       intent.output = text;
     } else {
@@ -88,6 +86,7 @@ const Dialog = (_intents, initialContexts) => {
       }
       // handle condition #129
       let { output } = intent;
+      let set;
       if (Array.isArray(output)) {
         output.forEach(o => {
           if (o.type === 'condition') {
@@ -96,17 +95,22 @@ const Dialog = (_intents, initialContexts) => {
             o.children.forEach(child => {
               if ((!output || !value) && (child.value === context[child.name] || !child.value)) {
                 ({ value } = child);
-                output = child.text;
+                output = child;
               }
             });
-          } else if (o.text) {
-            output = o.text;
           } else {
             output = o;
           }
         });
       }
+      if (output.text) {
+        set = output.set;
+        output = output.text;
+      }
       response = renderTemplate(output, context);
+      if (set) {
+        context = { ...context, ...set };
+      }
     } else {
       response = "I don't understand";
     }
