@@ -118,7 +118,7 @@ test('Dialog intents inline variables should display correctly', () => {
     { input: ['*'], output: 'ok {{var}}{{dummy}}<<var=none>>', set: { var: 'value' } },
   ]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs, context });
+  const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok value');
 });
 
@@ -127,7 +127,7 @@ test('Dialog intents output array with inline variables should display correctly
     { input: ['*'], output: ['ok {{var}}{{dummy}}<<var=none>>'], set: { var: 'value' } },
   ]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs, context });
+  const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok value');
 });
 
@@ -149,6 +149,6 @@ test('Dialog intents output condition with inline var should display correctly',
     },
   ]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs, context });
+  const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok Bob');
 });
