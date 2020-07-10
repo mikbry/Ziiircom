@@ -22,7 +22,7 @@ test('Dialog with one intent should return matchIntent', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: 'hello', output: 'hello' }]);
   const { matchs } = matchIntent({ text: 'hello' });
   expect(matchs[0].intent.output).toBe('hello');
-  const response = buildOutput({ matchs });
+  const { response } = buildOutput({ matchs });
   expect(response).toBe('hello');
 });
 
@@ -30,14 +30,14 @@ test('Dialog with any intent.input should return matchIntent', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: '*', output: 'hello' }]);
   const { matchs } = matchIntent({ text: 'hello' });
   expect(matchs[0].intent.output).toBe('hello');
-  const response = buildOutput({ matchs });
+  const { response } = buildOutput({ matchs });
   expect(response).toBe('hello');
 });
 
 test("Dialog not understand should return I don't understand", () => {
   const [matchIntent, buildOutput] = Dialog([{ input: 'hello', output: 'hello' }]);
   const { matchs } = matchIntent({ text: 'Yup' });
-  const response = buildOutput({ matchs });
+  const { response } = buildOutput({ matchs });
   expect(response).toBe("I don't understand");
 });
 
@@ -66,28 +66,28 @@ test('Dialog intents with multiple matchs plus any should match first', () => {
     { input: ['hello'], output: 'hello' },
   ]);
   const { matchs } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs });
+  const { response } = buildOutput({ matchs });
   expect(response).toBe('hello');
 });
 
 test('Dialog intents with set should update context', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok', set: { var: 'value' } }]);
   const { matchs } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs });
+  const { response } = buildOutput({ matchs });
   expect(response).toBe('ok');
 });
 
 test('Dialog intents variables should display correctly', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok {{var}}{{dummy}}', set: { var: 'value' } }]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs, context });
+  const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok value');
 });
 
 test('Dialog intents output array should display correctly', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: ['ok {{var}}'], set: { var: 'Bob' } }]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs, context });
+  const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok Bob');
 });
 
@@ -109,7 +109,7 @@ test('Dialog intents output condition should display correctly', () => {
     },
   ]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const response = buildOutput({ matchs, context });
+  const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok Bob');
 });
 
