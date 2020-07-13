@@ -214,11 +214,11 @@ background-position:50%;
 background-size:cover;
 box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12);
 cursor:pointer;
-`;s.defaultProps={theme:a.default};var i=s;t.default=i},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n,a=(n=r(7))&&n.__esModule?n:{default:n},o=r(9),s=r(3),i=r(10);var l=async(e,t)=>{const[r,n]=(0,i.useSelector)(e=>[e.messenger.isOpen,e.messenger.header]);let l=r;const u=(0,s.useRef)(null),d=()=>{l=!l;const e=u.current;e.classList.toggle("isclosed"),e.classList.toggle("isopen")},f=await(0,a.default)(),c=(0,o.styled)(f.Messenger,{onMessage:e=>{t(e)},onClick:e=>{e.stopPropagation()},header:n})`
+`;s.defaultProps={theme:a.default};var i=s;t.default=i},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n,a=(n=r(7))&&n.__esModule?n:{default:n},o=r(9),s=r(3),i=r(10);var l=async(e,t)=>{const[r,n,l]=(0,i.useSelector)(e=>[e.messenger.isOpen,e.messenger.header,e.messenger.input]);let u=r;const d=(0,s.useRef)(null),f=()=>{u=!u;const e=d.current;e.classList.toggle("isclosed"),e.classList.toggle("isopen")},c=await(0,a.default)(),p=(0,o.styled)(c.Messenger,{onMessage:e=>{t(e)},onClick:e=>{e.stopPropagation()},header:n,input:l})`
     width: 100%;
     max-width: 600px;
     height: 80%;
-  `,p=(0,o.styled)("div",{ref:u,className:"ziiircom-messenger is"+(l?"open":"closed"),onClick:d},c)`
+  `,m=(0,o.styled)("div",{ref:d,className:"ziiircom-messenger is"+(u?"open":"closed"),onClick:f},p)`
     display: flex;
     position: fixed;
     top: 0;
@@ -238,12 +238,12 @@ cursor:pointer;
     &.isclosed {
       display: none;
     }
-  `,m=(0,o.styled)(f.FAButton,{className:"ziiircom-messenger-fab",onClick:d})`
+  `,y=(0,o.styled)(c.FAButton,{className:"ziiircom-messenger-fab",onClick:f})`
     position: absolute;
     right: 32px;
     bottom: 32px;
     z-index: 9;
-  `;return(0,o.styled)("div",{className:"ziiircom-messenger-frame"},p,m)`
+  `;return(0,o.styled)("div",{className:"ziiircom-messenger-frame"},m,y)`
     position: fixed;
     top: 0;
     left: 0;
