@@ -78,6 +78,7 @@ const FooterInput = Interface.styled(Input)`
   padding: 4px;
   margin: 0;
   border: none;
+  outline:none;
 `;
 
 const e = Interface.createElement;
