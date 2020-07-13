@@ -26,8 +26,6 @@ module.exports = env => {
   const isDevelopment = process.env.NODE_ENV !== 'production';
   const isLibrary = !isDevelopment && !!(process.env.PACKAGE_DIR || env.PACKAGE_DIR);
 
-  console.log('isDev=', isDevelopment, isLibrary, process.env.NODE_ENV);
-
   return {
     config,
     context: packagePath,
