@@ -11,7 +11,11 @@ import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
 const App = async (messages, onMessage) => {
-  const [_isOpen, header] = useSelector(state => [state.messenger.isOpen, state.messenger.header]);
+  const [_isOpen, header, input] = useSelector(state => [
+    state.messenger.isOpen,
+    state.messenger.header,
+    state.messenger.input,
+  ]);
   let isOpen = _isOpen;
   const messengerRef = useRef(null);
   const handleFabClick = () => {
@@ -31,7 +35,7 @@ const App = async (messages, onMessage) => {
 
   const ui = await useUI();
 
-  const Messenger = styled(ui.Messenger, { onMessage: handleMessage, onClick: handlePrevClick, header })`
+  const Messenger = styled(ui.Messenger, { onMessage: handleMessage, onClick: handlePrevClick, header, input })`
     width: 100%;
     max-width: 600px;
     height: 80%;
