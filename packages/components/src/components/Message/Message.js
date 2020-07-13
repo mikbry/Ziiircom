@@ -49,7 +49,16 @@ const Styled = Interface.styled('div')`
     font-weight: 400;
     line-height: 1.66;
   }
-
+  & > div > p > button {
+    border: none;
+    border-radius: 12px;
+    height: 24px;
+    margin: 2px 4px;
+    background: ${props => props.theme.palette.secondary};
+    color: ${props => props.theme.palette.onSecondary};
+    cursor: pointer;
+    font-size: 16px;
+  }
   @keyframes enterMessageFromUser {
     0% {
       transform: translate( 0, 20px );
