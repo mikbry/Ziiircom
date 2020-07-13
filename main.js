@@ -130,7 +130,16 @@ var messenger=function(e){var t={};function r(n){if(t[n])return t[n].exports;var
     font-weight: 400;
     line-height: 1.66;
   }
-
+  & > div > p > button {
+    border: none;
+    border-radius: 12px;
+    height: 24px;
+    margin: 2px 4px;
+    background: ${e=>e.theme.palette.secondary};
+    color: ${e=>e.theme.palette.onSecondary};
+    cursor: pointer;
+    font-size: 16px;
+  }
   @keyframes enterMessageFromUser {
     0% {
       transform: translate( 0, 20px );
