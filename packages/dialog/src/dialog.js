@@ -55,8 +55,10 @@ const preprocessIntent = _intent => {
 
 const getValue = (_value, entities) => {
   let value = _value;
+  /* istanbul ignore next */
   if (value === '*') {
     entities.forEach(e => {
+      /* istanbul ignore next */
       if (e.type === 'any') {
         ({ value } = e);
       }
@@ -124,10 +126,11 @@ const Dialog = (_intents, initialContexts) => {
           }
         });
       }
+      let text = output;
       if (output.text) {
-        output = output.text;
+        ({ text } = output);
       }
-      ({ response, set } = renderTemplate(output, context, entities));
+      ({ response, set } = renderTemplate(text, context, entities));
       if (Object.keys(set).length) {
         context = { ...context, ...set };
       }

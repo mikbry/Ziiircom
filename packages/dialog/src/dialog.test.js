@@ -152,3 +152,13 @@ test('Dialog intents output condition with inline var should display correctly',
   const { response } = buildOutput({ matchs, context });
   expect(response).toBe('ok Bob');
 });
+
+test('Dialog intents inline assigned variables should display correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok {{var=*}}<<action=*>>' }]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const { response, entities } = buildOutput({ matchs, context });
+  expect(response).toBe('ok hello');
+  expect(entities.length).toBe(1);
+  expect(entities[0].type).toBe('any');
+  expect(entities[0].value).toBe('hello');
+});
