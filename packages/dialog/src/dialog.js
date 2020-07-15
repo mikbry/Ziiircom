@@ -53,11 +53,32 @@ const preprocessIntent = _intent => {
   return intent;
 };
 
-const renderTemplate = (template, context) =>
-  template.replace(/{{\s*([\w.]+)\s*}}/g, (match, name) => {
-    const value = context[name.trim()] || '';
+const getValue = (_value, entities) => {
+  let value = _value;
+  /* istanbul ignore next */
+  if (value === '*') {
+    entities.forEach(e => {
+      /* istanbul ignore next */
+      if (e.type === 'any') {
+        ({ value } = e);
+      }
+    });
+  }
+  return value;
+};
+
+const renderTemplate = (template, context, entities) => {
+  const set = {};
+  const response = template.replace(/{{\s*([\w.]+)\s*(=\s*(.+)\s*)*}}/g, (match, _name, eq, replace) => {
+    const name = _name.trim();
+    if (eq) {
+      set[name] = getValue(replace, entities);
+    }
+    const value = set[name] || context[name] || '';
     return value;
   });
+  return { response, set };
+};
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
@@ -78,8 +99,10 @@ const Dialog = (_intents, initialContexts) => {
       [match] = matchs;
     }
     let response;
+    let entities;
     if (match) {
       const { intent } = match;
+      ({ entities } = match);
       // Store in context all variables changed
       if (intent.set) {
         context = { ...context, ...intent.set };
@@ -103,20 +126,25 @@ const Dialog = (_intents, initialContexts) => {
           }
         });
       }
+      let text = output;
       if (output.text) {
-        set = output.set;
-        output = output.text;
+        ({ text } = output);
       }
-      response = renderTemplate(output, context);
-      if (set) {
+      ({ response, set } = renderTemplate(text, context, entities));
+      if (Object.keys(set).length) {
         context = { ...context, ...set };
+      }
+      if (output.set) {
+        Object.keys(output.set).forEach(name => {
+          context[name] = getValue(output.set[name], entities);
+        });
       }
     } else {
       response = "I don't understand";
     }
     contexts[userId] = deepCopy(context);
     response = renderer(response);
-    return { response, context };
+    return { response, context, entities };
   };
   if (_intents && Array.isArray(_intents) && _intents.length) {
     const intents = _intents.map(i => preprocessIntent(i));
@@ -143,7 +171,11 @@ const Dialog = (_intents, initialContexts) => {
           }
         }
         if (i >= 0) {
-          matchs.push({ intent, any, inputIndex: i });
+          const m = { intent, any, inputIndex: i };
+          if (any) {
+            m.entities = [{ type: 'any', value: message.text }];
+          }
+          matchs.push(m);
         }
       });
       return { matchs: matchs.sort((a, b) => (a.intent.order || 0) - (b.intent.order || 0)), context, userId };
