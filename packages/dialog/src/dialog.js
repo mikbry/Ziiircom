@@ -53,11 +53,19 @@ const preprocessIntent = _intent => {
   return intent;
 };
 
-const renderTemplate = (template, context) =>
-  template.replace(/{{\s*([\w.]+)\s*}}/g, (match, name) => {
-    const value = context[name.trim()] || '';
+const renderTemplate = (template, context) => {
+  const set = {};
+  const response = template.replace(/{{\s*([\w.]+)\s*(=\s*(.+)\s*)*}}/g, (match, _name, eq, replace) => {
+    const name = _name.trim();
+    if (eq) {
+      // TODO handle entities
+      set[name] = replace;
+    }
+    const value = set[name] || context[name] || '';
     return value;
   });
+  return { response, set };
+};
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
@@ -79,7 +87,7 @@ const Dialog = (_intents, initialContexts) => {
     }
     let response;
     if (match) {
-      const { intent } = match;
+      const { intent, entities } = match;
       // Store in context all variables changed
       if (intent.set) {
         context = { ...context, ...intent.set };
@@ -104,12 +112,15 @@ const Dialog = (_intents, initialContexts) => {
         });
       }
       if (output.text) {
-        set = output.set;
         output = output.text;
       }
-      response = renderTemplate(output, context);
-      if (set) {
+      ({ response, set } = renderTemplate(output, context, entities));
+      if (Object.keys(set).length) {
         context = { ...context, ...set };
+      }
+      if (output.set) {
+        // TODO handle entities
+        context = { ...context, ...output.set };
       }
     } else {
       response = "I don't understand";
