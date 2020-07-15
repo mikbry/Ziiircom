@@ -8,7 +8,7 @@
 import { deepCopy } from '@ziiircom/common';
 
 const preprocessOutput = (output, set = {}) => {
-  const text = output.replace(/<<\s*([\w.]+)\s*=\s*(.+)\s*>>/g, (match, name, value) => {
+  const text = output.replace(/<<\s*([\w.]+)\s*=\s*(.+?)\s*>>/g, (match, name, value) => {
     // eslint-disable-next-line no-param-reassign
     set[name] = value;
     return '';
@@ -69,7 +69,7 @@ const getValue = (_value, entities) => {
 
 const renderTemplate = (template, context, entities) => {
   const set = {};
-  const response = template.replace(/{{\s*([\w.]+)\s*(=\s*(.+)\s*)*}}/g, (match, _name, eq, replace) => {
+  const response = template.replace(/{{\s*([\w.]+)\s*(=\s*(.+?)\s*)*}}/g, (match, _name, eq, replace) => {
     const name = _name.trim();
     if (eq) {
       set[name] = getValue(replace, entities);
@@ -172,9 +172,7 @@ const Dialog = (_intents, initialContexts) => {
         }
         if (i >= 0) {
           const m = { intent, any, inputIndex: i };
-          if (any) {
-            m.entities = [{ type: 'any', value: message.text }];
-          }
+          m.entities = [{ type: 'any', value: message.text }];
           matchs.push(m);
         }
       });
