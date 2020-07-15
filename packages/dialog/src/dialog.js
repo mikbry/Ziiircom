@@ -143,7 +143,11 @@ const Dialog = (_intents, initialContexts) => {
           }
         }
         if (i >= 0) {
-          matchs.push({ intent, any, inputIndex: i });
+          const m = { intent, any, inputIndex: i };
+          if (any) {
+            m.entities = [{ type: 'any', value: message.text }];
+          }
+          matchs.push(m);
         }
       });
       return { matchs: matchs.sort((a, b) => (a.intent.order || 0) - (b.intent.order || 0)), context, userId };
