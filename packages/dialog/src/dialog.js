@@ -80,12 +80,28 @@ const renderTemplate = (template, context, entities) => {
   return { response, set };
 };
 
+const htmlRenderer = message => {
+  const html = message.replace(/https?:\/\/\S*|\[(.*?)\]\((.*?)\)/gi, (match, complexLabel, complexUrl) => {
+    let url = match;
+    let label = url;
+    if (complexLabel) {
+      label = complexLabel;
+      url = complexUrl;
+    }
+    if (url.match(/\.(jpg|jpeg|gif|png)$/gi)) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer"><img src="${url}" alt="${label}" /></a>`;
+    }
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  });
+  return html;
+};
+
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
 const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
-  const buildOutput = ({ matchs, context: c = {}, userId }, renderer = message => message) => {
+  const buildOutput = ({ matchs, context: c = {}, userId }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
     let match;
     if (matchs && matchs.length > 1) {

@@ -162,3 +162,20 @@ test('Dialog intents inline assigned variables should display correctly', () => 
   expect(entities[0].type).toBe('any');
   expect(entities[0].value).toBe('hello');
 });
+
+test('Dialog links should display correctly', () => {
+  let [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok [link](https://url)' }]);
+  let { matchs, context } = matchIntent({ text: 'hello' });
+  let { response } = buildOutput({ matchs, context });
+  expect(response).toBe('ok <a href="https://url" target="_blank" rel="noopener noreferrer">link</a>');
+  [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok https://url' }]);
+  ({ matchs, context } = matchIntent({ text: 'hello' }));
+  ({ response } = buildOutput({ matchs, context }));
+  expect(response).toBe('ok <a href="https://url" target="_blank" rel="noopener noreferrer">https://url</a>');
+  [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok https://url.png' }]);
+  ({ matchs, context } = matchIntent({ text: 'hello' }));
+  ({ response } = buildOutput({ matchs, context }));
+  expect(response).toBe(
+    'ok <a href="https://url.png" target="_blank" rel="noopener noreferrer"><img src="https://url.png" alt="https://url.png" /></a>',
+  );
+});
