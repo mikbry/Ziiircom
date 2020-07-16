@@ -98,6 +98,20 @@ const htmlRenderer = message => {
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
+const extractAndMatch = (input, text) => {
+  const entities = [];
+  let match;
+  if (input === '*') {
+    entities.push({ type: 'any', value: text });
+    match = true;
+  } else if (input.indexOf('{{') > 0) {
+    // TODO extract entities
+  } else {
+    match = simpleMatch(input, text);
+  }
+  return [match, entities];
+};
+
 const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
@@ -171,20 +185,15 @@ const Dialog = (_intents, initialContexts) => {
         let any = false;
         let i = Array.isArray(intent.input)
           ? intent.input.findIndex(input => {
-              if (input === '*') {
-                any = true;
-                return true;
-              }
-              return simpleMatch(input, message.text);
+              const [m, entities] = extractAndMatch(input, message.text);
+              any = entities[0] && entities[0].type === 'any';
+              return m;
             })
           : -1;
         if (i === -1 && typeof intent.input === 'string') {
-          if (intent.input === '*') {
-            any = true;
-            i = 0;
-          } else if (simpleMatch(intent.input, message.text)) {
-            i = 0;
-          }
+          const [m, entities] = extractAndMatch(intent.input, message.text);
+          any = entities[0] && entities[0].type === 'any';
+          i = m ? 0 : -1;
         }
         if (i >= 0) {
           const m = { intent, any, inputIndex: i };
