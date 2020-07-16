@@ -179,3 +179,42 @@ test('Dialog links should display correctly', () => {
     'ok <a href="https://url.png" target="_blank" rel="noopener noreferrer"><img src="https://url.png" alt="https://url.png" /></a>',
   );
 });
+
+test('Dialog with input {{@any}} should match correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['{{@any}}'], output: 'ok {{var=*}}' }]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const { response, entities } = buildOutput({ matchs, context });
+  expect(response).toBe('ok hello');
+  expect(entities.length).toBe(1);
+  expect(entities[0].type).toBe('any');
+  expect(entities[0].value).toBe('hello');
+});
+
+test('Dialog with input {{@email}} should match correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['{{@email}}'], output: 'email={{var=*}}' }]);
+  const { matchs, context } = matchIntent({ text: 'john@doe.com' });
+  const { response, entities } = buildOutput({ matchs, context });
+  expect(response).toBe('email=john@doe.com');
+  expect(entities.length).toBe(1);
+  expect(entities[0].type).toBe('email');
+  expect(entities[0].value).toBe('john@doe.com');
+});
+
+test('Dialog with input {{var=@email}} should match correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['{{var=@email}}'], output: 'email={{var}}' }]);
+  const { matchs, context } = matchIntent({ text: 'john@doe.com' });
+  const { response, entities } = buildOutput({ matchs, context });
+  expect(response).toBe('email=john@doe.com');
+  expect(entities.length).toBe(1);
+  expect(entities[0].name).toBe('var');
+  expect(entities[0].type).toBe('email');
+  expect(entities[0].value).toBe('john@doe.com');
+});
+
+test('Dialog with input malformed entities should pass', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: [' {{var=@email}}'], output: 'email={{var}}' }]);
+  const { matchs, context } = matchIntent({ text: 'john@doe.com' });
+  const { response, entities } = buildOutput({ matchs, context });
+  expect(response).toBe("I don't understand");
+  expect(entities).toBe(undefined);
+});

@@ -57,12 +57,7 @@ const getValue = (_value, entities) => {
   let value = _value;
   /* istanbul ignore next */
   if (value === '*') {
-    entities.forEach(e => {
-      /* istanbul ignore next */
-      if (e.type === 'any') {
-        ({ value } = e);
-      }
-    });
+    [{ value }] = entities;
   }
   return value;
 };
@@ -97,6 +92,38 @@ const htmlRenderer = message => {
 };
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
+
+const extractAndMatch = (input, text) => {
+  const entities = [];
+  let match;
+  let value = text;
+  if (input === '*') {
+    entities.push({ type: 'any', value, offset: 0 });
+    match = true;
+  } else if (input.indexOf('{{') > -1) {
+    // Extract entities
+    input.replace(/{{\s*([\w.]*)\s*(=?)\s*@(any|email)\s*}}/g, (m, name, eq, type, offset) => {
+      if (offset > 0) {
+        // TODO
+        value = undefined;
+      }
+      if (type === 'any') {
+        match = true;
+      } else if (type === 'email' && value && value.match(/\b(\w[-._\w]*\w@\w[-._\w]*\w\.\w{2,3})\b/gi)) {
+        match = true;
+      }
+      if (match) {
+        entities.push({ name, type, value, offset });
+      }
+    });
+  } else {
+    match = simpleMatch(input, text);
+    if (match) {
+      entities.push({ type: 'all', value, offset: 0 });
+    }
+  }
+  return [match, entities];
+};
 
 const Dialog = (_intents, initialContexts) => {
   let resp;
@@ -146,6 +173,11 @@ const Dialog = (_intents, initialContexts) => {
       if (output.text) {
         ({ text } = output);
       }
+      entities.forEach(e => {
+        if (e.name) {
+          context[e.name] = e.value;
+        }
+      });
       ({ response, set } = renderTemplate(text, context, entities));
       if (Object.keys(set).length) {
         context = { ...context, ...set };
@@ -164,31 +196,27 @@ const Dialog = (_intents, initialContexts) => {
   };
   if (_intents && Array.isArray(_intents) && _intents.length) {
     const intents = _intents.map(i => preprocessIntent(i));
+    let m;
+    let entities;
     const matchIntent = (message, userId = 'user') => {
       const context = contexts[userId] || {};
       const matchs = [];
       intents.forEach(intent => {
-        let any = false;
         let i = Array.isArray(intent.input)
           ? intent.input.findIndex(input => {
-              if (input === '*') {
-                any = true;
-                return true;
-              }
-              return simpleMatch(input, message.text);
+              [m, entities] = extractAndMatch(input, message.text);
+              return m;
             })
           : -1;
         if (i === -1 && typeof intent.input === 'string') {
-          if (intent.input === '*') {
-            any = true;
-            i = 0;
-          } else if (simpleMatch(intent.input, message.text)) {
-            i = 0;
-          }
+          [m, entities] = extractAndMatch(intent.input, message.text);
+          i = m ? 0 : -1;
         }
         if (i >= 0) {
-          const m = { intent, any, inputIndex: i };
-          m.entities = [{ type: 'any', value: message.text }];
+          m = { intent, inputIndex: i, entities };
+          if (entities.length === 1 && entities[0].type === 'any') {
+            m.any = true;
+          }
           matchs.push(m);
         }
       });
