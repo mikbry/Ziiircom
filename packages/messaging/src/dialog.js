@@ -11,8 +11,9 @@ import useMessaging from './messaging';
 
 // simple Dialog Messaging service
 const useDialog = async (listener, intents) => {
-  const [addMessage, getMessages, createMessage, , commands] = await useMessaging(listener);
-  const [matchIntents, buildResponse] = Dialog(intents);
+  const [addMessage, getMessages, createMessage, , cmds] = await useMessaging(listener);
+  const contexts = {};
+  const [matchIntents, buildResponse] = Dialog(intents, contexts);
 
   const sendMessage = async message => {
     addMessage(message);
@@ -22,6 +23,15 @@ const useDialog = async (listener, intents) => {
     const msg = createMessage('bot', response);
     addMessage(msg);
     await listener({ type: 'newMessage', message: msg });
+  };
+
+  const commands = async type => {
+    if (type === '#reset') {
+      Object.keys(contexts).forEach(id => {
+        delete contexts[id];
+      });
+    }
+    return cmds(type);
   };
 
   return [getMessages, createMessage, sendMessage, commands];

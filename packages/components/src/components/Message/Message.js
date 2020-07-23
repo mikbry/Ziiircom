@@ -120,7 +120,7 @@ const Avatar = Interface.styled('img')`
 `;
 
 const e = Interface.createElement;
-const Message = ({ createdtime, avatar, fromUser = true, children, onAction = () => {} }) => {
+const Message = ({ createdtime, avatar, fromUser = true, children, onAction }) => {
   const meta = friendlyDate(createdtime);
   let html = children;
   let body = children;

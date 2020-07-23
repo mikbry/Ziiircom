@@ -27,9 +27,11 @@ test('Messaging command #reset should erase messages', async () => {
   const handleEventMessage = async ({ type: t }) => {
     type = t;
   };
-  const messaging = await useMessaging();
+  const messaging = await useMessaging('dialog');
   expect(messaging).toBeDefined();
-  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage, [
+    { input: 'hello', output: 'hello' },
+  ]);
   await sendMessage(createMessage('user', 'hello'));
   let messages = await getMessages();
   expect(messages.length).toBe(2);
@@ -44,9 +46,9 @@ test('Messaging unknown command should emit unknownCommand', async () => {
   const handleEventMessage = async ({ type: t }) => {
     type = t;
   };
-  const messaging = await useMessaging();
+  const messaging = await useMessaging('dialog');
   expect(messaging).toBeDefined();
-  const [, , , commands] = await messaging(handleEventMessage);
+  const [, , , commands] = await messaging(handleEventMessage, [{ input: 'hello', output: 'hello' }]);
   commands('#dummy');
   expect(type).toBe('unknownCommand');
 });
