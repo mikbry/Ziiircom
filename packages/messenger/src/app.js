@@ -10,7 +10,7 @@ import { styled } from './utils/styled';
 import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
-const App = async (messages, onMessage) => {
+const App = async (messages, onMessage, onAction) => {
   const [_isOpen, header, input] = useSelector(state => [
     state.messenger.isOpen,
     state.messenger.header,
@@ -35,7 +35,14 @@ const App = async (messages, onMessage) => {
 
   const ui = await useUI();
 
-  const Messenger = styled(ui.Messenger, { onMessage: handleMessage, onClick: handlePrevClick, header, input })`
+  const Messenger = styled(ui.Messenger, {
+    messages,
+    onMessage: handleMessage,
+    onClick: handlePrevClick,
+    onAction,
+    header,
+    input,
+  })`
     width: 100%;
     max-width: 600px;
     height: 80%;

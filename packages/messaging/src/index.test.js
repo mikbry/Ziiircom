@@ -22,6 +22,21 @@ test('Messaging without type should return echo', async () => {
   expect(messages.length).toBe(2);
 });
 
+test('Messaging with messages should add them', async () => {
+  const handleEventMessage = async () => {};
+  const messaging = await useMessaging();
+  expect(messaging).toBeDefined();
+  const [getMessages] = await messaging({
+    listener: handleEventMessage,
+    messages: [
+      { from: 'u1', text: 'hello' },
+      { from: 'u2', text: 'hello', created_time: 12 },
+    ],
+  });
+  const messages = await getMessages();
+  expect(messages.length).toBe(2);
+});
+
 test('Messaging command #reset should erase messages', async () => {
   let type;
   const handleEventMessage = async ({ type: t }) => {

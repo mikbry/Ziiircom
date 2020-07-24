@@ -60,6 +60,7 @@ const ZiiirClient = async ({
     listener: handleEventMessage,
     messages,
     dataset,
+    contexts: state.contexts,
   });
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
@@ -70,13 +71,13 @@ const ZiiirClient = async ({
     }
   };
   const msgs = await getMessages();
-  const el = await App(msgs, handleNewMessage);
   handleAction = (action, data) => {
     //  if (action === 'BUTTON') {
     const message = createMessage('user', data);
     sendMessage(message);
     // }
   };
+  const el = await App(msgs, handleNewMessage, handleAction);
   render(el, root, { ...store });
   return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
 };

@@ -9,7 +9,16 @@ import { deepCopy } from '@ziiircom/common';
 
 // Messaging service
 const useMessaging = async ({ listener, messages: _messages }) => {
-  let messages = deepCopy([], _messages);
+  let messages = [];
+  if (_messages) {
+    _messages.forEach(_m => {
+      const m = deepCopy(_m);
+      if (!m.created_time) {
+        m.created_time = Date.now();
+      }
+      messages.push(m);
+    });
+  }
 
   const createMessage = (from, text) => ({ from, text, created_time: Date.now() });
 
