@@ -52,7 +52,7 @@ const messenger = async (initialState = { messenger: {} }, messageListener, root
   }
   const messagingType = dataset ? 'dialog' : undefined;
   const messaging = await useMessaging(messagingType);
-  return client({ state, messaging, root, messageListener, dataset });
+  return client({ state, messaging, root, messageListener, dataset, messages: state.messages });
 };
 
 if (process.env.NODE_ENV === 'development') {

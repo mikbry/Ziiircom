@@ -10,9 +10,9 @@ import { deepCopy } from '@ziiircom/common';
 import useMessaging from './messaging';
 
 // simple Dialog Messaging service
-const useDialog = async (listener, intents) => {
-  const [addMessage, getMessages, createMessage, , cmds] = await useMessaging(listener);
-  const contexts = {};
+const useDialog = async ({ listener, dataset: intents, messages, contexts: _contexts = {} }) => {
+  const [addMessage, getMessages, createMessage, , cmds] = await useMessaging({ listener, messages });
+  const contexts = deepCopy(_contexts);
   const [matchIntents, buildResponse] = Dialog(intents, contexts);
 
   const sendMessage = async message => {

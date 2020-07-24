@@ -82,7 +82,8 @@ const FooterInput = Interface.styled(Input)`
 `;
 
 const e = Interface.createElement;
-const m = (createdtime, msg, fromUser, avatar) => e(Message, { key: createdtime, createdtime, avatar, fromUser }, msg);
+const m = (createdtime, msg, fromUser, avatar, onAction) =>
+  e(Message, { key: createdtime, createdtime, avatar, fromUser, onAction }, msg);
 const Messenger = ({
   isExpanded = true,
   input = { display: true },
@@ -90,13 +91,14 @@ const Messenger = ({
   messages = [],
   onMessage,
   onClick,
+  onAction,
 }) => {
   const Messages = e(
     Conversation,
     { isExpanded, className: 'ziiir-conversation' },
     messages
       .sort((m1, m2) => m1.createdtime > m2.createdtime)
-      .map(msg => m(msg.createdtime, msg.text, msg.from === 'user', msg.avatar)),
+      .map(msg => m(msg.created_time, msg.text, msg.from === 'user', msg.avatar, onAction)),
   );
   let inputComponent = 'ziiir.com';
   const handleKey = event => {

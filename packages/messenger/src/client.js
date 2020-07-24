@@ -18,6 +18,7 @@ const ZiiirClient = async ({
   root,
   messageListener = ({ type, message }) => ({ type, message }),
   dataset,
+  messages,
 }) => {
   setup({ html, createElement, styled });
   const ui = await useUI();
@@ -55,7 +56,12 @@ const ZiiirClient = async ({
     }
     messageListener({ type, message });
   };
-  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage, dataset);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging({
+    listener: handleEventMessage,
+    messages,
+    dataset,
+    contexts: state.contexts,
+  });
   const handleNewMessage = text => {
     if (text.charAt(0) === '#') {
       commands(text);
@@ -64,14 +70,14 @@ const ZiiirClient = async ({
       sendMessage(message);
     }
   };
-  const messages = await getMessages();
-  const el = await App(messages, handleNewMessage);
+  const msgs = await getMessages();
   handleAction = (action, data) => {
     //  if (action === 'BUTTON') {
     const message = createMessage('user', data);
     sendMessage(message);
     // }
   };
+  const el = await App(msgs, handleNewMessage, handleAction);
   render(el, root, { ...store });
   return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
 };
