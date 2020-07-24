@@ -12,7 +12,7 @@ test('Messaging without type should return echo', async () => {
   const handleEventMessage = async () => {};
   const messaging = await useMessaging();
   expect(messaging).toBeDefined();
-  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging({ listener: handleEventMessage });
   expect(getMessages).toBeDefined();
   expect(createMessage).toBeDefined();
   expect(sendMessage).toBeDefined();
@@ -29,9 +29,10 @@ test('Messaging command #reset should erase messages', async () => {
   };
   const messaging = await useMessaging('dialog');
   expect(messaging).toBeDefined();
-  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage, [
-    { input: 'hello', output: 'hello' },
-  ]);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging({
+    listener: handleEventMessage,
+    dataset: [{ input: 'hello', output: 'hello' }],
+  });
   await sendMessage(createMessage('user', 'hello'));
   let messages = await getMessages();
   expect(messages.length).toBe(2);
@@ -48,7 +49,10 @@ test('Messaging unknown command should emit unknownCommand', async () => {
   };
   const messaging = await useMessaging('dialog');
   expect(messaging).toBeDefined();
-  const [, , , commands] = await messaging(handleEventMessage, [{ input: 'hello', output: 'hello' }]);
+  const [, , , commands] = await messaging({
+    listener: handleEventMessage,
+    dataset: [{ input: 'hello', output: 'hello' }],
+  });
   commands('#dummy');
   expect(type).toBe('unknownCommand');
 });
@@ -57,9 +61,10 @@ test('Messaging dialog type should return dialog Messaging', async () => {
   const handleEventMessage = async () => {};
   const messaging = await useMessaging('dialog');
   expect(messaging).toBeDefined();
-  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage, [
-    { input: 'hello', output: 'hello' },
-  ]);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging({
+    listener: handleEventMessage,
+    dataset: [{ input: 'hello', output: 'hello' }],
+  });
   expect(getMessages).toBeDefined();
   expect(createMessage).toBeDefined();
   expect(sendMessage).toBeDefined();
@@ -73,9 +78,10 @@ test("Messaging dialog unknown input should return I don't understand", async ()
   const handleEventMessage = async () => {};
   const messaging = await useMessaging('dialog');
   expect(messaging).toBeDefined();
-  const [getMessages, createMessage, sendMessage, commands] = await messaging(handleEventMessage, [
-    { input: 'hello', output: 'hello' },
-  ]);
+  const [getMessages, createMessage, sendMessage, commands] = await messaging({
+    listener: handleEventMessage,
+    dataset: [{ input: 'hello', output: 'hello' }],
+  });
   expect(getMessages).toBeDefined();
   expect(createMessage).toBeDefined();
   expect(sendMessage).toBeDefined();

@@ -8,8 +8,8 @@
 import { deepCopy } from '@ziiircom/common';
 
 // Messaging service
-const useMessaging = async listener => {
-  let messages = [];
+const useMessaging = async ({ listener, messages: _messages }) => {
+  let messages = deepCopy([], _messages);
 
   const createMessage = (from, text) => ({ from, text, created_time: Date.now() });
 

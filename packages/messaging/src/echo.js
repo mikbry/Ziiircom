@@ -9,8 +9,8 @@ import { deepCopy } from '@ziiircom/common';
 import useMessaging from './messaging';
 
 // simple Echo Messaging service
-const useEcho = async listener => {
-  const [addMessage, getMessages, createMessage, , commands] = await useMessaging(listener);
+const useEcho = async ({ listener, messages }) => {
+  const [addMessage, getMessages, createMessage, , commands] = await useMessaging({ listener, messages });
 
   const sendMessage = async message => {
     addMessage(message);
