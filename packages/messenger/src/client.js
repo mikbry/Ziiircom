@@ -47,7 +47,7 @@ const ZiiirClient = async ({
           break;
         }
       }
-      render(m, container, undefined, insert);
+      render(m, container, { ...store }, insert);
       container.scrollTop = container.scrollHeight;
     } else if (type === 'resetMessages') {
       while (container.firstChild) {
