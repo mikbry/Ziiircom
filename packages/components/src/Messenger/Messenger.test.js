@@ -79,10 +79,10 @@ test('Messenger with messages should display them', async () => {
     <Messenger
       input={{ display: false }}
       messages={[
-        { key: 1, createdtime: 0, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: true },
-        { key: 2, createdtime: 1, text: 'Message', from: false },
-        { key: 3, createdtime: 2, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: true },
-        { key: 4, createdtime: 3, text: 'Message', from: false },
+        { key: 1, created_time: 0, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: true },
+        { key: 2, created_time: 1, text: 'Message', from: false },
+        { key: 3, created_time: 2, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: true },
+        { key: 4, created_time: 3, text: 'Message', from: false },
       ]}
     />,
   );

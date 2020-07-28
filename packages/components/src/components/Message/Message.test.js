@@ -9,6 +9,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import Message from './index';
+import Theme from '../../Theme';
 
 test('Message should render correctly', () => {
   const { asFragment } = render(<Message>message</Message>);
@@ -17,8 +18,14 @@ test('Message should render correctly', () => {
 
 test('Message should render button', () => {
   const handleAction = jest.fn();
+  const theme = { ...Theme };
+  theme.palette.button = { border: 'none', background: 'white', color: 'red' };
   const body = 'message<button>ok</button>';
-  const { getByRole } = render(<Message onAction={handleAction}>{body}</Message>);
+  const { getByRole } = render(
+    <Message onAction={handleAction} them={theme}>
+      {body}
+    </Message>,
+  );
   const button = getByRole('button');
   button.click();
   button.parentElement.click();
