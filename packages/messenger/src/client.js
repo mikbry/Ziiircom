@@ -43,6 +43,7 @@ const ZiiirClient = async ({
           avatar: getAvatar(message),
           fromUser: message.from === 'user',
           onAction: handleAction,
+          hideDate: state.messenger.hideDate,
         },
         message.text,
       );
@@ -90,7 +91,7 @@ const ZiiirClient = async ({
     sendMessage(message);
     // }
   };
-  const el = await App(msgs, handleNewMessage, handleAction);
+  const el = await App(msgs, handleNewMessage, handleAction, state.messenger.hideDate);
   render(el, root, { ...store });
   return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
 };
