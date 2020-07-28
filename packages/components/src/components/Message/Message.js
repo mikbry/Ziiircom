@@ -30,8 +30,8 @@ const Styled = Interface.styled('div')`
       props.fromUser ? 'enterMessageFromUser' : 'enterMessageFromBot'};
   }
   & > div > p {
-    background-color: ${props => (props.fromUser ? props.theme.palette.secondary : props.theme.palette.surface)};
-    color: ${props => (props.fromUser ? props.theme.palette.onSecondary : props.theme.palette.onSurface)};
+    background-color: ${props => (props.fromUser ? props.theme.palette.surface : props.theme.palette.secondary)};
+    color: ${props => (props.fromUser ? props.theme.palette.onSurface : props.theme.palette.onSecondary)};
     box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 5px 0px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 3px 1px -2px;
     margin-bottom: 4px;
     padding: 16px;
@@ -49,13 +49,23 @@ const Styled = Interface.styled('div')`
     font-weight: 400;
     line-height: 1.66;
   }
+  & > div > p > a {
+    color: ${props => props.theme.palette.link || 'inherit'};
+  }
   & > div > p > button {
-    border: none;
-    border-radius: 12px;
+    border: ${props =>
+      props.theme.palette.button && props.theme.palette.button.border ? props.theme.palette.button.border : 'none'};
+    border-radius: 4px;
     height: 24px;
-    margin: 2px 4px;
-    background: ${props => props.theme.palette.secondary};
-    color: ${props => props.theme.palette.onSecondary};
+    margin: 8px 4px;
+    background: ${props =>
+      props.theme.palette.button && props.theme.palette.button.background
+        ? props.theme.palette.button.background
+        : props.theme.palette.surface};
+    color: ${props =>
+      props.theme.palette.button && props.theme.palette.button.color
+        ? props.theme.palette.button.color
+        : props.theme.palette.onSurface};
     cursor: pointer;
     font-size: 16px;
   }
