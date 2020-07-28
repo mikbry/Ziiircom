@@ -23,6 +23,14 @@ const ZiiirClient = async ({
   setup({ html, createElement, styled });
   const ui = await useUI();
   const store = createStore(state);
+  const personas = store.messenger.personas || {};
+  const getAvatar = message => {
+    let { avatar } = message;
+    if (!avatar) {
+      avatar = personas[message.from];
+    }
+    return avatar;
+  };
   let handleAction;
   const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
@@ -32,7 +40,7 @@ const ZiiirClient = async ({
         {
           key: message.created_time,
           createdtime: message.created_time,
-          avatar: message.avatar,
+          avatar: getAvatar(message),
           fromUser: message.from === 'user',
           onAction: handleAction,
         },
@@ -70,7 +78,12 @@ const ZiiirClient = async ({
       sendMessage(message);
     }
   };
-  const msgs = await getMessages();
+  let msgs = await getMessages();
+  msgs = msgs.map(_m => {
+    const m = _m;
+    m.avatar = getAvatar(m);
+    return m;
+  });
   handleAction = (action, data) => {
     //  if (action === 'BUTTON') {
     const message = createMessage('user', data);

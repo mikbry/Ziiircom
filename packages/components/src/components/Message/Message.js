@@ -154,8 +154,8 @@ const Message = ({ createdtime, avatar, fromUser = true, children, onAction }) =
   return e(
     Styled,
     { fromUser, 'created-time': createdtime },
-    e('div', { onClick: handleClick }, e('p', { dangerouslySetInnerHTML: html }, body), e('span', null, meta)),
     avatar && e(Avatar, { src: avatar.src, alt: avatar.name }),
+    e('div', { onClick: handleClick }, e('p', { dangerouslySetInnerHTML: html }, body), e('span', null, meta)),
   );
 };
 

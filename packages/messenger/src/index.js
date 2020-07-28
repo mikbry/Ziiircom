@@ -9,7 +9,7 @@ import useMessaging from '@ziiircom/messaging';
 
 import client from './client';
 
-const messenger = async (initialState = { messenger: {} }, messageListener, root = document.body) => {
+const messenger = async (initialState = {}, messageListener, root = document.body) => {
   let config;
   let dataset;
   try {
@@ -24,6 +24,9 @@ const messenger = async (initialState = { messenger: {} }, messageListener, root
     config = {};
   }
   const state = { ...config, ...initialState };
+  if (!state.messenger) {
+    state.messenger = {};
+  }
   if (state.dataset) {
     if (state.dataset.src) {
       try {
