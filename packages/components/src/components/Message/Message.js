@@ -130,7 +130,7 @@ const Avatar = Interface.styled('img')`
 `;
 
 const e = Interface.createElement;
-const Message = ({ createdtime, avatar, fromUser = true, children, onAction }) => {
+const Message = ({ createdtime, avatar, fromUser = true, children, onAction, hideDate = false }) => {
   const meta = friendlyDate(createdtime);
   let html = children;
   let body = children;
@@ -155,7 +155,12 @@ const Message = ({ createdtime, avatar, fromUser = true, children, onAction }) =
     Styled,
     { fromUser, 'created-time': createdtime },
     avatar && e(Avatar, { src: avatar.src, alt: avatar.name }),
-    e('div', { onClick: handleClick }, e('p', { dangerouslySetInnerHTML: html }, body), e('span', null, meta)),
+    e(
+      'div',
+      { onClick: handleClick },
+      e('p', { dangerouslySetInnerHTML: html }, body),
+      !hideDate && e('span', null, meta),
+    ),
   );
 };
 
