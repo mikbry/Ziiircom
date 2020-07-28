@@ -223,6 +223,7 @@ test('defaultClient should respond to input button', async done => {
     {
       intents: [{ input: 'hello', output: 'hello<button>ok</button>' }],
       messenger: {},
+      messages: [{ from: 'bot', avatar: { src: 'bot', name: 'bot' }, text: 'hello' }],
     },
     messageListener,
   );
