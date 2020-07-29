@@ -141,7 +141,7 @@ const Dialog = (_intents, initialContexts) => {
     if (!match && matchs[0]) {
       [match] = matchs;
     }
-    let response;
+    let response = [];
     let entities;
     if (match) {
       const { intent } = match;
@@ -152,7 +152,6 @@ const Dialog = (_intents, initialContexts) => {
       }
       // handle condition #129
       let { output } = intent;
-      let set;
       if (Array.isArray(output)) {
         output.forEach(o => {
           if (o.type === 'condition') {
@@ -164,9 +163,9 @@ const Dialog = (_intents, initialContexts) => {
                 output = child;
               }
             });
-          } else {
+          } /* else {
             output = o;
-          }
+          } */
         });
       }
       let text = output;
@@ -178,20 +177,26 @@ const Dialog = (_intents, initialContexts) => {
           context[e.name] = e.value;
         }
       });
-      ({ response, set } = renderTemplate(text, context, entities));
-      if (Object.keys(set).length) {
-        context = { ...context, ...set };
+      if (!Array.isArray(text)) {
+        text = [text];
       }
-      if (output.set) {
-        Object.keys(output.set).forEach(name => {
-          context[name] = getValue(output.set[name], entities);
-        });
-      }
+      text.forEach(t => {
+        const r = renderTemplate(t, context, entities);
+        response.push(r.response);
+        if (Object.keys(r.set).length) {
+          context = { ...context, ...r.set };
+        }
+        if (output.set) {
+          Object.keys(output.set).forEach(name => {
+            context[name] = getValue(output.set[name], entities);
+          });
+        }
+      });
     } else {
-      response = "I don't understand";
+      response.push("I don't understand");
     }
     contexts[userId] = deepCopy(context);
-    response = renderer(response);
+    response = response.map(m => renderer(m));
     return { response, context, entities };
   };
   if (_intents && Array.isArray(_intents) && _intents.length) {

@@ -35,29 +35,36 @@ const ZiiirClient = async ({
   let handleAction;
   const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
-    if (type === 'newMessage') {
+    const createMessage = msg => {
       const m = createElement(
         ui.Message,
         {
-          key: message.created_time,
-          createdtime: message.created_time,
-          avatar: getAvatar(message),
-          fromUser: message.from === 'user',
+          key: msg.created_time,
+          createdtime: msg.created_time,
+          avatar: getAvatar(msg),
+          fromUser: msg.from === 'user',
           onAction: handleAction,
           hideDate: state.messenger.hideDate,
         },
-        message.text,
+        msg.text,
       );
       let insert;
       // eslint-disable-next-line no-restricted-syntax
       for (const c of container.children) {
         const createdtime = parseInt(c.getAttribute('created-time'), 10);
-        if (message.created_time < createdtime) {
+        if (msg.created_time < createdtime) {
           insert = { before: c };
           break;
         }
       }
       render(m, container, { ...store }, insert);
+    };
+    if (type === 'newMessage') {
+      if (Array.isArray(message)) {
+        message.forEach(m => createMessage(m));
+      } else {
+        createMessage(message);
+      }
       container.scrollTop = container.scrollHeight;
     } else if (type === 'resetMessages') {
       while (container.firstChild) {
