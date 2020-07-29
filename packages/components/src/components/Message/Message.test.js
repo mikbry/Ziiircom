@@ -31,7 +31,7 @@ test('Message should render button', () => {
   button.parentElement.click();
   expect(handleAction).toBeCalledTimes(1);
   const { getAllByRole } = render(
-    <Message onAction={handleAction} hideDate>
+    <Message onAction={handleAction} hideDate fromUser hasPrevious hasNext>
       {[body]}
     </Message>,
   );

@@ -35,7 +35,7 @@ const ZiiirClient = async ({
   let handleAction;
   const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
-    const createMessage = msg => {
+    const createMessage = (msg, hasPrevious, hasNext) => {
       const m = createElement(
         ui.Message,
         {
@@ -45,6 +45,8 @@ const ZiiirClient = async ({
           fromUser: msg.from === 'user',
           onAction: handleAction,
           hideDate: state.messenger.hideDate,
+          hasPrevious,
+          hasNext,
         },
         msg.text,
       );
@@ -61,7 +63,13 @@ const ZiiirClient = async ({
     };
     if (type === 'newMessage') {
       if (Array.isArray(message)) {
-        message.forEach(m => createMessage(m));
+        message.forEach((m, i, ms) => {
+          const prev = ms[i - 1];
+          const hasPrevious = !!prev && prev.from === m.from && m.created_time - prev.created_time < 2000;
+          const next = ms[i + 1];
+          const hasNext = !!next && next.from === m.from && next.created_time - m.created_time < 2000;
+          createMessage(m, hasPrevious, hasNext);
+        });
       } else {
         createMessage(message);
       }

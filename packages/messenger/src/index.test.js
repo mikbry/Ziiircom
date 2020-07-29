@@ -86,12 +86,12 @@ test('defaultClient should load intents if state.intents.src', async done => {
 
 test('defaultClient should load intents if state.dataset.src', async done => {
   let count = 0;
-  const closeMockFetch = mockFetch([{ input: 'hello', output: 'hello' }]);
+  const closeMockFetch = mockFetch([{ input: 'hello', output: ['hello', 'I am Bob', 'How are you ?'] }]);
   const messageListener = ({ type, message }) => {
     count += 1;
     if (count === 2) {
       const conversation = document.getElementsByClassName('ziiir-conversation')[0];
-      expect(conversation.children.length).toBe(2);
+      expect(conversation.children.length).toBe(4);
       expect(conversation.children[0].firstChild.firstChild.innerText).toBe('hello');
       expect(conversation.children[1].firstChild.firstChild.innerText).toBe('hello');
       expect(global.fetch).toHaveBeenCalledTimes(2);

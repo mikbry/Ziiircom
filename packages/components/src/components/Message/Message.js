@@ -14,7 +14,7 @@ const Styled = Interface.styled('div')`
   flex-direction: row;
   width: 100%;
   max-width: 80%;
-  margin: 12px 0px 0px;
+  margin: ${props => (props.hasPrevious ? '-16px' : '12px')} 0px 0px;
 
   cursor: default;
 
@@ -35,7 +35,10 @@ const Styled = Interface.styled('div')`
     box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 5px 0px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 3px 1px -2px;
     margin-bottom: 4px;
     padding: 16px;
-    border-radius: ${props => (props.fromUser ? '12px 12px 4px 12px' : '12px 12px 12px 4px')};
+    border-radius: ${props =>
+      props.fromUser
+        ? `12px ${props.hasPrevious ? '4px' : '12px'} ${props.hasNext ? '4px' : '12px 12px'}`
+        : `${props.hasPrevious ? '4px' : '12px'} 12px 12px ${props.hasNext ? '4px' : '12px'}`};
     overflow-wrap: break-word;
     line-height: 1.44;
   }
@@ -98,6 +101,15 @@ Styled.defaultProps = {
   theme: Theme,
 };
 
+const EmptyAvatar = Interface.styled('span')`
+  z-index: 3;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  margin-right: 8px;
+`;
+
 const Avatar = Interface.styled('img')`
   z-index: 3;
   flex-shrink: 0;
@@ -130,7 +142,16 @@ const Avatar = Interface.styled('img')`
 `;
 
 const e = Interface.createElement;
-const Message = ({ createdtime, avatar, fromUser = true, children, onAction, hideDate = false }) => {
+const Message = ({
+  createdtime,
+  avatar,
+  fromUser = true,
+  children,
+  onAction,
+  hideDate = false,
+  hasPrevious = false,
+  hasNext = false,
+}) => {
   const meta = friendlyDate(createdtime);
   let html = children;
   let body = children;
@@ -153,13 +174,13 @@ const Message = ({ createdtime, avatar, fromUser = true, children, onAction, hid
   };
   return e(
     Styled,
-    { fromUser, 'created-time': createdtime },
-    avatar && e(Avatar, { src: avatar.src, alt: avatar.name }),
+    { fromUser, 'created-time': createdtime, hasPrevious, hasNext },
+    avatar && (hasNext ? e(EmptyAvatar) : e(Avatar, { src: avatar.src, alt: avatar.name })),
     e(
       'div',
       { onClick: handleClick },
       e('p', { dangerouslySetInnerHTML: html }, body),
-      !hideDate && e('span', null, meta),
+      !hideDate && !hasNext && e('span', null, meta),
     ),
   );
 };

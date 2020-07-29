@@ -17,9 +17,16 @@ export default {
   },
 };
 
+const messages = [
+  { from: 'user', text: 'hello', created_time: 10000 },
+  { from: 'user', text: 'I am Bob !', created_time: 10001 },
+  { from: 'bot', text: 'hello', created_time: 10002 },
+  { from: 'bot', text: 'I am Liza', created_time: 10003 },
+  { from: 'bot', text: 'How are you ?', created_time: 10004 },
+];
 export const Basic = () => (
   <div>
-    <Messenger />
+    <Messenger messages={messages} />
   </div>
 );
 Basic.story = {
