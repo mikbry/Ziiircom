@@ -23,12 +23,22 @@ const preprocessIntent = _intent => {
     output.forEach((o, i) => {
       if (o.type === 'condition') {
         o.children.forEach((c, j) => {
-          // eslint-disable-next-line no-param-reassign
-          const { text, set } = preprocessOutput(c.text, c.set);
-          if (Object.keys(set).length === 0) {
-            intent.output[i].children[j] = { ...c, text };
+          const txt = c.text;
+          if (Array.isArray(txt)) {
+            intent.output[i].children[j].text = [];
+            intent.output[i].children[j].set = {};
+            txt.forEach(t => {
+              const { text, set } = preprocessOutput(t, c.set);
+              intent.output[i].children[j].text.push(text);
+              intent.output[i].children[j].set = { ...intent.output[i].children[j].set, ...set };
+            });
           } else {
+            // eslint-disable-next-line no-param-reassign
+            const { text, set } = preprocessOutput(c.text, c.set);
             intent.output[i].children[j] = { ...c, set, text };
+          }
+          if (Object.keys(intent.output[i].children[j].set).length === 0) {
+            delete intent.output[i].children[j].set;
           }
         });
       } else {
@@ -141,7 +151,7 @@ const Dialog = (_intents, initialContexts) => {
     if (!match && matchs[0]) {
       [match] = matchs;
     }
-    let response;
+    let response = [];
     let entities;
     if (match) {
       const { intent } = match;
@@ -152,7 +162,6 @@ const Dialog = (_intents, initialContexts) => {
       }
       // handle condition #129
       let { output } = intent;
-      let set;
       if (Array.isArray(output)) {
         output.forEach(o => {
           if (o.type === 'condition') {
@@ -164,9 +173,9 @@ const Dialog = (_intents, initialContexts) => {
                 output = child;
               }
             });
-          } else {
+          } /* else {
             output = o;
-          }
+          } */
         });
       }
       let text = output;
@@ -178,20 +187,30 @@ const Dialog = (_intents, initialContexts) => {
           context[e.name] = e.value;
         }
       });
-      ({ response, set } = renderTemplate(text, context, entities));
-      if (Object.keys(set).length) {
-        context = { ...context, ...set };
+      if (!Array.isArray(text)) {
+        text = [text];
       }
-      if (output.set) {
-        Object.keys(output.set).forEach(name => {
-          context[name] = getValue(output.set[name], entities);
-        });
-      }
+      text.forEach(t => {
+        let txt = t;
+        if (txt.text) {
+          txt = txt.text;
+        }
+        const r = renderTemplate(txt, context, entities);
+        response.push(r.response);
+        if (Object.keys(r.set).length) {
+          context = { ...context, ...r.set };
+        }
+        if (output.set) {
+          Object.keys(output.set).forEach(name => {
+            context[name] = getValue(output.set[name], entities);
+          });
+        }
+      });
     } else {
-      response = "I don't understand";
+      response.push("I don't understand");
     }
     contexts[userId] = deepCopy(context);
-    response = renderer(response);
+    response = response.map(m => renderer(m));
     return { response, context, entities };
   };
   if (_intents && Array.isArray(_intents) && _intents.length) {
