@@ -23,12 +23,22 @@ const preprocessIntent = _intent => {
     output.forEach((o, i) => {
       if (o.type === 'condition') {
         o.children.forEach((c, j) => {
-          // eslint-disable-next-line no-param-reassign
-          const { text, set } = preprocessOutput(c.text, c.set);
-          if (Object.keys(set).length === 0) {
-            intent.output[i].children[j] = { ...c, text };
+          const txt = c.text;
+          if (Array.isArray(txt)) {
+            intent.output[i].children[j].text = [];
+            intent.output[i].children[j].set = {};
+            txt.forEach(t => {
+              const { text, set } = preprocessOutput(t, c.set);
+              intent.output[i].children[j].text.push(text);
+              intent.output[i].children[j].set = { ...intent.output[i].children[j].set, ...set };
+            });
           } else {
+            // eslint-disable-next-line no-param-reassign
+            const { text, set } = preprocessOutput(c.text, c.set);
             intent.output[i].children[j] = { ...c, set, text };
+          }
+          if (Object.keys(intent.output[i].children[j].set).length === 0) {
+            delete intent.output[i].children[j].set;
           }
         });
       } else {
@@ -181,7 +191,11 @@ const Dialog = (_intents, initialContexts) => {
         text = [text];
       }
       text.forEach(t => {
-        const r = renderTemplate(t, context, entities);
+        let txt = t;
+        if (txt.text) {
+          txt = txt.text;
+        }
+        const r = renderTemplate(txt, context, entities);
         response.push(r.response);
         if (Object.keys(r.set).length) {
           context = { ...context, ...r.set };
