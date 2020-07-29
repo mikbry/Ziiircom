@@ -9,6 +9,7 @@ import { setup } from '@ziiircom/components';
 import useUI from './hooks/ui';
 import { html, createElement, render } from './utils/builder';
 import { styled } from './utils/styled';
+import initFonts from './utils/styled/fonts';
 import createStore from './utils/store';
 import App from './app';
 
@@ -93,6 +94,7 @@ const ZiiirClient = async ({
   };
   const el = await App(msgs, handleNewMessage, handleAction, state.messenger.hideDate);
   render(el, root, { ...store });
+  initFonts(state.theme, 'ziiircom-messenger-frame');
   return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
 };
 
