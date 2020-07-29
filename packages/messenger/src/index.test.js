@@ -33,7 +33,16 @@ test('defaultClient should be started and respond to input"', async (done) => {
     }
     return { type, message };
   };
-  await messenger({ intents: undefined, messenger: {} }, messageListener);
+  await messenger(
+    {
+      theme: {
+        fonts: { text: { name: 'Raleway', url: 'https://fonts.googleapis.com/css?family=Raleway:400,700' } },
+      },
+      intents: undefined,
+      messenger: {},
+    },
+    messageListener,
+  );
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
@@ -211,8 +220,8 @@ test('defaultClient should respond to input button', async done => {
     count += 1;
     if (count === 2) {
       const conversation = document.getElementsByClassName('ziiir-conversation')[0];
-      expect(conversation.children.length).toBe(2);
-      expect(conversation.children[0].firstChild.firstChild.innerText).toBe('hello');
+      expect(conversation.children.length).toBe(3);
+      expect(conversation.children[1].firstChild.firstChild.innerText).toBe('hello');
       // expect(conversation.children[1].firstChild.firstChild.innerText).toBe('hello ok');
     } else if (count === 3) {
       done();

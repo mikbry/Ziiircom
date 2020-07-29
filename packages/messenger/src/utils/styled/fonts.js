@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const initFonts = (theme, id) => {
+const initFonts = (theme = {}, id) => {
   const { fonts = {} } = theme;
   const { text = {}, heading = {} } = fonts;
   const fontMessengerTextEl = document.createElement('link');
