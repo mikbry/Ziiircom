@@ -101,6 +101,15 @@ Styled.defaultProps = {
   theme: Theme,
 };
 
+const EmptyAvatar = Interface.styled('span')`
+  z-index: 3;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  margin-right: 8px;
+`;
+
 const Avatar = Interface.styled('img')`
   z-index: 3;
   flex-shrink: 0;
@@ -166,7 +175,7 @@ const Message = ({
   return e(
     Styled,
     { fromUser, 'created-time': createdtime, hasPrevious, hasNext },
-    avatar && !hasPrevious && e(Avatar, { src: avatar.src, alt: avatar.name }),
+    avatar && (hasNext ? e(EmptyAvatar) : e(Avatar, { src: avatar.src, alt: avatar.name })),
     e(
       'div',
       { onClick: handleClick },

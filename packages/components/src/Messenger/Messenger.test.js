@@ -79,13 +79,15 @@ test('Messenger with messages should display them', async () => {
     <Messenger
       input={{ display: false }}
       messages={[
-        { key: 1, created_time: 0, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: true },
-        { key: 2, created_time: 1, text: 'Message', from: false },
-        { key: 3, created_time: 2, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: true },
-        { key: 4, created_time: 3, text: 'Message', from: false },
+        { created_time: 0, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: 'true' },
+        { created_time: 1, text: 'Message', from: 'false' },
+        { created_time: 2, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: 'true' },
+        { created_time: 3, avatar: { src: 'avatar', name: 'avatar' }, text: 'Message', from: 'false' },
+        { created_time: 4, text: 'Message', from: 'false' },
+        { created_time: 5, text: 'Message', from: 'false' },
       ]}
     />,
   );
   const messages = getAllByText('Message');
-  expect(messages.length).toBe(4);
+  expect(messages.length).toBe(6);
 });
