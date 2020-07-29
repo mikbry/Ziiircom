@@ -12,7 +12,6 @@ const Box = Interface.styled('div')`
   padding: 1.2em;
   background: ${props => props.theme.palette.background};
   color: #292c45;
-  font-family: Roboto Condensed,sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

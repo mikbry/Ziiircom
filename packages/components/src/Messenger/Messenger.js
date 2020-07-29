@@ -16,7 +16,6 @@ import Theme from '../Theme';
 
 const StyledMessenger = Interface.styled(Box)`
   color: ${props => props.theme.palette.onSurface};
-  font-family: sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
