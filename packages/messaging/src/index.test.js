@@ -46,7 +46,7 @@ test('Messaging command #reset should erase messages', async () => {
   expect(messaging).toBeDefined();
   const [getMessages, createMessage, sendMessage, commands] = await messaging({
     listener: handleEventMessage,
-    dataset: [{ input: 'hello', output: 'hello' }],
+    dataset: [{ input: 'hello', output: { text: 'hello', quick_replies: [{ title: 'ok' }] } }],
   });
   await sendMessage(createMessage('user', 'hello'));
   let messages = await getMessages();

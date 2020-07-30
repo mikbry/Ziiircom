@@ -77,6 +77,15 @@ test('Dialog intents with set should update context', () => {
   expect(response[0]).toBe('ok');
 });
 
+test('Dialog intents with quick_replies should send back', () => {
+  const [matchIntent, buildOutput] = Dialog([
+    { input: ['*'], output: { text: 'ok', quick_replies: [{ title: 'ok' }] } },
+  ]);
+  const { matchs } = matchIntent({ text: 'hello' });
+  const { quick_replies: qr } = buildOutput({ matchs });
+  expect(qr[0].title).toBe('ok');
+});
+
 test('Dialog intents variables should display correctly', () => {
   const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok {{var}}{{dummy}}', set: { var: 'value' } }]);
   const { matchs, context } = matchIntent({ text: 'hello' });
