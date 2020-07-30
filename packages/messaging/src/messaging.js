@@ -20,7 +20,7 @@ const useMessaging = async ({ listener, messages: _messages }) => {
     });
   }
 
-  const createMessage = (from, text) => ({ from, text, created_time: Date.now() });
+  const createMessage = (from, text, ...extra) => ({ from, text, ...extra, created_time: Date.now() });
 
   const sendMessage = undefined;
 

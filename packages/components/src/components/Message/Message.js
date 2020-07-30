@@ -182,8 +182,13 @@ const Message = ({
       { onClick: handleClick },
       e('p', { dangerouslySetInnerHTML: html }, body),
       !hideDate && !hasNext && e('span', null, meta),
+      quickReplies &&
+        e(
+          'div',
+          {},
+          quickReplies.map(qr => e('button', { key: qr.title }, qr.title)),
+        ),
     ),
-    quickReplies && e('div', {}, 'quickReplies'),
   );
 };
 

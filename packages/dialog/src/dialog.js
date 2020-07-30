@@ -7,8 +7,8 @@
  */
 import { deepCopy } from '@ziiircom/common';
 
-const preprocessOutput = (output, set = {}) => {
-  const text = output.replace(/<<\s*([\w.]+)\s*=\s*(.+?)\s*>>/g, (match, name, value) => {
+const preprocessSentence = (sentence, set = {}) => {
+  const text = sentence.replace(/<<\s*([\w.]+)\s*=\s*(.+?)\s*>>/g, (match, name, value) => {
     // eslint-disable-next-line no-param-reassign
     set[name] = value;
     return '';
@@ -16,48 +16,45 @@ const preprocessOutput = (output, set = {}) => {
   return { text, set };
 };
 
+const preprocessOutput = output => {
+  let sentence;
+  if (Array.isArray(output)) {
+    // Sentence is an Array
+    sentence = output.map(s => preprocessOutput(s));
+  } else if (output.text) {
+    // Sentence is an object
+    sentence = output;
+    if (Array.isArray(sentence.text)) {
+      // Sentence.text is an array
+      sentence.text.forEach((t, j) => {
+        ({ text: sentence.text[j], set: sentence.set } = preprocessSentence(t, sentence.set));
+      });
+    } else {
+      // Sentence.text is a string
+      ({ text: sentence.text, set: sentence.set } = preprocessSentence(sentence.text, sentence.set));
+    }
+    if (Object.keys(sentence.set).length === 0) {
+      delete sentence.set;
+    }
+  } else {
+    // Sentence is a string
+    const { text, set } = preprocessSentence(output);
+    if (Object.keys(set).length) {
+      sentence = { text, set };
+    } else {
+      sentence = text;
+    }
+  }
+  return sentence;
+};
+
 const preprocessIntent = _intent => {
   const intent = deepCopy(_intent);
   const { output } = intent;
-  if (Array.isArray(output)) {
-    output.forEach((o, i) => {
-      if (o.type === 'condition') {
-        o.children.forEach((c, j) => {
-          const txt = c.text;
-          if (Array.isArray(txt)) {
-            intent.output[i].children[j].text = [];
-            intent.output[i].children[j].set = {};
-            txt.forEach(t => {
-              const { text, set } = preprocessOutput(t, c.set);
-              intent.output[i].children[j].text.push(text);
-              intent.output[i].children[j].set = { ...intent.output[i].children[j].set, ...set };
-            });
-          } else {
-            // eslint-disable-next-line no-param-reassign
-            const { text, set } = preprocessOutput(c.text, c.set);
-            intent.output[i].children[j] = { ...c, set, text };
-          }
-          if (Object.keys(intent.output[i].children[j].set).length === 0) {
-            delete intent.output[i].children[j].set;
-          }
-        });
-      } else {
-        const { text, set } = preprocessOutput(o);
-        intent.output[i] = { set };
-        if (Object.keys(set).length === 0) {
-          intent.output[i] = text;
-        } else {
-          intent.output[i] = { set, text };
-        }
-      }
-    });
+  if (Array.isArray(output) && output.length && output[0].type === 'condition') {
+    intent.output = intent.output.map(o => ({ ...o, children: preprocessOutput(o.children) }));
   } else {
-    const { text, set } = preprocessOutput(output);
-    if (Object.keys(set).length === 0) {
-      intent.output = text;
-    } else {
-      intent.output = { set, text };
-    }
+    intent.output = preprocessOutput(output);
   }
 
   return intent;
@@ -138,7 +135,7 @@ const extractAndMatch = (input, text) => {
 const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
-  const buildOutput = ({ matchs, context: c = {}, userId }, renderer = htmlRenderer) => {
+  const buildResponse = ({ matchs, context: c = {}, userId }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
     let match;
     let output;
@@ -248,7 +245,7 @@ const Dialog = (_intents, initialContexts) => {
       });
       return { matchs: matchs.sort((a, b) => (a.intent.order || 0) - (b.intent.order || 0)), context, userId };
     };
-    resp = [matchIntent, buildOutput];
+    resp = [matchIntent, buildResponse];
   }
 
   return resp;
