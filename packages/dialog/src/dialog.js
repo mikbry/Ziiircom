@@ -141,6 +141,8 @@ const Dialog = (_intents, initialContexts) => {
   const buildOutput = ({ matchs, context: c = {}, userId }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
     let match;
+    let output;
+    let quickReplies;
     if (matchs && matchs.length > 1) {
       matchs.forEach(m => {
         if (!m.any && !match && m.intent.topic === context.topic) {
@@ -161,7 +163,7 @@ const Dialog = (_intents, initialContexts) => {
         context = { ...context, ...intent.set };
       }
       // handle condition #129
-      let { output } = intent;
+      ({ output } = intent);
       if (Array.isArray(output)) {
         output.forEach(o => {
           if (o.type === 'condition') {
@@ -173,14 +175,15 @@ const Dialog = (_intents, initialContexts) => {
                 output = child;
               }
             });
-          } /* else {
-            output = o;
-          } */
+          }
         });
       }
       let text = output;
       if (output.text) {
         ({ text } = output);
+      }
+      if (output.quick_replies) {
+        quickReplies = output.quick_replies;
       }
       entities.forEach(e => {
         if (e.name) {
@@ -211,7 +214,11 @@ const Dialog = (_intents, initialContexts) => {
     }
     contexts[userId] = deepCopy(context);
     response = response.map(m => renderer(m));
-    return { response, context, entities };
+    output = { response, context, entities };
+    if (quickReplies) {
+      output.quick_replies = quickReplies;
+    }
+    return output;
   };
   if (_intents && Array.isArray(_intents) && _intents.length) {
     const intents = _intents.map(i => preprocessIntent(i));

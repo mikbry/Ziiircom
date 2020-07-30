@@ -47,6 +47,7 @@ const ZiiirClient = async ({
           hideDate: state.messenger.hideDate,
           hasPrevious,
           hasNext,
+          quickReplies: msg.quick_replies,
         },
         msg.text,
       );
