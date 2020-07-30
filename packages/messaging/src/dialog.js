@@ -19,10 +19,13 @@ const useDialog = async ({ listener, dataset: intents, messages, contexts: _cont
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const matchs = matchIntents(message);
-    const { response } = buildResponse(matchs);
+    const { response, quick_replies: quickReplies } = buildResponse(matchs);
     const newMessages = [];
-    response.forEach(r => {
+    response.forEach((r, i) => {
       const msg = createMessage('bot', r);
+      if (i === response.length - 1 && quickReplies) {
+        msg.quick_replies = deepCopy(quickReplies);
+      }
       addMessage(msg);
       newMessages.push(deepCopy(msg));
     });
