@@ -111,7 +111,7 @@ const StyledReplies = Interface.styled('div')`
         ? props.theme.palette.button.border
         : `1px solid ${props.theme.palette.secondary}`};
     border-radius: 4px;
-    height: 24px;
+    min-height: 24px;
     margin: 8px 4px;
     background: ${props =>
       props.theme.palette.button && props.theme.palette.button.background

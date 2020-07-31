@@ -101,7 +101,7 @@ const Messenger = ({
     Conversation,
     { isExpanded, className: 'ziiir-conversation' },
     messages
-      .sort((m1, m2) => m1.createdtime > m2.createdtime)
+      .sort((m1, m2) => m1.created_time > m2.created_time)
       .map((msg, i, ms) => {
         const prev = ms[i - 1];
         const hasPrevious = !!prev && prev.from === msg.from && msg.created_time - prev.created_time < 2000;
