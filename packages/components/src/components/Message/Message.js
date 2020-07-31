@@ -101,6 +101,35 @@ Styled.defaultProps = {
   theme: Theme,
 };
 
+const StyledReplies = Interface.styled('div')`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  & > button {
+    border: ${props =>
+      props.theme.palette.button && props.theme.palette.button.border
+        ? props.theme.palette.button.border
+        : `1px solid ${props.theme.palette.secondary}`};
+    border-radius: 4px;
+    height: 24px;
+    margin: 8px 4px;
+    background: ${props =>
+      props.theme.palette.button && props.theme.palette.button.background
+        ? props.theme.palette.button.background
+        : props.theme.palette.surface};
+    color: ${props =>
+      props.theme.palette.button && props.theme.palette.button.color
+        ? props.theme.palette.button.color
+        : props.theme.palette.onSurface};
+    cursor: pointer;
+    font-size: 16px;
+  }
+`;
+
+StyledReplies.defaultProps = {
+  theme: Theme,
+};
+
 const EmptyAvatar = Interface.styled('span')`
   z-index: 3;
   flex-shrink: 0;
@@ -181,10 +210,10 @@ const Message = ({
       'div',
       { onClick: handleClick },
       e('p', { dangerouslySetInnerHTML: html }, body),
-      !hideDate && !hasNext && e('span', null, meta),
+      !hideDate && !quickReplies && !hasNext && e('span', null, meta),
       quickReplies &&
         e(
-          'div',
+          StyledReplies,
           {},
           quickReplies.map(qr => e('button', { key: qr.title }, qr.title)),
         ),
