@@ -50,7 +50,7 @@ var messenger=function(e){var t={};function r(a){if(t[a])return t[a].exports;var
   margin: 0;
   border: none;
   outline:none;
-`,g=a.default.createElement;var v=({isExpanded:e=!0,input:t={display:!0},header:r={},messages:a=[],onMessage:n,onClick:s,onAction:o,hideDate:i=!1})=>{const u=g(h,{isExpanded:e,className:"ziiir-conversation"},a.sort((e,t)=>e.createdtime>t.createdtime).map((e,t,r)=>{const a=r[t-1],n=!!a&&a.from===e.from&&e.created_time-a.created_time<2e3,s=r[t+1],u=!!s&&s.from===e.from&&s.created_time-e.created_time<2e3;return((e,t,r,a,n,s,o,i,u)=>g(l.default,{key:e,createdtime:e,avatar:a,fromUser:r,onAction:n,hideDate:s,hasPrevious:o,hasNext:i,quickReplies:u},t))(e.created_time,e.text,"user"===e.from,e.avatar,o,i,n,u,e.quick_replies)}));let d="ziiir.com";const c=e=>{const t=e.target.value||"";"Enter"===e.key&&t.length>0&&(n&&n(t),e.target.value="")};return t.display&&(d=g(y,{className:"ziir-input",onKeyUp:c,placeholder:t.placeholder||"Your message"})),g(f,{className:e?"isexpanded":void 0,onClick:s},g(p,null,r.text||""),u,g(m,null,d))};t.default=v},function(e,t,r){"use strict";var a;Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n=((a=r(23))&&a.__esModule?a:{default:a}).default;t.default=n},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var a=s(r(0)),n=s(r(1));function s(e){return e&&e.__esModule?e:{default:e}}const o=a.default.styled("div")`
+`,g=a.default.createElement;var v=({isExpanded:e=!0,input:t={display:!0},header:r={},messages:a=[],onMessage:n,onClick:s,onAction:o,hideDate:i=!1})=>{const u=g(h,{isExpanded:e,className:"ziiir-conversation"},a.sort((e,t)=>e.created_time>t.created_time).map((e,t,r)=>{const a=r[t-1],n=!!a&&a.from===e.from&&e.created_time-a.created_time<2e3,s=r[t+1],u=!!s&&s.from===e.from&&s.created_time-e.created_time<2e3;return((e,t,r,a,n,s,o,i,u)=>g(l.default,{key:e,createdtime:e,avatar:a,fromUser:r,onAction:n,hideDate:s,hasPrevious:o,hasNext:i,quickReplies:u},t))(e.created_time,e.text,"user"===e.from,e.avatar,o,i,n,u,e.quick_replies)}));let d="ziiir.com";const c=e=>{const t=e.target.value||"";"Enter"===e.key&&t.length>0&&(n&&n(t),e.target.value="")};return t.display&&(d=g(y,{className:"ziir-input",onKeyUp:c,placeholder:t.placeholder||"Your message"})),g(f,{className:e?"isexpanded":void 0,onClick:s},g(p,null,r.text||""),u,g(m,null,d))};t.default=v},function(e,t,r){"use strict";var a;Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n=((a=r(23))&&a.__esModule?a:{default:a}).default;t.default=n},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var a=s(r(0)),n=s(r(1));function s(e){return e&&e.__esModule?e:{default:e}}const o=a.default.styled("div")`
   padding: 1.2em;
   background: ${e=>e.theme.palette.background};
   color: #292c45;
@@ -172,7 +172,7 @@ var messenger=function(e){var t={};function r(a){if(t[a])return t[a].exports;var
   & > button {
     border: ${e=>e.theme.palette.button&&e.theme.palette.button.border?e.theme.palette.button.border:"1px solid "+e.theme.palette.secondary};
     border-radius: 4px;
-    height: 24px;
+    min-height: 24px;
     margin: 8px 4px;
     background: ${e=>e.theme.palette.button&&e.theme.palette.button.background?e.theme.palette.button.background:e.theme.palette.surface};
     color: ${e=>e.theme.palette.button&&e.theme.palette.button.color?e.theme.palette.button.color:e.theme.palette.onSurface};
