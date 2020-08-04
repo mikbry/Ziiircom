@@ -197,11 +197,18 @@ const Message = ({
   } else {
     html = undefined;
   }
+
   const handleClick = event => {
     if (event.target.tagName === 'BUTTON') {
       onAction(event.target.tagName, event.target.textContent);
     }
   };
+
+  const handleQuickClick = event => {
+    const parent = event.target.parentNode;
+    parent.style.display = 'none';
+  };
+
   return e(
     Styled,
     { fromUser, 'created-time': createdtime, hasPrevious, hasNext },
@@ -214,7 +221,7 @@ const Message = ({
       quickReplies &&
         e(
           StyledReplies,
-          {},
+          { onClick: handleQuickClick },
           quickReplies.map(qr => e('button', { key: qr.title }, qr.title)),
         ),
     ),
