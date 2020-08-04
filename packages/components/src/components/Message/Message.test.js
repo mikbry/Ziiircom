@@ -22,7 +22,7 @@ test('Message should render button', () => {
   theme.palette.button = { border: 'none', background: 'white', color: 'red' };
   const body = 'message<button>ok</button>';
   const { getByRole } = render(
-    <Message onAction={handleAction} them={theme}>
+    <Message onAction={handleAction} theme={theme}>
       {body}
     </Message>,
   );
@@ -30,6 +30,13 @@ test('Message should render button', () => {
   button.click();
   button.parentElement.click();
   expect(handleAction).toBeCalledTimes(1);
+});
+test('Message should render quick_replies', () => {
+  const handleAction = jest.fn();
+  const theme = { ...Theme };
+  theme.palette.button = { border: 'none', background: 'white', color: 'red' };
+  const body = 'message';
+
   const { getAllByRole } = render(
     <Message onAction={handleAction} hideDate fromUser hasPrevious hasNext quickReplies={[{ title: 'ok' }]}>
       {[body]}
@@ -37,5 +44,10 @@ test('Message should render button', () => {
   );
   const buttons = getAllByRole('button');
   buttons[0].click();
-  expect(handleAction).toBeCalledTimes(2);
+  expect(handleAction).toBeCalledTimes(1);
+  render(
+    <Message theme={theme} onAction={handleAction} quickReplies={[{ title: 'ok' }]}>
+      {[body]}
+    </Message>,
+  );
 });
