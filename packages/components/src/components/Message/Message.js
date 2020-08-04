@@ -9,6 +9,12 @@ import { friendlyDate } from '@ziiircom/common';
 import Interface from '../../interface';
 import Theme from '../../Theme';
 
+const buttonBorder = (palette, border = 'none') =>
+  palette.button && palette.button.border ? palette.button.border : border;
+
+const buttonBackgroundColor = palette =>
+  palette.button && palette.button.background ? palette.button.background : palette.surface;
+const buttonColor = palette => (palette.button && palette.button.color ? palette.button.color : palette.onSurface);
 const Styled = Interface.styled('div')`
   display: flex;
   flex-direction: row;
@@ -56,19 +62,12 @@ const Styled = Interface.styled('div')`
     color: ${props => props.theme.palette.link || 'inherit'};
   }
   & > div > p > button {
-    border: ${props =>
-      props.theme.palette.button && props.theme.palette.button.border ? props.theme.palette.button.border : 'none'};
+    border: ${props => buttonBorder(props.theme.palette)};
     border-radius: 4px;
     height: 24px;
     margin: 8px 4px;
-    background: ${props =>
-      props.theme.palette.button && props.theme.palette.button.background
-        ? props.theme.palette.button.background
-        : props.theme.palette.surface};
-    color: ${props =>
-      props.theme.palette.button && props.theme.palette.button.color
-        ? props.theme.palette.button.color
-        : props.theme.palette.onSurface};
+    background: ${props => buttonBackgroundColor(props.theme.palette)};
+    color: ${props => buttonColor(props.theme.palette)};
     cursor: pointer;
     font-size: 16px;
   }
@@ -106,21 +105,12 @@ const StyledReplies = Interface.styled('div')`
   flex-direction: row;
   width: 100%;
   & > button {
-    border: ${props =>
-      props.theme.palette.button && props.theme.palette.button.border
-        ? props.theme.palette.button.border
-        : `1px solid ${props.theme.palette.secondary}`};
+    border: ${props => buttonBorder(props.theme.palette, `1px solid ${props.theme.palette.secondary}`)};
     border-radius: 4px;
     min-height: 24px;
     margin: 8px 4px;
-    background: ${props =>
-      props.theme.palette.button && props.theme.palette.button.background
-        ? props.theme.palette.button.background
-        : props.theme.palette.surface};
-    color: ${props =>
-      props.theme.palette.button && props.theme.palette.button.color
-        ? props.theme.palette.button.color
-        : props.theme.palette.onSurface};
+    background: ${props => buttonBackgroundColor(props.theme.palette)};
+    color: ${props => buttonColor(props.theme.palette)};
     cursor: pointer;
     font-size: 16px;
   }
