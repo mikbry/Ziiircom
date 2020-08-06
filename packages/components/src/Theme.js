@@ -8,10 +8,10 @@
 
 const Theme = {
   palette: {
-    primary: 'palevioletred',
-    secondary: '#70DBB8',
+    primary: '#F03F29',
+    secondary: '#1EA7FD',
     background: 'smokewhite',
-    surface: 'papayawhip',
+    surface: '#F0F0F0',
     onPrimary: 'white',
     onSecondary: 'white',
     onBackground: 'dark',
@@ -20,6 +20,7 @@ const Theme = {
   },
   fonts: [],
   font: {
+    family: 'sans-serif',
     size: '16px',
     style: 'normal',
     weight: '400',
@@ -36,10 +37,9 @@ const Theme = {
   },
 
   message: {
-    radius: 12,
+    radius: 16,
     smallRadius: 4,
-    shadow:
-      'rgba(0, 0, 0, 0.2) 0px 1px 5px 0px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 3px 1px -2px',
+    shadow: 'none',
   },
 };
 

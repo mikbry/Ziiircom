@@ -16,9 +16,10 @@ import Theme from '../Theme';
 
 const StyledMessenger = Interface.styled(Box)`
   color: ${props => props.theme.palette.onSurface};
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: ${props => props.theme.font.family};
+  font-size: ${props => props.theme.font.size};
+  font-style: ${props => props.theme.font.style};
+  font-weight: ${props => props.theme.font.weight};
   line-height: 1.1;
   overflow-wrap: break-word;
 
