@@ -68,7 +68,7 @@ const Styled = Interface.styled('div')`
   & > div > p > button {
     border: ${props => buttonBorder(props.theme.palette)};
     border-radius: 4px;
-    height: 24px;
+    min-height: 24px;
     margin: 8px 4px;
     background: ${props => buttonBackgroundColor(props.theme.palette)};
     color: ${props => buttonColor(props.theme.palette)};
@@ -106,7 +106,7 @@ Styled.defaultProps = {
 
 const StyledReplies = Interface.styled('div')`
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   width: 100%;
   & > button {
     border: ${props => buttonBorder(props.theme.palette, `1px solid ${props.theme.palette.secondary}`)};
