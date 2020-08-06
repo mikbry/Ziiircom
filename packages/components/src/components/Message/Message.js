@@ -38,13 +38,17 @@ const Styled = Interface.styled('div')`
   & > div > p {
     background-color: ${props => (props.fromUser ? props.theme.palette.surface : props.theme.palette.secondary)};
     color: ${props => (props.fromUser ? props.theme.palette.onSurface : props.theme.palette.onSecondary)};
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 5px 0px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 3px 1px -2px;
+    box-shadow: ${props => props.theme.message.shadow};
     margin-bottom: 4px;
     padding: 16px;
-    border-radius: ${props =>
-      props.fromUser
-        ? `12px ${props.hasPrevious ? '4px' : '12px'} ${props.hasNext ? '4px' : '12px 12px'}`
-        : `${props.hasPrevious ? '4px' : '12px'} 12px 12px ${props.hasNext ? '4px' : '12px'}`};
+    border-radius: ${props => {
+      let { smallRadius, radius } = props.theme.message;
+      smallRadius += 'px';
+      radius += 'px';
+      return props.fromUser
+        ? `${radius} ${props.hasPrevious ? smallRadius : radius} ${props.hasNext ? smallRadius : `${radius} ${radius}`}`
+        : `${props.hasPrevious ? smallRadius : radius} ${radius} ${radius} ${props.hasNext ? smallRadius : radius}`;
+    }};
     overflow-wrap: break-word;
     line-height: 1.44;
   }
