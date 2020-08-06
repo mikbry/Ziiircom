@@ -31,7 +31,7 @@ const Styled = Interface.styled('div')`
   }
 
   & > div {
-    width: 100%;
+    margin-left: ${props => (props.fromUser ? 'auto' : '0px')};
     animation: 0.3s cubic-bezier(0, 0, 0.2, 1) 0s 1 normal both running ${props =>
       props.fromUser ? 'enterMessageFromUser' : 'enterMessageFromBot'};
   }
@@ -40,7 +40,7 @@ const Styled = Interface.styled('div')`
     color: ${props => (props.fromUser ? props.theme.palette.onSurface : props.theme.palette.onSecondary)};
     box-shadow: ${props => props.theme.message.shadow};
     margin-bottom: 4px;
-    padding: 16px;
+    padding: 6px 16px;
     border-radius: ${props => {
       let { smallRadius, radius } = props.theme.message;
       smallRadius += 'px';
