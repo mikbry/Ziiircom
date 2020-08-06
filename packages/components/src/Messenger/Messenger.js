@@ -23,13 +23,12 @@ const StyledMessenger = Interface.styled(Box)`
   overflow-wrap: break-word;
 
   padding: 0px;
-  width: 400px;
-  height: 600px;
+  width: ${props => props.theme.messenger.width};
+  height: ${props => props.theme.messenger.height};
   display: flex;
-  border-radius: 12px;
+  border-radius: ${props => `${props.theme.radius}px`};
   flex-direction: column;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
-
+  box-shadow: ${props => props.theme.shadow};
   &.isexpanded .ziiir-conversation {
     animation: 0.675s cubic-bezier(0.4, 0, 0.2, 1) 0.45s 1 normal both running enterConversation;
     animation-delay: 0.45s;
