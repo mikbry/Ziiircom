@@ -267,13 +267,5 @@ cursor:pointer;
     right: 32px;
     bottom: 32px;
     z-index: 9;
-  `;return(0,s.styled)("div",{className:"ziiircom-messenger-frame"},y,g)`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-  `};t.default=l}]);
+  `;return(0,s.styled)("div",{className:"ziiircom-messenger-frame"},y,g)``};t.default=l}]);
 //# sourceMappingURL=main.js.map
