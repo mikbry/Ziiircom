@@ -11,7 +11,7 @@ import { html, createElement, render } from './utils/builder';
 import { styled } from './utils/styled';
 import initFonts from './utils/styled/fonts';
 import createStore from './utils/store';
-import App from './app';
+import MessengerApp from './MessengerApp';
 
 const ZiiirClient = async ({
   state,
@@ -108,7 +108,7 @@ const ZiiirClient = async ({
     sendMessage(message);
     // }
   };
-  const el = await App(msgs, handleNewMessage, handleAction, state.messenger.hideDate);
+  const el = await MessengerApp(msgs, handleNewMessage, handleAction, state.messenger.hideDate);
   render(el, root, { ...store });
   initFonts(state.theme, 'ziiircom-messenger-frame');
   return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
