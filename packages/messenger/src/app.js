@@ -47,7 +47,7 @@ const App = async (messages, onMessage, onAction, hideDate) => {
     width: 100%;
     max-width: ${props => props.theme.messenger.width};
     height: 80%;
-    margin: 48px;
+    margin: 96px 48px 96px auto;
   `;
 
   const MessengerFrame = styled(
@@ -64,8 +64,6 @@ const App = async (messages, onMessage, onAction, hideDate) => {
     z-index: 3;
     flex-direction: column;
     flex-shrink: 0;
-    align-items: end;
-    justify-content: center;
 
     &.isopen {
       display: flex;
