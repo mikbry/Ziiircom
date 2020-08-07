@@ -25,6 +25,10 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     messenger.classList.toggle('isopen');
   };
 
+  if (header.closeButton) {
+    header.closeButton.onClose = handleFabClick;
+  }
+
   const handlePrevClick = event => {
     event.stopPropagation();
   };

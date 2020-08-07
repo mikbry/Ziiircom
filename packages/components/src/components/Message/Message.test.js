@@ -31,6 +31,7 @@ test('Message should render button', () => {
   button.parentElement.click();
   expect(handleAction).toBeCalledTimes(1);
 });
+
 test('Message should render quick_replies', () => {
   const handleAction = jest.fn();
   const theme = { ...Theme };
