@@ -60,12 +60,22 @@ StyledMessenger.defaultProps = {
 };
 
 const MessengerHeader = Interface.styled(Header)`
-  border-radius: 12px 12px 0 0;
+  border-bottom: ${props => `1px solid ${props.theme.palette.border}`};
+  border-radius: ${props => `${props.theme.radius}px ${props.theme.radius}px 0 0`};
 `;
 
+MessengerHeader.defaultProps = {
+  theme: Theme,
+};
+
 const MessengerFooter = Interface.styled(Footer)`
-  border-radius: 0 0 12px 12px;
+border-top: ${props => `1px solid ${props.theme.palette.border}`};
+border-radius: ${props => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
 `;
+
+MessengerFooter.defaultProps = {
+  theme: Theme,
+};
 
 const Conversation = Interface.styled(List)`
   transform-origin: center bottom 0px;
@@ -77,7 +87,7 @@ const FooterInput = Interface.styled(Input)`
   padding: 4px;
   margin: 0;
   border: none;
-  outline:none;
+  outline: none;
 `;
 
 const e = Interface.createElement;
