@@ -23,11 +23,12 @@ HeaderStyled.defaultProps = {
   theme: Theme,
 };
 
-const CloseBut = Interface.styled('div')`
+const CloseBut = Interface.styled('button')`
 width:24px;
-height:16px;
-margin: 0.3em 1.2em 1.2em -0.6em;
-padding: 8px;
+height:24px;
+margin: 0.6em 1.2em 1.2em -0.6em;
+padding: 4px;
+border: none;
 border-radius:100%;
 background-color: rgba(255, 255, 255, 0.2);
 &:hover {
@@ -54,7 +55,7 @@ const e = Interface.createElement;
 const Header = ({ children, closeButton }) => {
   let container = e(HeaderStyled, null, children[0]);
   if (closeButton) {
-    const button = e(CloseBut, { onClick: closeButton.onClose }, CloseIcon);
+    const button = e(CloseBut, { onClick: closeButton.onClose }, e(CloseIcon));
     container = e(HeaderStyled, null, button, e('span', null, children[0]));
   }
   return container;
