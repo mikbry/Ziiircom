@@ -10,7 +10,7 @@ import { styled } from './utils/styled';
 import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
-const App = async (messages, onMessage, onAction, hideDate) => {
+const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
   const [_isOpen, header, input] = useSelector(state => [
     state.messenger.isOpen,
     state.messenger.header,
@@ -50,7 +50,7 @@ const App = async (messages, onMessage, onAction, hideDate) => {
     margin: 96px 48px 96px auto;
   `;
 
-  const MessengerFrame = styled(
+  const MessengerBox = styled(
     'div',
     { ref: messengerRef, className: `ziiircom-messenger is${isOpen ? 'open' : 'closed'}`, onClick: handleFabClick },
     Messenger,
@@ -81,15 +81,7 @@ const App = async (messages, onMessage, onAction, hideDate) => {
     z-index: 9;
   `;
 
-  return styled('div', { className: 'ziiircom-messenger-frame' }, MessengerFrame, Fab)`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-  `;
+  return styled('div', { className: 'ziiircom-messenger-frame' }, MessengerBox, Fab)``;
 };
 
-export default App;
+export default MessengerApp;

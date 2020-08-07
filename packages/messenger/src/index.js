@@ -7,7 +7,7 @@
  */
 import useMessaging from '@ziiircom/messaging';
 
-import client from './client';
+import client from './ZiiirClient';
 
 const messenger = async (initialState = {}, messageListener, root = document.body) => {
   let config;
