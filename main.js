@@ -243,7 +243,7 @@ cursor:pointer;
     width: 100%;
     max-width: ${e=>e.theme.messenger.width};
     height: 80%;
-    margin: 48px;
+    margin: 96px 48px 96px auto;
   `,y=(0,s.styled)("div",{ref:f,className:"ziiircom-messenger is"+(c?"open":"closed"),onClick:p},h)`
     display: flex;
     position: fixed;
@@ -254,8 +254,6 @@ cursor:pointer;
     z-index: 3;
     flex-direction: column;
     flex-shrink: 0;
-    align-items: end;
-    justify-content: center;
 
     &.isopen {
       display: flex;
