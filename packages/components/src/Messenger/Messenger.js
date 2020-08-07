@@ -100,13 +100,14 @@ const m = (createdtime, msg, fromUser, avatar, onAction, hideDate, hasPrevious, 
 const Messenger = ({
   isExpanded = true,
   input = { display: true },
-  header = {},
+  header: _header = {},
   messages = [],
   onMessage,
   onClick,
   onAction,
   hideDate = false,
 }) => {
+  const { text: headerText = '', ...header } = _header;
   const Messages = e(
     Conversation,
     { isExpanded, className: 'ziiir-conversation' },
@@ -151,7 +152,7 @@ const Messenger = ({
   return e(
     StyledMessenger,
     { className: isExpanded ? 'isexpanded' : undefined, onClick },
-    e(MessengerHeader, null, header.text || ''),
+    e(MessengerHeader, header, headerText),
     Messages,
     e(MessengerFooter, null, inputComponent),
   );
