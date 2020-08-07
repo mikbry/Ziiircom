@@ -17,6 +17,7 @@ const Theme = {
     onBackground: 'dark',
     onSurface: 'gray',
     disabledText: 'lightGrey',
+    border: '#EAEAEA',
   },
   fonts: [],
   font: {
