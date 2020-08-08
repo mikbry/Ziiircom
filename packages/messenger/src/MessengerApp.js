@@ -11,7 +11,7 @@ import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
 const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
-  const [_isOpen, header, input] = useSelector(state => [
+  const [_isOpen, header = {}, input] = useSelector(state => [
     state.messenger.isOpen,
     state.messenger.header,
     state.messenger.input,
