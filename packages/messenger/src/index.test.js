@@ -100,7 +100,7 @@ test('defaultClient should load intents if state.dataset.src', async done => {
     }
     return { type, message };
   };
-  await messenger({ dataset: { src: 'url' }, messenger: {} }, messageListener);
+  await messenger({ dataset: { src: 'url' }, messenger: { header: { closeButton: {} } } }, messageListener);
   const input = await screen.findByPlaceholderText('Your message');
   input.value = 'hello';
   fireEvent(
