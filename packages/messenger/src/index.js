@@ -8,7 +8,7 @@
 import useMessaging from '@ziiircom/messaging';
 import { deepCopy } from '@ziiircom/common';
 
-import client from './ZiiirClient';
+import ziiirClient from './ZiiirClient';
 
 const messenger = async (initialState = {}, messageListener, root = document.body) => {
   let config;
@@ -70,7 +70,24 @@ const messenger = async (initialState = {}, messageListener, root = document.bod
   }
   const messagingType = dataset ? 'dialog' : undefined;
   const messaging = await useMessaging(messagingType);
-  return client({ state, messaging, root, messageListener, dataset, messages: state.messages });
+  const [store, getMessages, createMessage, sendMessage, commands, handleEventMessage] = await ziiirClient({
+    state,
+    messaging,
+    root,
+    messageListener,
+    dataset,
+    messages: state.messages,
+  });
+  window.ziiircom = {
+    name: 'Ziiircom',
+    store,
+    getMessages,
+    createMessage,
+    sendMessage,
+    commands,
+    handleEventMessage,
+  };
+  return [store, getMessages, createMessage, sendMessage, commands, handleEventMessage];
 };
 
 if (process.env.NODE_ENV === 'development') {
