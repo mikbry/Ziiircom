@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import useMessaging from '@ziiircom/messaging';
+import { deepCopy } from '@ziiircom/common';
 
 import client from './ZiiirClient';
 
@@ -29,12 +30,26 @@ const messenger = async (initialState = {}, messageListener, root = document.bod
   }
   if (state.dataset) {
     if (state.dataset.src) {
-      try {
+      dataset = [];
+      const sources = Array.isArray(state.dataset.src) ? state.dataset.src : [state.dataset.src];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const src of sources) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          const response = await fetch(src);
+          // eslint-disable-next-line no-await-in-loop
+          const d = await response.json();
+          dataset = deepCopy(dataset, d);
+        } catch (err) {
+          // console.log('no intents found', err);
+        }
+      }
+      /* try {
         const response = await fetch(state.dataset.src);
         dataset = await response.json();
       } catch (err) {
         // console.log('no intents found', err);
-      }
+      } */
     } else {
       ({ dataset } = state);
     }
