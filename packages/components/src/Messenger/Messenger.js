@@ -30,11 +30,13 @@ const StyledMessenger = Interface.styled(Box)`
   border-radius: ${props => `${props.theme.radius}px`};
   flex-direction: column;
   box-shadow: ${props => props.theme.shadow};
+
   &.isexpanded .ziiir-conversation {
     animation: 0.675s cubic-bezier(0.4, 0, 0.2, 1) 0.45s 1 normal both running enterConversation;
     animation-delay: 0.45s;
     animation-fill-mode: both;
   }
+
   & .ziiir-conversation {
     padding: 16px;
   }
