@@ -158,18 +158,30 @@ test('Dialog intents output condition with inline var should display correctly',
     },
   ]);
   const { matchs, context } = matchIntent({ text: 'hello' });
-  const { response } = buildOutput({ matchs, context });
+  const { response, context: ctx } = buildOutput({ matchs, context });
   expect(response[0]).toBe('ok Bob');
+  expect(ctx.var).toBe('ok');
 });
 
-test('Dialog intents inline assigned variables should display correctly', () => {
-  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok {{var=*}}' }]);
+test('Dialog intents inline output assigned variables should display correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: ['ok {{var=*}}'] }]);
   const { matchs, context } = matchIntent({ text: 'hello' });
   const { response, entities } = buildOutput({ matchs, context });
   expect(response[0]).toBe('ok hello');
   expect(entities.length).toBe(1);
   expect(entities[0].type).toBe('any');
   expect(entities[0].value).toBe('hello');
+});
+
+test('Dialog intents inline assigned variable should display correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: ['ok<<var=*>>'] }]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const { response, entities, context: ctx } = buildOutput({ matchs, context });
+  expect(response[0]).toBe('ok');
+  expect(entities.length).toBe(1);
+  expect(entities[0].type).toBe('any');
+  expect(entities[0].value).toBe('hello');
+  expect(ctx.var).toBe('hello');
 });
 
 test('Dialog links should display correctly', () => {

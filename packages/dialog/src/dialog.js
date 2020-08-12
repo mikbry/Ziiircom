@@ -200,11 +200,14 @@ const Dialog = (_intents, initialContexts) => {
         if (Object.keys(r.set).length) {
           context = { ...context, ...r.set };
         }
-        if (output.set) {
-          Object.keys(output.set).forEach(name => {
-            context[name] = getValue(output.set[name], entities);
-          });
-        }
+        const os = Array.isArray(output) ? output : [output];
+        os.forEach(o => {
+          if (o.set) {
+            Object.keys(o.set).forEach(name => {
+              context[name] = getValue(o.set[name], entities);
+            });
+          }
+        });
       });
     } else {
       response.push("I don't understand");
