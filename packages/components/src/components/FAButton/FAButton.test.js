@@ -15,7 +15,7 @@ test('FAButton should render correctly', () => {
     <>
       <FAButton />
       <FAButton icon='test' />
-      <FAButton theme={{ palette: { secondary: 'red' } }} />
+      <FAButton theme={{ palette: { secondary: 'red' } }} iconActive='test' />
       <FAButton theme={{ palette: { secondary: '#eee', bubbleColor: '#000' } }} />
     </>,
   );

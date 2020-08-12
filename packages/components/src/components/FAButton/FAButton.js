@@ -34,6 +34,25 @@ background-position:50%;
 background-size:cover;
 box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12);
 cursor:pointer;
+transition: all .2s ease-in-out;
+animation:spin 0.45s ease-in-out;
+&:hover {
+  transform: scale(1.05);
+}
+&.isactive {
+  animation:spin 0.45s ease-in-out;
+  background-image: ${props => (props.iconActive ? `url("${props.iconActive}");` : undefined)}
+}
+@keyframes spin {
+  from {
+    opacity: 0;
+    transform: scale(0.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  } 
+}
 `;
 
 Fab.defaultProps = {
