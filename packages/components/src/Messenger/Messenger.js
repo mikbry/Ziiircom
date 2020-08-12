@@ -35,6 +35,9 @@ const StyledMessenger = Interface.styled(Box)`
     animation-delay: 0.45s;
     animation-fill-mode: both;
   }
+  & .ziiir-conversation {
+    padding: 16px;
+  }
 
   @keyframes enterConversation {
     0% {

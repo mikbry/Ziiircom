@@ -23,6 +23,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     const messenger = messengerRef.current;
     messenger.classList.toggle('isclosed');
     messenger.classList.toggle('isopen');
+    messenger.firstChild.classList.remove('isexpanded');
   };
 
   if (header.closeButton) {
