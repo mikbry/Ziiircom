@@ -82,6 +82,23 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
       animation: slide-out 0.5s forwards;
     }
 
+    @media only screen and (max-width: 772px) {
+      .isopen {
+        animation: slide-up 0.5s forwards;
+      }
+      .isclosed {
+        animation: slide-down 0.5s forwards;
+      }
+      .isactive {
+        display: none;
+      }
+      .ziiircom-messenger > div {
+        max-width: 100%;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        margin: auto 0 0 0;
+      }
+    }
     @keyframes slide-in {
       from {
         left: 600px;
@@ -99,6 +116,27 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
       }
       to {
         left: 600px;
+        opacity: 0;
+        display: none;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        top: 600px;
+        opacity: 0;
+      }
+      to {
+        top: 0;
+        opacity: 1;
+      }
+    }
+    @keyframes slide-down {
+      from {
+        top: 0;
+        opacity: 1;
+      }
+      to {
+        top: 600px;
         opacity: 0;
         display: none;
       }

@@ -14,6 +14,7 @@ const HeaderStyled = Interface.styled('header')`
   background: ${props => props.theme.palette.primary};
   min-height: 64px;
   padding-top: 1.2em;
+  padding-bottom: 1.2em;
   padding-left: 1.2em;
   padding-right: 0.3em;
   display: flex;
