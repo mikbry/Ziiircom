@@ -75,10 +75,33 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
 
     &.isopen {
       display: flex;
+      animation: slide-in 0.5s forwards;
     }
 
     &.isclosed {
-      display: none;
+      animation: slide-out 0.5s forwards;
+    }
+
+    @keyframes slide-in {
+      from {
+        left: 600px;
+        opacity: 0;
+      }
+      to {
+        left: 0;
+        opacity: 1;
+      }
+    }
+    @keyframes slide-out {
+      from {
+        left: 0;
+        opacity: 1;
+      }
+      to {
+        left: 600px;
+        opacity: 0;
+        display: none;
+      }
     }
   `;
 
