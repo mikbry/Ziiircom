@@ -74,8 +74,20 @@ MessengerHeader.defaultProps = {
 };
 
 const MessengerFooter = Interface.styled(Footer)`
-border-top: ${props => `1px solid ${props.theme.palette.border}`};
-border-radius: ${props => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
+  border-top: ${props => `1px solid ${props.theme.palette.border}`};
+  border-radius: ${props => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
+  display: flex;
+  flex-direction: column;
+  & > div {
+    font-size: 13px;
+    line-height: 14px;
+    width: 100%;
+    text-align: end;
+    margin-top: -18px;
+  }
+  & > input {
+    margin-top: 10px;
+  }
 `;
 
 MessengerFooter.defaultProps = {
@@ -159,7 +171,12 @@ const Messenger = ({
     { className: isExpanded ? 'isexpanded' : undefined, onClick },
     e(MessengerHeader, header, headerText),
     Messages,
-    e(MessengerFooter, null, inputComponent),
+    e(
+      MessengerFooter,
+      null,
+      e('div', null, 'Powered by ', e('a', { href: 'https://ziiir.com' }, 'ziiir.com')),
+      inputComponent,
+    ),
   );
 };
 
