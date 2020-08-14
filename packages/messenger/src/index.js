@@ -39,7 +39,14 @@ const messenger = async (initialState = {}, messageListener, root = document.bod
           const response = await fetch(src);
           // eslint-disable-next-line no-await-in-loop
           const d = await response.json();
+          let intents;
+          if (d.intents) {
+            intents = deepCopy(dataset.intents, d.intents);
+          }
           dataset = deepCopy(dataset, d);
+          if (intents) {
+            dataset.intents = intents;
+          }
         } catch (err) {
           // console.log('no intents found', err);
         }
