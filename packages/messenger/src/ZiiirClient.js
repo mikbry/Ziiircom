@@ -7,7 +7,7 @@
  */
 import { setup } from '@ziiircom/components';
 import useUI from './hooks/ui';
-import { html, createElement, render } from './utils/builder';
+import { html, createElement, render, useRef } from './utils/builder';
 import { styled } from './utils/styled';
 import initFonts from './utils/styled/fonts';
 import createStore from './utils/store';
@@ -21,7 +21,7 @@ const ZiiirClient = async ({
   dataset,
   messages,
 }) => {
-  setup({ html, createElement, styled });
+  setup({ html, createElement, styled, useRef });
   const ui = await useUI();
   const store = createStore(state);
   const personas = store.messenger.personas || {};
