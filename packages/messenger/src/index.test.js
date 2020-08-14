@@ -185,7 +185,7 @@ test('message #dummy should do nothing"', async () => {
 test('Messenger by default should be closed"', async () => {
   await messenger();
   const container = document.body.getElementsByClassName('ziiircom-messenger')[0];
-  expect(container).toHaveClass('isclosed');
+  expect(container).toHaveClass('isclosedstart');
 });
 
 test('Messenger with state.isOpen=true should be opened"', async () => {
