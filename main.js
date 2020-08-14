@@ -15,6 +15,15 @@ var messenger=function(e){var t={};function r(n){if(t[n])return t[n].exports;var
   flex-direction: column;
   box-shadow: ${e=>e.theme.shadow};
 
+  & p {
+    font-size: 13px;
+    line-height: 14px;
+    text-align: end;
+    padding-right: 16px;
+    margin: 4px 0;
+
+  }
+
   &.isexpanded .ziiir-conversation {
     animation: 0.675s cubic-bezier(0.4, 0, 0.2, 1) 0.45s 1 normal both running enterConversation;
     animation-delay: 0.45s;
@@ -50,13 +59,6 @@ var messenger=function(e){var t={};function r(n){if(t[n])return t[n].exports;var
   border-radius: ${e=>`0 0 ${e.theme.radius}px ${e.theme.radius}px`};
   display: flex;
   flex-direction: column;
-  & p {
-    font-size: 13px;
-    line-height: 14px;
-    width: 100%;
-    text-align: end;
-    margin-top: -18px;
-  }
   & button {
     border: none;
     outline: none;
