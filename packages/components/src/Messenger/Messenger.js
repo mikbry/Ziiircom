@@ -31,6 +31,15 @@ const StyledMessenger = Interface.styled(Box)`
   flex-direction: column;
   box-shadow: ${props => props.theme.shadow};
 
+  & p {
+    font-size: 13px;
+    line-height: 14px;
+    text-align: end;
+    padding-right: 16px;
+    margin: 4px 0;
+
+  }
+
   &.isexpanded .ziiir-conversation {
     animation: 0.675s cubic-bezier(0.4, 0, 0.2, 1) 0.45s 1 normal both running enterConversation;
     animation-delay: 0.45s;
@@ -78,13 +87,6 @@ const MessengerFooter = Interface.styled(Footer)`
   border-radius: ${props => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
   display: flex;
   flex-direction: column;
-  & p {
-    font-size: 13px;
-    line-height: 14px;
-    width: 100%;
-    text-align: end;
-    margin-top: -18px;
-  }
   & button {
     border: none;
     outline: none;
