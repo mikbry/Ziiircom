@@ -138,89 +138,97 @@ const extractAndMatch = (input, text, conditions, context) => {
   return [match, entities];
 };
 
+const generateOutput = (match, _context) => {
+  const { intent } = match;
+  const { entities } = match;
+  let context = _context;
+  const response = [];
+  let quickReplies;
+  // Store in context all variables changed
+  if (intent.set) {
+    context = { ...context, ...intent.set };
+  }
+  // handle condition #129
+  let { output } = intent;
+  if (Array.isArray(output)) {
+    output.forEach(o => {
+      if (o.type === 'condition') {
+        output = null;
+        let value;
+        o.children.forEach(child => {
+          if ((!output || !value) && (child.value === context[child.name] || !child.value)) {
+            ({ value } = child);
+            output = child;
+          }
+        });
+      }
+    });
+  }
+  if (output) {
+    let text = output;
+    if (output.text) {
+      ({ text } = output);
+    }
+    if (output.quick_replies) {
+      quickReplies = output.quick_replies;
+    }
+    entities.forEach(e => {
+      if (e.name) {
+        context[e.name] = e.value;
+      }
+    });
+    if (!Array.isArray(text)) {
+      text = [text];
+    }
+    text.forEach(t => {
+      let txt = t;
+      if (txt.text) {
+        txt = txt.text;
+      }
+      const r = renderTemplate(txt, context, entities);
+      response.push(r.response);
+      if (Object.keys(r.set).length) {
+        context = { ...context, ...r.set };
+      }
+      const os = Array.isArray(output) ? output : [output];
+      os.forEach(o => {
+        if (o.set) {
+          Object.keys(o.set).forEach(name => {
+            context[name] = getValue(o.set[name], entities);
+          });
+        }
+      });
+    });
+  }
+  return [response, context, quickReplies, entities];
+};
+
 const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
   const buildResponse = ({ matchs, context: c = {}, userId = 'user' }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
     let match;
-    let output;
-    let quickReplies;
+    let matchIndex = 0;
     if (matchs && matchs.length > 1) {
-      matchs.forEach(m => {
+      matchs.forEach((m, i) => {
         if (!m.any && !match && m.intent.topic === context.topic) {
-          match = m;
+          matchIndex = i;
         }
       });
-    }
-    if (!match && matchs[0]) {
-      [match] = matchs;
     }
     let response = [];
     let entities;
-    if (match) {
-      const { intent } = match;
-      ({ entities } = match);
-      // Store in context all variables changed
-      if (intent.set) {
-        context = { ...context, ...intent.set };
-      }
-      // handle condition #129
-      ({ output } = intent);
-      if (Array.isArray(output)) {
-        output.forEach(o => {
-          if (o.type === 'condition') {
-            output = null;
-            let value;
-            o.children.forEach(child => {
-              if ((!output || !value) && (child.value === context[child.name] || !child.value)) {
-                ({ value } = child);
-                output = child;
-              }
-            });
-          }
-        });
-      }
-      let text = output;
-      if (output.text) {
-        ({ text } = output);
-      }
-      if (output.quick_replies) {
-        quickReplies = output.quick_replies;
-      }
-      entities.forEach(e => {
-        if (e.name) {
-          context[e.name] = e.value;
-        }
-      });
-      if (!Array.isArray(text)) {
-        text = [text];
-      }
-      text.forEach(t => {
-        let txt = t;
-        if (txt.text) {
-          txt = txt.text;
-        }
-        const r = renderTemplate(txt, context, entities);
-        response.push(r.response);
-        if (Object.keys(r.set).length) {
-          context = { ...context, ...r.set };
-        }
-        const os = Array.isArray(output) ? output : [output];
-        os.forEach(o => {
-          if (o.set) {
-            Object.keys(o.set).forEach(name => {
-              context[name] = getValue(o.set[name], entities);
-            });
-          }
-        });
-      });
-    } else {
+    let quickReplies;
+    if (matchs[matchIndex]) {
+      [response, context, quickReplies, entities] = generateOutput(matchs[matchIndex], context);
+      contexts[userId] = deepCopy(context);
+    }
+    if (response.length === 0) {
       response.push("I don't understand");
     }
-    contexts[userId] = deepCopy(context);
     response = response.map(m => renderer(m));
-    output = { response, context, entities };
+    const output = { response, context, entities };
     if (quickReplies) {
       output.quick_replies = quickReplies;
     }
