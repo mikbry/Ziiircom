@@ -22,8 +22,12 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
   const handleFabClick = () => {
     isOpen = !isOpen;
     const messenger = messengerRef.current;
-    messenger.classList.toggle('isclosed');
     messenger.classList.toggle('isopen');
+    if (messenger.classList.contains('isclosedstart')) {
+      messenger.classList.remove('isclosedstart');
+    } else {
+      messenger.classList.toggle('isclosed');
+    }
     messenger.firstChild.classList.remove('isexpanded');
     const fab = fabRef.current;
     fab.classList.toggle('isactive');
@@ -57,10 +61,13 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     height: 80%;
     margin: 96px 48px 96px auto;
   `;
-
   const MessengerBox = styled(
     'div',
-    { ref: messengerRef, className: `ziiircom-messenger is${isOpen ? 'open' : 'closed'}`, onClick: handleFabClick },
+    {
+      ref: messengerRef,
+      className: `ziiircom-messenger is${isOpen ? 'open' : 'closedstart'}`,
+      onClick: handleFabClick,
+    },
     Messenger,
   )`
     display: flex;
@@ -74,12 +81,16 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     flex-shrink: 0;
 
     &.isopen {
-      display: flex;
       animation: slide-in 0.5s forwards;
     }
 
+    &.isclosedstart {
+      visibility: hidden;
+    }
+
     &.isclosed {
-      animation: slide-out 0.5s forwards;
+      visibility: hidden;
+      animation: slide-out 0.5s ease;
     }
 
     @media only screen and (max-width: 772px) {
@@ -100,45 +111,51 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
       }
     }
     @keyframes slide-in {
-      from {
+      0% {
         left: 600px;
         opacity: 0;
+        visibility: hidden;
       }
-      to {
+      100% {
         left: 0;
         opacity: 1;
+        visibility: visible;
       }
     }
     @keyframes slide-out {
-      from {
+      0% {
         left: 0;
         opacity: 1;
+        visibility: visible;
       }
-      to {
+      100% {
         left: 600px;
         opacity: 0;
-        display: none;
+        visibility: hidden;
       }
     }
     @keyframes slide-up {
-      from {
+      0% {
         top: 600px;
         opacity: 0;
+        visibility: hidden;
       }
-      to {
+      100% {
         top: 0;
         opacity: 1;
+        visibility: visible;
       }
     }
     @keyframes slide-down {
-      from {
+      0% {
         top: 0;
         opacity: 1;
+        visibility: visible;
       }
-      to {
+      100% {
         top: 600px;
         opacity: 0;
-        display: none;
+        visibility: hidden;
       }
     }
   `;
