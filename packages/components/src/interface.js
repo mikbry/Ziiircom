@@ -8,11 +8,12 @@
 
 const Interface = {};
 
-export const setup = ({ html, styled, createElement }) => {
+export const setup = ({ html, styled, createElement, useRef }) => {
   if (!Interface.html) {
     Interface.html = html;
     Interface.styled = styled;
     Interface.createElement = createElement;
+    Interface.useRef = useRef;
     // Object.freeze(Interface);
   }
   return Interface;

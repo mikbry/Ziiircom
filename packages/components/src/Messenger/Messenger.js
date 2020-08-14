@@ -78,15 +78,32 @@ const MessengerFooter = Interface.styled(Footer)`
   border-radius: ${props => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
   display: flex;
   flex-direction: column;
-  & > div {
+  & p {
     font-size: 13px;
     line-height: 14px;
     width: 100%;
     text-align: end;
     margin-top: -18px;
   }
-  & > input {
-    margin-top: 10px;
+  & button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding-right: 0;
+    color: ${props => props.theme.palette.disabledText};
+    background-color: transparent;
+  }
+  & button:hover {
+    color: ${props => props.theme.palette.onSurface};
+  }
+  & button img {
+    background-color: transparent;
+    filter: opacity(30%);
+  }
+  & button:hover img {
+    background-color: transparent;
+    filter: opacity(50%);
   }
 `;
 
@@ -99,6 +116,14 @@ const Conversation = Interface.styled(List)`
   scroll-behavior: smooth;
 `;
 
+const FooterInputContainer = Interface.styled('div')`
+display: flex;
+width: 100%;
+padding: 4px;
+margin: 0;
+border: none;
+outline: none;
+`;
 const FooterInput = Interface.styled(Input)`
   width: 100%;
   padding: 4px;
@@ -125,6 +150,7 @@ const Messenger = ({
   hideDate = false,
 }) => {
   const { text: headerText = '', ...header } = _header;
+  const inputRef = Interface.useRef(null);
   const Messages = e(
     Conversation,
     { isExpanded, className: 'ziiir-conversation' },
@@ -159,24 +185,45 @@ const Messenger = ({
       event.target.value = '';
     }
   };
+  const handleSend = () => {
+    const { value } = inputRef.current;
+    if (value && value.length && onMessage) {
+      onMessage(value);
+      inputRef.current.value = '';
+    }
+  };
+
   if (input.display) {
     inputComponent = e(FooterInput, {
       className: 'ziir-input',
       onKeyUp: handleKey,
+      ref: inputRef,
       placeholder: input.placeholder || 'Your message',
     });
+    if (input.sendButton) {
+      let buttoncontent = 'send';
+      if (input.sendButton.icon) {
+        buttoncontent = e('img', {
+          src: input.sendButton.icon.src
+            ? input.sendButton.icon.src
+            : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMi4wMSAyMUwyMyAxMiAyLjAxIDMgMiAxMGwxNSAyLTE1IDJ6Ii8+PC9zdmc+',
+        });
+      }
+      inputComponent = e(
+        FooterInputContainer,
+        null,
+        inputComponent,
+        e('button', { onClick: handleSend }, buttoncontent),
+      );
+    }
   }
   return e(
     StyledMessenger,
     { className: isExpanded ? 'isexpanded' : undefined, onClick },
     e(MessengerHeader, header, headerText),
     Messages,
-    e(
-      MessengerFooter,
-      null,
-      e('div', null, 'Powered by ', e('a', { href: 'https://ziiir.com' }, 'ziiir.com')),
-      inputComponent,
-    ),
+    e('p', null, 'Powered by ', e('a', { href: 'https://ziiir.com' }, 'ziiir.com')),
+    e(MessengerFooter, null, inputComponent),
   );
 };
 
