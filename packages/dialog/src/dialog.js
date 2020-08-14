@@ -100,42 +100,48 @@ const htmlRenderer = message => {
 
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
-const extractAndMatch = (input, text) => {
+const testIntentConditions = (conditions, context) =>
+  !conditions || conditions.length === 0 || conditions.findIndex(c => c.name && context[c.name] === c.value) > -1;
+
+const extractAndMatch = (input, text, conditions, context) => {
   const entities = [];
   let match;
   let value = text;
-  if (input === '*') {
-    entities.push({ type: 'any', value, offset: 0 });
-    match = true;
-  } else if (input.indexOf('{{') > -1) {
-    // Extract entities
-    input.replace(/{{\s*([\w.]*)\s*(=?)\s*@(any|email)\s*}}/g, (m, name, eq, type, offset) => {
-      if (offset > 0) {
-        // TODO
-        value = undefined;
-      }
-      if (type === 'any') {
-        match = true;
-      } else if (type === 'email' && value && value.match(/\b(\w[-._\w]*\w@\w[-._\w]*\w\.\w{2,3})\b/gi)) {
-        match = true;
-      }
+  if (testIntentConditions(conditions, context)) {
+    if (input === '*') {
+      entities.push({ type: 'any', value, offset: 0 });
+      match = true;
+    } else if (input.indexOf('{{') > -1) {
+      // Extract entities
+      input.replace(/{{\s*([\w.]*)\s*(=?)\s*@(any|email)\s*}}/g, (m, name, eq, type, offset) => {
+        if (offset > 0) {
+          // TODO
+          value = undefined;
+        }
+        if (type === 'any') {
+          match = true;
+        } else if (type === 'email' && value && value.match(/\b(\w[-._\w]*\w@\w[-._\w]*\w\.\w{2,3})\b/gi)) {
+          match = true;
+        }
+        if (match) {
+          entities.push({ name, type, value, offset });
+        }
+      });
+    } else {
+      match = simpleMatch(input, text);
       if (match) {
-        entities.push({ name, type, value, offset });
+        entities.push({ type: 'all', value, offset: 0 });
       }
-    });
-  } else {
-    match = simpleMatch(input, text);
-    if (match) {
-      entities.push({ type: 'all', value, offset: 0 });
     }
   }
+
   return [match, entities];
 };
 
 const Dialog = (_intents, initialContexts) => {
   let resp;
   const contexts = initialContexts || {};
-  const buildResponse = ({ matchs, context: c = {}, userId }, renderer = htmlRenderer) => {
+  const buildResponse = ({ matchs, context: c = {}, userId = 'user' }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
     let match;
     let output;
@@ -226,16 +232,17 @@ const Dialog = (_intents, initialContexts) => {
     let entities;
     const matchIntent = (message, userId = 'user') => {
       const context = contexts[userId] || {};
-      const matchs = [];
+      let matchs = [];
       intents.forEach(intent => {
-        let i = Array.isArray(intent.input)
-          ? intent.input.findIndex(input => {
-              [m, entities] = extractAndMatch(input, message.text);
-              return m;
-            })
-          : -1;
+        let i =
+          Array.isArray(intent.input) && testIntentConditions(intent.conditions, context)
+            ? intent.input.findIndex(input => {
+                [m, entities] = extractAndMatch(input, message.text);
+                return m;
+              })
+            : -1;
         if (i === -1 && typeof intent.input === 'string') {
-          [m, entities] = extractAndMatch(intent.input, message.text);
+          [m, entities] = extractAndMatch(intent.input, message.text, intent.conditions, context);
           i = m ? 0 : -1;
         }
         if (i >= 0) {
@@ -246,7 +253,18 @@ const Dialog = (_intents, initialContexts) => {
           matchs.push(m);
         }
       });
-      return { matchs: matchs.sort((a, b) => (a.intent.order || 0) - (b.intent.order || 0)), context, userId };
+      matchs = matchs.sort((a, b) =>
+        a.intent.conditions &&
+        a.intent.conditions.length > 0 &&
+        (!b.intent.conditions || b.intent.conditions.length === 0)
+          ? -1
+          : (a.intent.order || 0) - (b.intent.order || 0),
+      );
+      return {
+        matchs,
+        context,
+        userId,
+      };
     };
     resp = [matchIntent, buildResponse];
   }
