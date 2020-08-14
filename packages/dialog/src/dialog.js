@@ -219,7 +219,6 @@ const Dialog = (_intents, initialContexts) => {
       response.push("I don't understand");
     }
     contexts[userId] = deepCopy(context);
-    console.log('contextsUid=', userId, contexts[userId]);
     response = response.map(m => renderer(m));
     output = { response, context, entities };
     if (quickReplies) {
@@ -233,7 +232,7 @@ const Dialog = (_intents, initialContexts) => {
     let entities;
     const matchIntent = (message, userId = 'user') => {
       const context = contexts[userId] || {};
-      const matchs = [];
+      let matchs = [];
       intents.forEach(intent => {
         let i =
           Array.isArray(intent.input) && testIntentConditions(intent.conditions, context)
@@ -254,16 +253,15 @@ const Dialog = (_intents, initialContexts) => {
           matchs.push(m);
         }
       });
-      console.log('matchs=', matchs);
-      console.log('context=', context);
+      matchs = matchs.sort((a, b) =>
+        a.intent.conditions &&
+        a.intent.conditions.length > 0 &&
+        (!b.intent.conditions || b.intent.conditions.length === 0)
+          ? -1
+          : (a.intent.order || 0) - (b.intent.order || 0),
+      );
       return {
-        matchs: matchs.sort((a, b) =>
-          a.intent.conditions &&
-          a.intent.conditions.length > 0 &&
-          (!b.intent.conditions || b.intent.conditions.length === 0)
-            ? 1
-            : (a.intent.order || 0) - (b.intent.order || 0),
-        ),
+        matchs,
         context,
         userId,
       };
