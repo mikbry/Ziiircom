@@ -8,7 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
 
-module.exports = env => {
+module.exports = (env) => {
   const packagesPath = '../packages';
   let packagePath = ' ./';
   if (process.env.PACKAGE_DIR || env.PACKAGE_DIR) {
@@ -63,14 +63,16 @@ module.exports = env => {
     },
     devtool: 'source-map',
     plugins: [
-      new CopyWebpackPlugin([
-        {
-          context: path.resolve('./public/'),
-          from: './**/*',
-          to: path.resolve('./dist'),
-          force: true,
-        },
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            context: path.resolve('./public/'),
+            from: './**/*',
+            to: path.resolve('./dist'),
+            force: true,
+          },
+        ],
+      }),
       new HtmlWebpackPlugin({
         path: path.resolve('./dist'),
         template: './public/index.html',
