@@ -12,36 +12,36 @@ import Theme from '../../Theme';
 const buttonBorder = (palette, border = 'none') =>
   palette.button && palette.button.border ? palette.button.border : border;
 
-const buttonBackgroundColor = palette =>
+const buttonBackgroundColor = (palette) =>
   palette.button && palette.button.background ? palette.button.background : palette.surface;
-const buttonColor = palette => (palette.button && palette.button.color ? palette.button.color : palette.onSurface);
+const buttonColor = (palette) => (palette.button && palette.button.color ? palette.button.color : palette.onSurface);
 const Styled = Interface.styled('div')`
   display: flex;
   flex-direction: row;
   width: 100%;
   max-width: 80%;
-  margin: ${props => (props.hasPrevious ? '-16px' : '12px')} 0px 0px;
+  margin: ${(props) => (props.hasPrevious ? '-16px' : '12px')} 0px 0px;
 
   cursor: default;
 
-  margin-left: ${props => (props.fromUser ? 'auto' : 0)};
+  margin-left: ${(props) => (props.fromUser ? 'auto' : 0)};
 
   &:first-child {
     margin-top: 0px;
   }
 
   & > div {
-    margin-left: ${props => (props.fromUser ? 'auto' : '0px')};
-    animation: 0.3s cubic-bezier(0, 0, 0.2, 1) 0s 1 normal both running ${props =>
+    margin-left: ${(props) => (props.fromUser ? 'auto' : '0px')};
+    animation: 0.3s cubic-bezier(0, 0, 0.2, 1) 0s 1 normal both running ${(props) =>
       props.fromUser ? 'enterMessageFromUser' : 'enterMessageFromBot'};
   }
   & > div > p {
-    background-color: ${props => (props.fromUser ? props.theme.palette.surface : props.theme.palette.secondary)};
-    color: ${props => (props.fromUser ? props.theme.palette.onSurface : props.theme.palette.onSecondary)};
-    box-shadow: ${props => props.theme.message.shadow};
+    background-color: ${(props) => (props.fromUser ? props.theme.palette.surface : props.theme.palette.secondary)};
+    color: ${(props) => (props.fromUser ? props.theme.palette.onSurface : props.theme.palette.onSecondary)};
+    box-shadow: ${(props) => props.theme.message.shadow};
     margin-bottom: 4px;
     padding: 6px 16px;
-    border-radius: ${props => {
+    border-radius: ${(props) => {
       let { smallRadius, radius } = props.theme.message;
       smallRadius += 'px';
       radius += 'px';
@@ -53,7 +53,7 @@ const Styled = Interface.styled('div')`
     line-height: 1.44;
   }
   & > div > span {
-    text-align: ${props => (props.fromUser ? 'right' : 'left')};
+    text-align: ${(props) => (props.fromUser ? 'right' : 'left')};
     display: block;
     margin: 0px 16px;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0s;
@@ -63,15 +63,15 @@ const Styled = Interface.styled('div')`
     line-height: 1.66;
   }
   & > div > p > a {
-    color: ${props => props.theme.palette.link || 'inherit'};
+    color: ${(props) => props.theme.palette.link || 'inherit'};
   }
   & > div > p > button {
-    border: ${props => buttonBorder(props.theme.palette)};
+    border: ${(props) => buttonBorder(props.theme.palette)};
     border-radius: 4px;
     min-height: 24px;
     margin: 8px 4px;
-    background: ${props => buttonBackgroundColor(props.theme.palette)};
-    color: ${props => buttonColor(props.theme.palette)};
+    background: ${(props) => buttonBackgroundColor(props.theme.palette)};
+    color: ${(props) => buttonColor(props.theme.palette)};
     cursor: pointer;
     font-size: 16px;
   }
@@ -109,12 +109,12 @@ const StyledReplies = Interface.styled('div')`
   flex-flow: row wrap;
   width: 100%;
   & > button {
-    border: ${props => buttonBorder(props.theme.palette, `1px solid ${props.theme.palette.secondary}`)};
+    border: ${(props) => buttonBorder(props.theme.palette, `1px solid ${props.theme.palette.secondary}`)};
     border-radius: 4px;
     min-height: 24px;
     margin: 8px 4px;
-    background: ${props => buttonBackgroundColor(props.theme.palette)};
-    color: ${props => buttonColor(props.theme.palette)};
+    background: ${(props) => buttonBackgroundColor(props.theme.palette)};
+    color: ${(props) => buttonColor(props.theme.palette)};
     cursor: pointer;
     font-size: 16px;
   }
@@ -192,13 +192,13 @@ const Message = ({
     html = undefined;
   }
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     if (event.target.tagName === 'BUTTON') {
       onAction(event.target.tagName, event.target.textContent);
     }
   };
 
-  const handleQuickClick = event => {
+  const handleQuickClick = (event) => {
     const parent = event.target.parentNode;
     parent.style.display = 'none';
   };
@@ -216,7 +216,7 @@ const Message = ({
         e(
           StyledReplies,
           { onClick: handleQuickClick },
-          quickReplies.map(qr => e('button', { key: qr.title }, qr.title)),
+          quickReplies.map((qr) => e('button', { key: qr.title }, qr.title)),
         ),
     ),
   );

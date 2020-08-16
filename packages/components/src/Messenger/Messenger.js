@@ -15,21 +15,21 @@ import Input from '../components/Input';
 import Theme from '../Theme';
 
 const StyledMessenger = Interface.styled(Box)`
-  color: ${props => props.theme.palette.onSurface};
-  font-family: ${props => props.theme.font.family};
-  font-size: ${props => props.theme.font.size};
-  font-style: ${props => props.theme.font.style};
-  font-weight: ${props => props.theme.font.weight};
+  color: ${(props) => props.theme.palette.onSurface};
+  font-family: ${(props) => props.theme.font.family};
+  font-size: ${(props) => props.theme.font.size};
+  font-style: ${(props) => props.theme.font.style};
+  font-weight: ${(props) => props.theme.font.weight};
   line-height: 1.1;
   overflow-wrap: break-word;
 
   padding: 0px;
-  width: ${props => props.theme.messenger.width};
-  height: ${props => props.theme.messenger.height};
+  width: ${(props) => props.theme.messenger.width};
+  height: ${(props) => props.theme.messenger.height};
   display: flex;
-  border-radius: ${props => `${props.theme.radius}px`};
+  border-radius: ${(props) => `${props.theme.radius}px`};
   flex-direction: column;
-  box-shadow: ${props => props.theme.shadow};
+  box-shadow: ${(props) => props.theme.shadow};
 
   & p {
     font-size: 13px;
@@ -74,8 +74,8 @@ StyledMessenger.defaultProps = {
 };
 
 const MessengerHeader = Interface.styled(Header)`
-  border-bottom: ${props => `1px solid ${props.theme.palette.border}`};
-  border-radius: ${props => `${props.theme.radius}px ${props.theme.radius}px 0 0`};
+  border-bottom: ${(props) => `1px solid ${props.theme.palette.border}`};
+  border-radius: ${(props) => `${props.theme.radius}px ${props.theme.radius}px 0 0`};
 `;
 
 MessengerHeader.defaultProps = {
@@ -83,8 +83,8 @@ MessengerHeader.defaultProps = {
 };
 
 const MessengerFooter = Interface.styled(Footer)`
-  border-top: ${props => `1px solid ${props.theme.palette.border}`};
-  border-radius: ${props => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
+  border-top: ${(props) => `1px solid ${props.theme.palette.border}`};
+  border-radius: ${(props) => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
   display: flex;
   flex-direction: column;
   & button {
@@ -93,11 +93,11 @@ const MessengerFooter = Interface.styled(Footer)`
     cursor: pointer;
     font-size: 16px;
     padding-right: 0;
-    color: ${props => props.theme.palette.disabledText};
+    color: ${(props) => props.theme.palette.disabledText};
     background-color: transparent;
   }
   & button:hover {
-    color: ${props => props.theme.palette.onSurface};
+    color: ${(props) => props.theme.palette.onSurface};
   }
   & button img {
     background-color: transparent;
@@ -177,7 +177,7 @@ const Messenger = ({
       }),
   );
   let inputComponent = 'ziiir.com';
-  const handleKey = event => {
+  const handleKey = (event) => {
     const value = event.target.value || '';
     if (event.key === 'Enter' && value.length > 0) {
       if (onMessage) {

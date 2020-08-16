@@ -21,11 +21,11 @@ const Fab = Interface.styled('div')`
 width:48px;
 height:48px;
 border-radius:100%;
-color: ${props => props.theme.palette.onSecondary};
+color: ${(props) => props.theme.palette.onSecondary};
 font-size: 1.25em;
 line-height: 64px;
-background: ${props => props.theme.palette.secondary};
-background-image: ${props =>
+background: ${(props) => props.theme.palette.secondary};
+background-image: ${(props) =>
   props.icon
     ? `url("${props.icon}")`
     : `url("${icon(props.theme.palette.secondary, props.theme.palette.bubbleColor)}")`};
@@ -41,7 +41,7 @@ animation:spin 0.45s ease-in-out;
 }
 &.isactive {
   animation:spin 0.45s ease-in-out;
-  background-image: ${props => (props.iconActive ? `url("${props.iconActive}");` : undefined)}
+  background-image: ${(props) => (props.iconActive ? `url("${props.iconActive}");` : undefined)}
 }
 @keyframes spin {
   from {

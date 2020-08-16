@@ -9,7 +9,7 @@ import Interface from '../../interface';
 import Theme from '../../Theme';
 
 const Footer = Interface.styled('div')`
-  color: ${props => props.theme.palette.disabledText};
+  color: ${(props) => props.theme.palette.disabledText};
   font-size: 1em;
   line-height: 36px;
   min-height: 36px;

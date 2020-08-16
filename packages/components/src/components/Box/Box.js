@@ -10,7 +10,7 @@ import Theme from '../../Theme';
 
 const Box = Interface.styled('div')`
   padding: 1.2em;
-  background: ${props => props.theme.palette.background};
+  background: ${(props) => props.theme.palette.background};
   color: #292c45;
   font-size: 16px;
   font-style: normal;

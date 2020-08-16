@@ -9,9 +9,9 @@ import Interface from '../../interface';
 import Theme from '../../Theme';
 
 const HeaderStyled = Interface.styled('header')`
-  color: ${props => props.theme.palette.onPrimary};
+  color: ${(props) => props.theme.palette.onPrimary};
   font-size: 1.25em;
-  background: ${props => props.theme.palette.primary};
+  background: ${(props) => props.theme.palette.primary};
   min-height: 64px;
   padding-top: 1.2em;
   padding-bottom: 1.2em;
