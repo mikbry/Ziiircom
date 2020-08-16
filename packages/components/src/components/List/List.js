@@ -10,7 +10,7 @@ import Theme from '../../Theme';
 
 const List = Interface.styled('div')`
   padding: 0px;
-  background: ${props => props.theme.palette.background};
+  background: ${(props) => props.theme.palette.background};
   display: flex;
   flex-direction: column;
   flex-grow: 1;

@@ -14,8 +14,8 @@ const Input = Interface.styled('input')`
   padding: 0.3em 1em;
   border-radius: 3px;
 
-  color: ${props => props.theme.palette.secondary};
-  border: 2px solid ${props => props.theme.palette.secondary};
+  color: ${(props) => props.theme.palette.secondary};
+  border: 2px solid ${(props) => props.theme.palette.secondary};
 `;
 
 Input.defaultProps = {
