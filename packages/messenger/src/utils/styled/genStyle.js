@@ -82,18 +82,18 @@ const genClassRule = (obj, styledObj, props) => {
 const genClassRules = (styled, props, defaultProps = {}) => {
   const sheet = getStylesheet();
   let selectors = '';
-  styled.forEach(styledObj => {
+  styled.forEach((styledObj) => {
     const selector = defaultProps.selector || genSelector();
     const obj = { main: '', sub: [], medias: [] };
     genClassRule(obj, styledObj, props);
     if (obj.main && obj.main.length > 0) {
       let css = `.${selector} { ${obj.main} }`;
       sheet.insertRule(css);
-      obj.sub.forEach(r => {
+      obj.sub.forEach((r) => {
         css = `.${selector}${r}`;
         sheet.insertRule(css);
       });
-      obj.medias.forEach(r => {
+      obj.medias.forEach((r) => {
         sheet.insertRule(r);
       });
       selectors += `${selector} `;
