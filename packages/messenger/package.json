@@ -31,10 +31,10 @@
     "@testing-library/jest-dom": "^5.9.0",
     "@ziiircom/dialog": "^0.1.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^25.3.0",
+    "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
-    "copy-webpack-plugin": "^5.1.1",
-    "eslint": "^6.8.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-loader": "^4.0.0",
@@ -48,7 +48,7 @@
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^5.1.1"
   },
   "jest": {
     "transform": {
