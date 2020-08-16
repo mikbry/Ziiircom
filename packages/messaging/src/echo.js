@@ -12,7 +12,7 @@ import useMessaging from './messaging';
 const useEcho = async ({ listener, messages }) => {
   const [addMessage, getMessages, createMessage, , commands] = await useMessaging({ listener, messages });
 
-  const sendMessage = async message => {
+  const sendMessage = async (message) => {
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const echo = createMessage('bot', `You say : ${message.text}`);

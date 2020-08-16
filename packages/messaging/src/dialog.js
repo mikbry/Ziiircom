@@ -15,7 +15,7 @@ const useDialog = async ({ listener, dataset: intents, messages, contexts: _cont
   const contexts = deepCopy(_contexts);
   const [matchIntents, buildResponse] = Dialog(intents, contexts);
 
-  const sendMessage = async message => {
+  const sendMessage = async (message) => {
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const matchs = matchIntents(message);
@@ -32,9 +32,9 @@ const useDialog = async ({ listener, dataset: intents, messages, contexts: _cont
     await listener({ type: 'newMessage', message: newMessages });
   };
 
-  const commands = async type => {
+  const commands = async (type) => {
     if (type === '#reset') {
-      Object.keys(contexts).forEach(id => {
+      Object.keys(contexts).forEach((id) => {
         delete contexts[id];
       });
     }

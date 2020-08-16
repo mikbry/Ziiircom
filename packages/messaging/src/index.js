@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const useMessaging = async type => {
+const useMessaging = async (type) => {
   let messaging;
   if (type === 'dialog') {
     try {
