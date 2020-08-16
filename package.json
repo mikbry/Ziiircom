@@ -20,8 +20,8 @@
     "bootstrap": "lerna bootstrap --use-workspaces"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
     "cross-env": "^7.0.2",
     "husky": "^4.2.5",
     "lerna": "^3.20.2",
