@@ -11,7 +11,7 @@ import { deepCopy } from '@ziiircom/common';
 const useMessaging = async ({ listener, messages: _messages }) => {
   let messages = [];
   if (_messages) {
-    _messages.forEach(_m => {
+    _messages.forEach((_m) => {
       const m = deepCopy(_m);
       if (!m.created_time) {
         m.created_time = Date.now();
@@ -24,7 +24,7 @@ const useMessaging = async ({ listener, messages: _messages }) => {
 
   const sendMessage = undefined;
 
-  const commands = async type => {
+  const commands = async (type) => {
     if (type === '#reset') {
       listener({ type: 'resetMessages' });
       messages = [];
@@ -33,7 +33,7 @@ const useMessaging = async ({ listener, messages: _messages }) => {
     }
   };
 
-  const addMessage = message => messages.push(deepCopy(message));
+  const addMessage = (message) => messages.push(deepCopy(message));
 
   const getMessages = async () => deepCopy(messages);
 

@@ -16,11 +16,11 @@ const preprocessSentence = (sentence, set = {}) => {
   return { text, set };
 };
 
-const preprocessOutput = output => {
+const preprocessOutput = (output) => {
   let sentence;
   if (Array.isArray(output)) {
     // Sentence is an Array
-    sentence = output.map(s => preprocessOutput(s));
+    sentence = output.map((s) => preprocessOutput(s));
   } else if (output.text) {
     // Sentence is an object
     sentence = output;
@@ -48,11 +48,11 @@ const preprocessOutput = output => {
   return sentence;
 };
 
-const preprocessIntent = _intent => {
+const preprocessIntent = (_intent) => {
   const intent = deepCopy(_intent);
   const { output } = intent;
   if (Array.isArray(output) && output.length && output[0].type === 'condition') {
-    intent.output = intent.output.map(o => ({ ...o, children: preprocessOutput(o.children) }));
+    intent.output = intent.output.map((o) => ({ ...o, children: preprocessOutput(o.children) }));
   } else {
     intent.output = preprocessOutput(output);
   }
@@ -82,7 +82,7 @@ const renderTemplate = (template, context, entities) => {
   return { response, set };
 };
 
-const htmlRenderer = message => {
+const htmlRenderer = (message) => {
   const html = message.replace(/https?:\/\/\S*|\[(.*?)\]\((.*?)\)/gi, (match, complexLabel, complexUrl) => {
     let url = match;
     let label = url;
@@ -101,7 +101,7 @@ const htmlRenderer = message => {
 const simpleMatch = (sentenceA, sentenceB) => sentenceA.toLowerCase() === sentenceB.toLowerCase();
 
 const testIntentConditions = (conditions, context) =>
-  !conditions || conditions.length === 0 || conditions.findIndex(c => c.name && context[c.name] === c.value) > -1;
+  !conditions || conditions.length === 0 || conditions.findIndex((c) => c.name && context[c.name] === c.value) > -1;
 
 const extractAndMatch = (input, text, conditions, context) => {
   const entities = [];
@@ -151,11 +151,11 @@ const generateOutput = (match, _context) => {
   // handle condition #129
   let { output } = intent;
   if (Array.isArray(output)) {
-    output.forEach(o => {
+    output.forEach((o) => {
       if (o.type === 'condition') {
         output = null;
         let value;
-        o.children.forEach(child => {
+        o.children.forEach((child) => {
           if ((!output || !value) && (child.value === context[child.name] || !child.value)) {
             ({ value } = child);
             output = child;
@@ -172,7 +172,7 @@ const generateOutput = (match, _context) => {
     if (output.quick_replies) {
       quickReplies = output.quick_replies;
     }
-    entities.forEach(e => {
+    entities.forEach((e) => {
       if (e.name) {
         context[e.name] = e.value;
       }
@@ -180,7 +180,7 @@ const generateOutput = (match, _context) => {
     if (!Array.isArray(text)) {
       text = [text];
     }
-    text.forEach(t => {
+    text.forEach((t) => {
       let txt = t;
       if (txt.text) {
         txt = txt.text;
@@ -191,9 +191,9 @@ const generateOutput = (match, _context) => {
         context = { ...context, ...r.set };
       }
       const os = Array.isArray(output) ? output : [output];
-      os.forEach(o => {
+      os.forEach((o) => {
         if (o.set) {
-          Object.keys(o.set).forEach(name => {
+          Object.keys(o.set).forEach((name) => {
             context[name] = getValue(o.set[name], entities);
           });
         }
@@ -227,7 +227,7 @@ const Dialog = (_intents, initialContexts) => {
     if (response.length === 0) {
       response.push("I don't understand");
     }
-    response = response.map(m => renderer(m));
+    response = response.map((m) => renderer(m));
     const output = { response, context, entities };
     if (quickReplies) {
       output.quick_replies = quickReplies;
@@ -235,16 +235,16 @@ const Dialog = (_intents, initialContexts) => {
     return output;
   };
   if (_intents && Array.isArray(_intents) && _intents.length) {
-    const intents = _intents.map(i => preprocessIntent(i));
+    const intents = _intents.map((i) => preprocessIntent(i));
     let m;
     let entities;
     const matchIntent = (message, userId = 'user') => {
       const context = contexts[userId] || {};
       let matchs = [];
-      intents.forEach(intent => {
+      intents.forEach((intent) => {
         let i =
           Array.isArray(intent.input) && testIntentConditions(intent.conditions, context)
-            ? intent.input.findIndex(input => {
+            ? intent.input.findIndex((input) => {
                 [m, entities] = extractAndMatch(input, message.text);
                 return m;
               })

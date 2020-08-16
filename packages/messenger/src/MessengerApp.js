@@ -11,7 +11,7 @@ import { useRef } from './utils/builder';
 import { useSelector } from './utils/store';
 
 const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
-  const [_isOpen, header = {}, input] = useSelector(state => [
+  const [_isOpen, header = {}, input] = useSelector((state) => [
     state.messenger.isOpen,
     state.messenger.header,
     state.messenger.input,
@@ -37,11 +37,11 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     header.closeButton.onClose = handleFabClick;
   }
 
-  const handlePrevClick = event => {
+  const handlePrevClick = (event) => {
     event.stopPropagation();
   };
 
-  const handleMessage = message => {
+  const handleMessage = (message) => {
     onMessage(message);
   };
 
@@ -57,7 +57,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     hideDate,
   })`
     width: 100%;
-    max-width: ${props => props.theme.messenger.width};
+    max-width: ${(props) => props.theme.messenger.width};
     height: 80%;
     margin: 96px 48px 96px auto;
   `;

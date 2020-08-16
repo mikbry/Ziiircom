@@ -25,7 +25,7 @@ const ZiiirClient = async ({
   const ui = await useUI();
   const store = createStore(state);
   const personas = store.messenger.personas || {};
-  const getAvatar = message => {
+  const getAvatar = (message) => {
     let { avatar } = message;
     if (!avatar) {
       avatar = personas[message.from];
@@ -88,7 +88,7 @@ const ZiiirClient = async ({
     dataset,
     contexts: state.contexts,
   });
-  const handleNewMessage = text => {
+  const handleNewMessage = (text) => {
     if (text.charAt(0) === '#') {
       commands(text);
     } else {
@@ -97,7 +97,7 @@ const ZiiirClient = async ({
     }
   };
   let msgs = await getMessages();
-  msgs = msgs.map(_m => {
+  msgs = msgs.map((_m) => {
     const m = _m;
     m.avatar = getAvatar(m);
     return m;

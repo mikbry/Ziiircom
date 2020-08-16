@@ -55,7 +55,7 @@ test('defaultClient should be started and respond to input"', async (done) => {
   expect(input.value).toBe('');
 });
 
-test('defaultClient should load intents if state.intents.src', async done => {
+test('defaultClient should load intents if state.intents.src', async (done) => {
   let count = 0;
   const closeMockFetch = mockFetch([{ input: 'hello', output: 'hello' }]);
   const messageListener = ({ type, message }) => {
@@ -84,7 +84,7 @@ test('defaultClient should load intents if state.intents.src', async done => {
   expect(input.value).toBe('');
 });
 
-test('defaultClient should load intents if state.dataset.src', async done => {
+test('defaultClient should load intents if state.dataset.src', async (done) => {
   let count = 0;
   const closeMockFetch = mockFetch([{ input: 'hello', output: ['hello', 'I am Bob', 'How are you ?'] }]);
   const messageListener = ({ type, message }) => {
@@ -113,7 +113,7 @@ test('defaultClient should load intents if state.dataset.src', async done => {
   expect(input.value).toBe('');
 });
 
-test("defaultClient without matching should return I don't understand", async done => {
+test("defaultClient without matching should return I don't understand", async (done) => {
   let count = 0;
   const messageListener = ({ type, message }) => {
     count += 1;
@@ -214,7 +214,7 @@ test('Messenger opened click outside should close it"', async () => {
   expect(container).toHaveClass('isclosed');
 });
 
-test('defaultClient should respond to input button', async done => {
+test('defaultClient should respond to input button', async (done) => {
   let count = 0;
   const messageListener = ({ type, message }) => {
     count += 1;

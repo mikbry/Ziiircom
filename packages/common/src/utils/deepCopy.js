@@ -12,12 +12,12 @@ const deepCopy = (..._elements) => {
   const stack = [];
   const assign = (...elements) => {
     let copy;
-    elements.forEach(e => {
+    elements.forEach((e) => {
       if (Array.isArray(e)) {
         if (!copy) {
           copy = [];
         }
-        e.forEach(sub => {
+        e.forEach((sub) => {
           copy.push(assign(sub));
         });
       } else if (e instanceof Date) {
@@ -28,7 +28,7 @@ const deepCopy = (..._elements) => {
           copy = {};
         }
         stack.push(e);
-        Object.keys(e).forEach(k => {
+        Object.keys(e).forEach((k) => {
           const ek = e[k];
           if (stack.indexOf(ek) !== -1) {
             // Circular ref

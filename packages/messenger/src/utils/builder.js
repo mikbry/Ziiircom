@@ -28,7 +28,7 @@ export const createElement = (element, props, ...children) => {
   if (children.length === 1 && Array.isArray(children[0])) {
     [array] = children;
   }
-  definition.children = array.filter(v => v !== undefined);
+  definition.children = array.filter((v) => v !== undefined);
   return definition;
 };
 
@@ -46,7 +46,7 @@ export const render = (element, container, state = {}, insert) => {
   if (typeof element.element === 'string') {
     const el = document.createElement(element.element);
     if (element.props) {
-      Object.keys(element.props).forEach(n => {
+      Object.keys(element.props).forEach((n) => {
         const v = element.props[n];
         const type = typeof v;
         const isAttribute = type === 'string' || type === 'number' || type === 'boolean';
@@ -78,7 +78,7 @@ export const render = (element, container, state = {}, insert) => {
       el.innerHTML = element.props.dangerouslySetInnerHTML.__html;
     }
     if (children) {
-      children.forEach(child => {
+      children.forEach((child) => {
         render(child, el, state);
       });
     }
@@ -101,10 +101,10 @@ export const render = (element, container, state = {}, insert) => {
   }
 };
 
-export const useRef = current => {
+export const useRef = (current) => {
   const ref = {
     current,
-    setCurrent: el => {
+    setCurrent: (el) => {
       ref.current = el;
     },
   };
