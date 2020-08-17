@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React, { createElement, useRef } from 'react';
 import styled from 'styled-components';
 import { addParameters } from '@storybook/react';
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
@@ -7,7 +7,7 @@ import { withKnobs } from "@storybook/addon-knobs";
 
 import { setup } from '../src/interface';
 
-setup({ styled, createElement });
+setup({ styled, createElement, useRef });
 
 addDecorator(withKnobs);
 addDecorator(storyFn => <div style={{ padding: '48px' }}>{storyFn()}</div>);
