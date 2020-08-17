@@ -15,7 +15,7 @@ var messenger=function(e){var t={};function r(n){if(t[n])return t[n].exports;var
   flex-direction: column;
   box-shadow: ${e=>e.theme.shadow};
 
-  & p {
+  & > p {
     font-size: 13px;
     line-height: 14px;
     text-align: end;
