@@ -31,7 +31,7 @@ const StyledMessenger = Interface.styled(Box)`
   flex-direction: column;
   box-shadow: ${(props) => props.theme.shadow};
 
-  & p {
+  & > p {
     font-size: 13px;
     line-height: 14px;
     text-align: end;
