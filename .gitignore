@@ -8,6 +8,5 @@
 **/yarn-error.log
 **/dist
 **/__snapshots__
-.vscode
 .DS_Store
 yarn.lock

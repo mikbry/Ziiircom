@@ -1,0 +1,6 @@
+{
+  "git.ignoreLimitWarning": true,
+  "licenser.customTermsAndConditions": "Copyright @YEAR@ @AUTHOR@\n\nAll right reserved",
+  "jest.pathToJest": "yarn test",
+  "jest.pathToConfig": "/Users/mik/dev/mikbry/ziiircom/jest.config.js"
+}
