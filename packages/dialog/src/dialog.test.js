@@ -265,12 +265,12 @@ test('Dialog with conditional intent should match correctly', () => {
 
 test('Dialog with conditional intent and conditional outputs should match correctly', () => {
   const [matchIntent, buildOutput] = Dialog([
-    { conditions: [], input: ['*'], output: 'hello<<var=*>>' },
+    { conditions: [], input: ['hello'], output: 'hello<<var=*>>' },
     {
-      input: ['*'],
+      input: ['cool'],
       output: [{ type: 'condition', children: [{ name: 'var', value: 'notfound', text: 'hello<<var=*>>' }] }],
     },
-    { conditions: [{ name: 'var', value: 'hello' }], input: ['*'], output: 'How are you?<<var=2>>' },
+    { conditions: [{ name: 'var', value: 'hello' }], input: ['cool'], output: 'How are you?<<var=2>>' },
     { conditions: [{ name: 'var', value: '2' }], input: '*', output: 'Fine<<var=3>>' },
   ]);
   let { matchs, context } = matchIntent({ text: 'hello' });
@@ -278,12 +278,12 @@ test('Dialog with conditional intent and conditional outputs should match correc
   expect(context.var).toBe(undefined);
   expect(response[0]).toBe('hello');
   expect(ctx.var).toBe('hello');
-  ({ matchs, context } = matchIntent({ text: 'hello' }));
+  ({ matchs, context } = matchIntent({ text: 'cool' }));
   expect(context.var).toBe('hello');
   ({ response, context: ctx } = buildOutput({ matchs }));
   expect(response[0]).toBe('How are you?');
   expect(ctx.var).toBe('2');
-  ({ matchs, context } = matchIntent({ text: 'hello' }));
+  ({ matchs, context } = matchIntent({ text: 'cool' }));
   expect(context.var).toBe('2');
   ({ response, context: ctx } = buildOutput({ matchs }));
   expect(response[0]).toBe('Fine');

@@ -208,13 +208,14 @@ const Dialog = (_intents, initialContexts) => {
   const contexts = initialContexts || {};
   const buildResponse = ({ matchs, context: c = {}, userId = 'user' }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
-    let match;
     let matchIndex = 0;
     if (matchs && matchs.length > 1) {
-      matchs.forEach((m, i) => {
-        if (!m.any && !match && m.intent.topic === context.topic) {
+      matchs.find((m, i) => {
+        if (((m.intent.conditions && m.intent.conditions.length > 0) || !m.any) && m.intent.topic === context.topic) {
           matchIndex = i;
+          return true;
         }
+        return false;
       });
     }
     let response = [];
