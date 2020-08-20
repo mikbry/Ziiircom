@@ -3,7 +3,6 @@
 **/config
 **/config.json
 **/build
-.vscode
 **/coverage
 **/*.DS_Store
 **/yarn-error.log
