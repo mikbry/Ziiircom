@@ -283,7 +283,7 @@ test('Dialog with conditional intent and conditional outputs should match correc
   ({ response, context: ctx } = buildOutput({ matchs }));
   expect(response[0]).toBe('How are you?');
   expect(ctx.var).toBe('2');
-  ({ matchs, context } = matchIntent({ text: 'hello' }));
+  ({ matchs, context } = matchIntent({ text: 'cool' }));
   expect(context.var).toBe('2');
   ({ response, context: ctx } = buildOutput({ matchs }));
   expect(response[0]).toBe('Fine');
