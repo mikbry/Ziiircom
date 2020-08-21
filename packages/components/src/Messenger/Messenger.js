@@ -22,7 +22,6 @@ const StyledMessenger = Interface.styled(Box)`
   font-weight: ${(props) => props.theme.font.weight};
   line-height: 1.1;
   overflow-wrap: break-word;
-
   padding: 0px;
   width: ${(props) => props.theme.messenger.width};
   height: ${(props) => props.theme.messenger.height};
@@ -48,6 +47,12 @@ const StyledMessenger = Interface.styled(Box)`
 
   & .ziiir-conversation {
     padding: 16px;
+    width: calc(100% - 32px);
+    height: calc(100% - 32px);
+  }
+
+  & .ziiir-conversation > div {
+    webkit-flex: 0 0 100%;
   }
 
   @keyframes enterConversation {
