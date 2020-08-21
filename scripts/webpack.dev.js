@@ -1,7 +1,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 const common = require(path.join(__dirname, './webpack.common'));
 
