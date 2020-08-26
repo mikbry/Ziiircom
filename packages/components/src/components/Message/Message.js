@@ -199,6 +199,7 @@ const Message = ({
   };
 
   const handleQuickClick = (event) => {
+    event.preventDefault();
     const parent = event.target.parentNode;
     parent.style.display = 'none';
   };
@@ -215,8 +216,8 @@ const Message = ({
       quickReplies &&
         e(
           StyledReplies,
-          { onClick: handleQuickClick },
-          quickReplies.map((qr) => e('button', { key: qr.title }, qr.title)),
+          {},
+          quickReplies.map((qr) => e('button', { key: qr.title, onClick: handleQuickClick }, qr.title)),
         ),
     ),
   );
