@@ -233,10 +233,14 @@ test('Dialog with input {{var=@email}} should match correctly', () => {
 });
 
 test('Dialog with input malformed entities should pass', () => {
-  const [matchIntent, buildOutput] = Dialog([{ input: [' {{var=@email}}'], output: 'email={{var}}' }]);
+  const [matchIntent, buildOutput] = Dialog(
+    [{ input: [' {{var=@email}}'], output: 'email={{var}}' }],
+    {},
+    { fallback: 'What ?' },
+  );
   const { matchs, context } = matchIntent({ text: 'john@doe.com' });
   const { response, entities } = buildOutput({ matchs, context });
-  expect(response[0]).toBe("I don't understand");
+  expect(response[0]).toBe('What ?');
   expect(entities).toBe(undefined);
 });
 

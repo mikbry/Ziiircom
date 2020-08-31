@@ -87,6 +87,7 @@ const ZiiirClient = async ({
     messages,
     dataset,
     contexts: state.contexts,
+    options: state.messenger.dialogOptions,
   });
   const handleNewMessage = (text) => {
     if (text.charAt(0) === '#') {
