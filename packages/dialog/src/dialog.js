@@ -203,7 +203,7 @@ const generateOutput = (match, _context) => {
   return [response, context, quickReplies, entities];
 };
 
-const Dialog = (_intents, initialContexts) => {
+const Dialog = (_intents, initialContexts, options = { fallback: "I don't understand" }) => {
   let resp;
   const contexts = initialContexts || {};
   const buildResponse = ({ matchs, context: c = {}, userId = 'user' }, renderer = htmlRenderer) => {
@@ -226,7 +226,7 @@ const Dialog = (_intents, initialContexts) => {
       contexts[userId] = deepCopy(context);
     }
     if (response.length === 0) {
-      response.push("I don't understand");
+      response.push(options.fallback);
     }
     response = response.map((m) => renderer(m));
     const output = { response, context, entities };
