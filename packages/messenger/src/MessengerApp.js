@@ -60,6 +60,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     max-width: ${(props) => props.theme.messenger.width};
     height: 80%;
     margin: 96px 48px 96px auto;
+    background: ${(props) => props.theme.palette.background};
   `;
   const MessengerBox = styled(
     'div',
@@ -76,7 +77,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 3;
+    z-index: 10;
     flex-direction: column;
     flex-shrink: 0;
 
