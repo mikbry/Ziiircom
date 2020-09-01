@@ -199,6 +199,12 @@ test('Dialog links should display correctly', () => {
   expect(response[0]).toBe(
     'ok <a href="https://url.png" target="_blank" rel="noopener noreferrer"><img src="https://url.png" alt="https://url.png" /></a>',
   );
+  [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok [https://url.png](https://url)' }]);
+  ({ matchs, context } = matchIntent({ text: 'hello' }));
+  ({ response } = buildOutput({ matchs, context }));
+  expect(response[0]).toBe(
+    'ok <a href="https://url" target="_blank" rel="noopener noreferrer"><img src="https://url.png" alt="url" /></a>',
+  );
 });
 
 test('Dialog with input {{@any}} should match correctly', () => {

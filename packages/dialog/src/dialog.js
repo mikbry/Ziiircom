@@ -90,8 +90,13 @@ const htmlRenderer = (message) => {
       label = complexLabel;
       url = complexUrl;
     }
-    if (url.match(/\.(jpg|jpeg|gif|png)$/gi)) {
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer"><img src="${url}" alt="${label}" /></a>`;
+    let imgUrl = url.match(/\.(jpg|jpeg|gif|png|svg)$/gi) ? url : undefined;
+    if (!imgUrl && label.match(/\.(jpg|jpeg|gif|png|svg)$/gi)) {
+      imgUrl = label;
+      label = label.substring(label.lastIndexOf('/') + 1, label.lastIndexOf('.'));
+    }
+    if (imgUrl) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer"><img src="${imgUrl}" alt="${label}" /></a>`;
     }
     return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   });
