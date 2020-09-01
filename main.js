@@ -327,6 +327,7 @@ animation:spin 0.45s ease-in-out;
     max-width: ${e=>e.theme.messenger.width};
     height: 80%;
     margin: 96px 48px 96px auto;
+    background: ${e=>e.theme.palette.background};
   `,y=(0,s.styled)("div",{ref:f,className:"ziiircom-messenger is"+(c?"open":"closedstart"),onClick:m},g)`
     display: flex;
     position: fixed;
@@ -334,7 +335,7 @@ animation:spin 0.45s ease-in-out;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 3;
+    z-index: 10;
     flex-direction: column;
     flex-shrink: 0;
 
