@@ -75,6 +75,9 @@ const Styled = Interface.styled('div')`
     cursor: pointer;
     font-size: 16px;
   }
+  & > div > p > button:focus {
+    outline: none !important;
+  }
   @keyframes enterMessageFromUser {
     0% {
       transform: translate( 0, 20px );
