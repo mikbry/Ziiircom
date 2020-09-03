@@ -17,7 +17,11 @@ test('Header should render correctly', () => {
 
 test('Header should render button', () => {
   const handleAction = jest.fn();
-  const { getByRole } = render(<Header closeButton={{ onClose: handleAction }}>title</Header>);
+  const { getByRole } = render(
+    <Header closeButton={{}} onClose={handleAction}>
+      title
+    </Header>,
+  );
   const button = getByRole('button');
   button.click();
   expect(handleAction).toBeCalledTimes(1);
