@@ -18,6 +18,11 @@ const HeaderStyled = Interface.styled('header')`
   padding-left: 1.2em;
   padding-right: 0.3em;
   display: flex;
+  @media only screen and (max-width: 772px) {
+    button:first-of-type {
+      display: block !important;
+    }
+  }
 `;
 
 HeaderStyled.defaultProps = {
@@ -31,6 +36,7 @@ margin: 0.6em 1.2em 1.2em -0.6em;
 padding: 4px;
 border: none;
 border-radius:100%;
+display: ${(props) => (props.closeButton ? 'block' : 'none')};
 background-color: rgba(255, 255, 255, 0.2);
 &:hover {
   background-color: rgba(255, 255, 255, 0.4);
@@ -53,12 +59,10 @@ CloseIcon.defaultProps = {
 };
 
 const e = Interface.createElement;
-const Header = ({ children, closeButton }) => {
-  let container = e(HeaderStyled, null, children[0]);
-  if (closeButton) {
-    const button = e(CloseBut, { onClick: closeButton.onClose }, e(CloseIcon));
-    container = e(HeaderStyled, null, button, e('span', null, children[0]));
-  }
-  return container;
+const Header = ({ children, closeButton, onClose }) => {
+  // let container = e(HeaderStyled, null, children[0]);
+  const button = e(CloseBut, { closeButton, onClick: onClose }, e(CloseIcon));
+  return e(HeaderStyled, null, button, e('span', null, children[0]));
+  // return container;
 };
 export default Header;
