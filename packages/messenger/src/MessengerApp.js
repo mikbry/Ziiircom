@@ -56,10 +56,9 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     input,
     hideDate,
   })`
-    width: 100%;
-    max-width: ${(props) => props.theme.messenger.width};
-    height: 80%;
-    margin: 96px 48px 96px auto;
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
     background: ${(props) => props.theme.palette.background};
   `;
   const MessengerBox = styled(
@@ -71,22 +70,17 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     },
     Messenger,
   )`
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    max-height: 700px;
+    width: ${(props) => (props.theme.messenger && props.theme.messenger.width ? props.theme.messenger.width : '500px')};
+    min-height: 320px;
     z-index: 10;
-    flex-direction: column;
-    flex-shrink: 0;
+    position: fixed;
+    height: calc(100% - 100px);
+    bottom: 100px;
+    right: 28px;
 
     &.isopen {
       animation: slide-in 0.5s forwards;
-    }
-
-    &.isclosedstart {
-      visibility: hidden;
     }
 
     &.isclosed {
@@ -94,12 +88,21 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
       animation: slide-out 0.5s ease;
     }
 
+    &.isclosedstart {
+      visibility: hidden;
+    }
+
     @media only screen and (max-width: 772px) {
-      .isopen {
-        animation: slide-up 0.5s forwards;
+      .ziiircom-messenger {
+        bottom: 0px !important;
+        right: 0px !important;
+        width: 100% !important;
       }
-      .isclosed {
-        animation: slide-down 0.5s forwards;
+      .ziiircom-messenger.isopen {
+        animation: slide-up 0.5s forwards !important;
+      }
+      .ziiircom-messenger.isclosed {
+        animation: slide-down 0.5s forwards !important;
       }
       .isactive {
         display: none;
@@ -113,48 +116,48 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     }
     @keyframes slide-in {
       0% {
-        left: 600px;
+        transform: translateX(780px);
         opacity: 0;
         visibility: hidden;
       }
       100% {
-        left: 0;
+        transform: translateX(0px);
         opacity: 1;
         visibility: visible;
       }
     }
     @keyframes slide-out {
       0% {
-        left: 0;
+        transform: translateX(0px);
         opacity: 1;
         visibility: visible;
       }
       100% {
-        left: 600px;
+        transform: translateX(780px);
         opacity: 0;
         visibility: hidden;
       }
     }
     @keyframes slide-up {
       0% {
-        top: 600px;
+        transform: translateY(780px);
         opacity: 0;
         visibility: hidden;
       }
       100% {
-        top: 0;
+        transform: translateY(0px);
         opacity: 1;
         visibility: visible;
       }
     }
     @keyframes slide-down {
       0% {
-        top: 0;
+        transform: translateY(0px);
         opacity: 1;
         visibility: visible;
       }
       100% {
-        top: 600px;
+        transform: translateY(780px);
         opacity: 0;
         visibility: hidden;
       }
@@ -181,7 +184,20 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     },
     MessengerBox,
     Fab,
-  )``;
+  )`
+    @media only screen and (max-width: 772px) {
+      .ziiircom-messenger {
+        bottom: 0px;
+        right: 0px;
+      }
+      .ziiiircom-messenger-frame > .isopen {
+        animation: slide-up 0.5s forwards;
+      }
+      .ziiircom-messenger > .isclosed {
+        animation: slide-down 0.5s forwards;
+      }
+    }
+  `;
 };
 
 export default MessengerApp;
