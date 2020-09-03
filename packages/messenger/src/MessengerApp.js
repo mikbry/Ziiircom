@@ -184,20 +184,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     },
     MessengerBox,
     Fab,
-  )`
-    @media only screen and (max-width: 772px) {
-      .ziiircom-messenger {
-        bottom: 0px;
-        right: 0px;
-      }
-      .ziiiircom-messenger-frame > .isopen {
-        animation: slide-up 0.5s forwards;
-      }
-      .ziiircom-messenger > .isclosed {
-        animation: slide-down 0.5s forwards;
-      }
-    }
-  `;
+  )``;
 };
 
 export default MessengerApp;
