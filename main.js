@@ -326,28 +326,22 @@ animation:spin 0.45s ease-in-out;
   } 
 }
 `;o.defaultProps={theme:a.default};var i=o;t.default=i},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n=(e={},t)=>{const{fonts:r={}}=e,{text:n={},heading:a={}}=r,s=document.createElement("link");s.setAttribute("rel","stylesheet"),s.setAttribute("href",n.url||"https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap"),s.setAttribute("type","text/css");const o=document.createElement("link");o.setAttribute("rel","stylesheet"),o.setAttribute("href",a.url||"https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap"),o.setAttribute("type","text/css");const[i]=document.getElementsByTagName("head");i.appendChild(s),i.appendChild(o);const[l]=document.getElementsByClassName(t);l.style.cssText=`font-family: ${n.name&&n.name+", "||""}sans-serif;`};t.default=n},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n,a=(n=r(7))&&n.__esModule?n:{default:n},s=r(9),o=r(3),i=r(10);var l=async(e,t,r,n)=>{const[l,d={},u]=(0,i.useSelector)(e=>[e.messenger.isOpen,e.messenger.header,e.messenger.input]);let c=l;const f=(0,o.useRef)(null),p=(0,o.useRef)(null),m=()=>{c=!c;const e=f.current;e.classList.toggle("isopen"),e.classList.contains("isclosedstart")?e.classList.remove("isclosedstart"):e.classList.toggle("isclosed"),e.firstChild.classList.remove("isexpanded");p.current.classList.toggle("isactive")};d.closeButton&&(d.closeButton.onClose=m);const h=await(0,a.default)(),g=(0,s.styled)(h.Messenger,{messages:e,onMessage:e=>{t(e)},onClick:e=>{e.stopPropagation()},onAction:r,header:d,input:u,hideDate:n})`
-    width: 100%;
-    max-width: ${e=>e.theme.messenger.width};
-    height: 80%;
-    margin: 96px 48px 96px auto;
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
     background: ${e=>e.theme.palette.background};
   `,y=(0,s.styled)("div",{ref:f,className:"ziiircom-messenger is"+(c?"open":"closedstart"),onClick:m},g)`
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    max-height: 700px;
+    width: ${e=>e.theme.messenger&&e.theme.messenger.width?e.theme.messenger.width:"500px"};
+    min-height: 320px;
     z-index: 10;
-    flex-direction: column;
-    flex-shrink: 0;
+    position: fixed;
+    height: calc(100% - 100px);
+    bottom: 100px;
+    right: 28px;
 
     &.isopen {
       animation: slide-in 0.5s forwards;
-    }
-
-    &.isclosedstart {
-      visibility: hidden;
     }
 
     &.isclosed {
@@ -355,12 +349,21 @@ animation:spin 0.45s ease-in-out;
       animation: slide-out 0.5s ease;
     }
 
+    &.isclosedstart {
+      visibility: hidden;
+    }
+
     @media only screen and (max-width: 772px) {
-      .isopen {
-        animation: slide-up 0.5s forwards;
+      .ziiircom-messenger {
+        bottom: 0px !important;
+        right: 0px !important;
+        width: 100% !important;
       }
-      .isclosed {
-        animation: slide-down 0.5s forwards;
+      .ziiircom-messenger.isopen {
+        animation: slide-up 0.5s forwards !important;
+      }
+      .ziiircom-messenger.isclosed {
+        animation: slide-down 0.5s forwards !important;
       }
       .isactive {
         display: none;
@@ -374,48 +377,48 @@ animation:spin 0.45s ease-in-out;
     }
     @keyframes slide-in {
       0% {
-        left: 600px;
+        transform: translateX(780px);
         opacity: 0;
         visibility: hidden;
       }
       100% {
-        left: 0;
+        transform: translateX(0px);
         opacity: 1;
         visibility: visible;
       }
     }
     @keyframes slide-out {
       0% {
-        left: 0;
+        transform: translateX(0px);
         opacity: 1;
         visibility: visible;
       }
       100% {
-        left: 600px;
+        transform: translateX(780px);
         opacity: 0;
         visibility: hidden;
       }
     }
     @keyframes slide-up {
       0% {
-        top: 600px;
+        transform: translateY(780px);
         opacity: 0;
         visibility: hidden;
       }
       100% {
-        top: 0;
+        transform: translateY(0px);
         opacity: 1;
         visibility: visible;
       }
     }
     @keyframes slide-down {
       0% {
-        top: 0;
+        transform: translateY(0px);
         opacity: 1;
         visibility: visible;
       }
       100% {
-        top: 600px;
+        transform: translateY(780px);
         opacity: 0;
         visibility: hidden;
       }
