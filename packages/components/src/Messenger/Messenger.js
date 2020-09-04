@@ -139,7 +139,6 @@ const SendButton = Interface.styled('button')`
   cursor: pointer;
   font-size: 16px;
   padding-right: 0;
-  padding-top: 4px;
   color: ${(props) => props.theme.palette.disabledText};
   background-color: transparent;
 `;
