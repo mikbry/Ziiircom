@@ -106,7 +106,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
         display: none;
       }
       .ziiircom-messenger > div {
-        max-width: 100%;
+        width: 100%;
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
         margin: auto 0 0 0;
