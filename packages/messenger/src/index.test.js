@@ -37,6 +37,7 @@ test('defaultClient should be started and respond to input"', async (done) => {
     {
       theme: {
         fonts: { text: { name: 'Raleway', url: 'https://fonts.googleapis.com/css?family=Raleway:400,700' } },
+        messenger: { width: '400px' },
       },
       intents: undefined,
       messenger: {},
