@@ -144,6 +144,10 @@ const SendButton = Interface.styled('button')`
   background-color: transparent;
 `;
 
+SendButton.defaultProps = {
+  theme: Theme,
+};
+
 const e = Interface.createElement;
 const m = (createdtime, msg, fromUser, avatar, onAction, hideDate, hasPrevious, hasNext, quickReplies) =>
   e(
@@ -213,7 +217,7 @@ const Messenger = ({
       placeholder: input.placeholder || 'Your message',
     });
     let buttoncontent = 'send';
-    if (input.sendButton.icon) {
+    if (input.sendButton && input.sendButton.icon) {
       buttoncontent = e('img', {
         src: input.sendButton.icon.src
           ? input.sendButton.icon.src
