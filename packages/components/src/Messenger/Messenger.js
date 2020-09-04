@@ -92,15 +92,7 @@ const MessengerFooter = Interface.styled(Footer)`
   border-radius: ${(props) => `0 0 ${props.theme.radius}px ${props.theme.radius}px`};
   display: flex;
   flex-direction: column;
-  & button {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding-right: 0;
-    color: ${(props) => props.theme.palette.disabledText};
-    background-color: transparent;
-  }
+
   & button:hover {
     color: ${(props) => props.theme.palette.onSurface};
   }
@@ -110,7 +102,7 @@ const MessengerFooter = Interface.styled(Footer)`
   }
   & button:hover img {
     background-color: transparent;
-    filter: opacity(50%);
+    filter: opacity(70%);
   }
 `;
 
@@ -124,19 +116,32 @@ const Conversation = Interface.styled(List)`
 `;
 
 const FooterInputContainer = Interface.styled('div')`
-display: flex;
-width: 100%;
-padding: 4px;
-margin: 0;
-border: none;
-outline: none;
+  display: flex;
+  width: 100%;
+  padding: 4px;
+  margin: 0;
+  border: none;
+  outline: none;
 `;
+
 const FooterInput = Interface.styled(Input)`
   width: 100%;
   padding: 4px;
   margin: 0;
   border: none;
   outline: none;
+`;
+
+const SendButton = Interface.styled('button')`
+  display: ${(props) => (props.input && props.input.sendButton ? 'block' : 'none')};
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding-right: 0;
+  padding-top: 4px;
+  color: ${(props) => props.theme.palette.disabledText};
+  background-color: transparent;
 `;
 
 const e = Interface.createElement;
@@ -207,22 +212,20 @@ const Messenger = ({
       ref: inputRef,
       placeholder: input.placeholder || 'Your message',
     });
-    if (input.sendButton) {
-      let buttoncontent = 'send';
-      if (input.sendButton.icon) {
-        buttoncontent = e('img', {
-          src: input.sendButton.icon.src
-            ? input.sendButton.icon.src
-            : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMi4wMSAyMUwyMyAxMiAyLjAxIDMgMiAxMGwxNSAyLTE1IDJ6Ii8+PC9zdmc+',
-        });
-      }
-      inputComponent = e(
-        FooterInputContainer,
-        null,
-        inputComponent,
-        e('button', { onClick: handleSend }, buttoncontent),
-      );
+    let buttoncontent = 'send';
+    if (input.sendButton.icon) {
+      buttoncontent = e('img', {
+        src: input.sendButton.icon.src
+          ? input.sendButton.icon.src
+          : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMi4wMSAyMUwyMyAxMiAyLjAxIDMgMiAxMGwxNSAyLTE1IDJ6Ii8+PC9zdmc+',
+      });
     }
+    inputComponent = e(
+      FooterInputContainer,
+      null,
+      inputComponent,
+      e(SendButton, { onClick: handleSend, className: 'ziiir-send-button' }, buttoncontent),
+    );
   }
   return e(
     StyledMessenger,
