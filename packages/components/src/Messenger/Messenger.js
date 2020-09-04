@@ -229,7 +229,11 @@ const Messenger = ({
       inputComponent,
       e(
         SendButton,
-        { onClick: handleSend, className: 'ziiir-send-button', sendButton: !!input.sendButton },
+        {
+          onClick: handleSend,
+          className: 'ziiir-send-button',
+          sendButton: input.sendButton && !input.sendButton.disableDesktop,
+        },
         buttoncontent,
       ),
     );
