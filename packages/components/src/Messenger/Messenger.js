@@ -133,7 +133,7 @@ const FooterInput = Interface.styled(Input)`
 `;
 
 const SendButton = Interface.styled('button')`
-  display: ${(props) => (props.input && props.input.sendButton ? 'block' : 'none')};
+  display: ${(props) => (props.sendButton ? 'block' : 'none')};
   border: none;
   outline: none;
   cursor: pointer;
@@ -143,7 +143,6 @@ const SendButton = Interface.styled('button')`
   color: ${(props) => props.theme.palette.disabledText};
   background-color: transparent;
 `;
-
 SendButton.defaultProps = {
   theme: Theme,
 };
@@ -228,7 +227,11 @@ const Messenger = ({
       FooterInputContainer,
       null,
       inputComponent,
-      e(SendButton, { onClick: handleSend, className: 'ziiir-send-button' }, buttoncontent),
+      e(
+        SendButton,
+        { onClick: handleSend, className: 'ziiir-send-button', sendButton: !!input.sendButton },
+        buttoncontent,
+      ),
     );
   }
   return e(

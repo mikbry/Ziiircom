@@ -50,7 +50,9 @@ test('Messenger should trigger onMessage', async () => {
 });
 
 test('Messenger should not trigger onMessage', async () => {
-  const { findByPlaceholderText } = render(<Messenger input={{ display: true, sendButton: {} }} />);
+  const { findByPlaceholderText } = render(
+    <Messenger input={{ display: true, sendButton: { icon: { src: 'test' } } }} />,
+  );
   const input = await findByPlaceholderText('Your message');
   expect(input).toBeDefined();
   input.value = 'text';
@@ -66,10 +68,10 @@ test('Messenger should not trigger onMessage', async () => {
 
 test('Messenger send button should trigger onMessage', async () => {
   const onMessage = jest.fn();
-  const { findByPlaceholderText, getByRole } = render(
-    <Messenger onMessage={onMessage} input={{ display: true, sendButton: { icon: { src: 'test' } } }} />,
+  const { findByPlaceholderText, getByText } = render(
+    <Messenger onMessage={onMessage} input={{ display: true, sendButton: {} }} />,
   );
-  const button = getByRole('button');
+  const button = getByText('send');
   button.click();
   expect(onMessage).toHaveBeenCalledTimes(0);
   const input = await findByPlaceholderText('Your message');
