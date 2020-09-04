@@ -64,15 +64,7 @@ var messenger=function(e){var t={};function r(n){if(t[n])return t[n].exports;var
   border-radius: ${e=>`0 0 ${e.theme.radius}px ${e.theme.radius}px`};
   display: flex;
   flex-direction: column;
-  & button {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding-right: 0;
-    color: ${e=>e.theme.palette.disabledText};
-    background-color: transparent;
-  }
+
   & button:hover {
     color: ${e=>e.theme.palette.onSurface};
   }
@@ -82,25 +74,35 @@ var messenger=function(e){var t={};function r(n){if(t[n])return t[n].exports;var
   }
   & button:hover img {
     background-color: transparent;
-    filter: opacity(50%);
+    filter: opacity(70%);
   }
 `;m.defaultProps={theme:u.default};const h=n.default.styled(o.default)`
   transform-origin: center bottom 0px;
   scroll-behavior: smooth;
 `,g=n.default.styled("div")`
-display: flex;
-width: 100%;
-padding: 4px;
-margin: 0;
-border: none;
-outline: none;
+  display: flex;
+  width: 100%;
+  padding: 4px;
+  margin: 0;
+  border: none;
+  outline: none;
 `,y=n.default.styled(d.default)`
   width: 100%;
   padding: 4px;
   margin: 0;
   border: none;
   outline: none;
-`,v=n.default.createElement;var b=({isExpanded:e=!0,input:t={display:!0},header:r={},messages:a=[],onMessage:s,onClick:o,onAction:i,hideDate:d=!1})=>{const{text:u="",...c}=r,b=n.default.useRef(null),x=v(h,{isExpanded:e,className:"ziiir-conversation"},a.sort((e,t)=>e.created_time>t.created_time).map((e,t,r)=>{const n=r[t-1],a=!!n&&n.from===e.from&&e.created_time-n.created_time<2e3,s=r[t+1],o=!!s&&s.from===e.from&&s.created_time-e.created_time<2e3;return((e,t,r,n,a,s,o,i,d)=>v(l.default,{key:e,createdtime:e,avatar:n,fromUser:r,onAction:a,hideDate:s,hasPrevious:o,hasNext:i,quickReplies:d},t))(e.created_time,e.text,"user"===e.from,e.avatar,i,d,a,o,e.quick_replies)}));let _="ziiir.com";const w=e=>{const t=e.target.value||"";"Enter"===e.key&&t.length>0&&(s&&s(t),e.target.value="")},M=()=>{const{value:e}=b.current;e&&e.length&&s&&(s(e),b.current.value="")};if(t.display&&(_=v(y,{className:"ziir-input",onKeyUp:w,ref:b,placeholder:t.placeholder||"Your message"}),t.sendButton)){let e="send";t.sendButton.icon&&(e=v("img",{src:t.sendButton.icon.src?t.sendButton.icon.src:"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMi4wMSAyMUwyMyAxMiAyLjAxIDMgMiAxMGwxNSAyLTE1IDJ6Ii8+PC9zdmc+"})),_=v(g,null,_,v("button",{onClick:M},e))}return v(f,{className:e?"isexpanded":void 0,onClick:o},v(p,c,u),x,v("p",null,"Powered by ",v("a",{href:"https://ziiir.com",target:"_blank"},"ziiir.com")),v(m,null,_))};t.default=b},function(e,t,r){"use strict";var n;Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var a=((n=r(23))&&n.__esModule?n:{default:n}).default;t.default=a},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n=s(r(0)),a=s(r(1));function s(e){return e&&e.__esModule?e:{default:e}}const o=n.default.styled("div")`
+`,v=n.default.styled("button")`
+  display: ${e=>e.sendButton?"block":"none"};
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding-right: 0;
+  padding-top: 4px;
+  color: ${e=>e.theme.palette.disabledText};
+  background-color: transparent;
+`;v.defaultProps={theme:u.default};const b=n.default.createElement;var x=({isExpanded:e=!0,input:t={display:!0},header:r={},messages:a=[],onMessage:s,onClick:o,onAction:i,hideDate:d=!1})=>{const{text:u="",...c}=r,x=n.default.useRef(null),_=b(h,{isExpanded:e,className:"ziiir-conversation"},a.sort((e,t)=>e.created_time>t.created_time).map((e,t,r)=>{const n=r[t-1],a=!!n&&n.from===e.from&&e.created_time-n.created_time<2e3,s=r[t+1],o=!!s&&s.from===e.from&&s.created_time-e.created_time<2e3;return((e,t,r,n,a,s,o,i,d)=>b(l.default,{key:e,createdtime:e,avatar:n,fromUser:r,onAction:a,hideDate:s,hasPrevious:o,hasNext:i,quickReplies:d},t))(e.created_time,e.text,"user"===e.from,e.avatar,i,d,a,o,e.quick_replies)}));let w="ziiir.com";const M=e=>{const t=e.target.value||"";"Enter"===e.key&&t.length>0&&(s&&s(t),e.target.value="")},k=()=>{const{value:e}=x.current;e&&e.length&&s&&(s(e),x.current.value="")};if(t.display){w=b(y,{className:"ziir-input",onKeyUp:M,ref:x,placeholder:t.placeholder||"Your message"});let e="send";t.sendButton&&t.sendButton.icon&&(e=b("img",{src:t.sendButton.icon.src?t.sendButton.icon.src:"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMi4wMSAyMUwyMyAxMiAyLjAxIDMgMiAxMGwxNSAyLTE1IDJ6Ii8+PC9zdmc+"})),w=b(g,null,w,b(v,{onClick:k,className:"ziiir-send-button",sendButton:!!t.sendButton},e))}return b(f,{className:e?"isexpanded":void 0,onClick:o},b(p,c,u),_,b("p",null,"Powered by ",b("a",{href:"https://ziiir.com",target:"_blank"},"ziiir.com")),b(m,null,w))};t.default=x},function(e,t,r){"use strict";var n;Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var a=((n=r(23))&&n.__esModule?n:{default:n}).default;t.default=a},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n=s(r(0)),a=s(r(1));function s(e){return e&&e.__esModule?e:{default:e}}const o=n.default.styled("div")`
   padding: 1.2em;
   background: ${e=>e.theme.palette.background};
   color: #292c45;
@@ -152,7 +154,6 @@ cursor:pointer;
 `;o.defaultProps={theme:a.default};var i=o;t.default=i},function(e,t,r){"use strict";var n;Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var a=((n=r(29))&&n.__esModule?n:{default:n}).default;t.default=a},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var n=s(r(0)),a=s(r(1));function s(e){return e&&e.__esModule?e:{default:e}}const o=n.default.styled("div")`
   color: ${e=>e.theme.palette.disabledText};
   font-size: 1em;
-  line-height: 36px;
   min-height: 36px;
   padding-left: 16px;
   padding-right: 16px;
@@ -375,7 +376,7 @@ animation:spin 0.45s ease-in-out;
         display: none;
       }
       .ziiircom-messenger > div {
-        max-width: 100%;
+        width: 100%;
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
         margin: auto 0 0 0;
