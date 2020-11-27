@@ -11,16 +11,19 @@ import { deepCopy } from '@ziiircom/common';
 import ziiirClient from './ZiiirClient';
 
 const messenger = async (initialState = {}, messageListener, root = document.body) => {
-  let config;
+  let { config } = initialState;
+  const { configFile = './config.json' } = initialState;
   let dataset;
-  try {
-    // config = await import('./config.json');
-    // config = config.default;
-    const response = await fetch('./config.json');
-    config = await response.json();
-  } catch (err) {
-    // console.log('no config found');
+
+  if (!config && configFile) {
+    try {
+      const response = await fetch(configFile);
+      config = await response.json();
+    } catch (err) {
+      // console.log('no config found');
+    }
   }
+
   if (!config) {
     config = {};
   }
