@@ -169,7 +169,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     iconActive:
       "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='-12 -12 48 48'%3E%3Cg fill='white'%3E%3Cpath d='M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z'/%3E%3C/g%3E%3C/svg%3E",
   })`
-    position: absolute;
+    position: fixed;
     right: 32px;
     bottom: 32px;
     z-index: 9;
