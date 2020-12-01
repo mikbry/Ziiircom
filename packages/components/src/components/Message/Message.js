@@ -65,6 +65,9 @@ const Styled = Interface.styled('div')`
   & > div > p > a {
     color: ${(props) => props.theme.palette.link || 'inherit'};
   }
+  & > div > p > a > img {
+    display: initial;
+  }
   & > div > p > button {
     border: ${(props) => buttonBorder(props.theme.palette)};
     border-radius: 4px;
