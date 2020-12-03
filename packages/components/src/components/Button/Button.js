@@ -10,6 +10,8 @@ import Theme from '../../Theme';
 
 const Button = Interface.styled('button')`
   font-size: 1em;
+  font-family: ${(props) => props.theme.font.family};
+  font-weight: ${(props) => props.theme.font.weight};
   margin: 0.6em;
   padding: 0.3em 1em;
   border-radius: 3px;
