@@ -216,6 +216,9 @@ cursor:pointer;
     color: ${e=>d(e.theme.palette)};
     cursor: pointer;
     font-size: 16px;
+    font-family: ${e=>e.theme.font.family};
+    font-weight: ${e=>e.theme.font.weight};
+    padding: 1px 6px;
   }
   & > div > p > button:focus {
     outline: none !important;
