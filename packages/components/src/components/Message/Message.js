@@ -77,6 +77,9 @@ const Styled = Interface.styled('div')`
     color: ${(props) => buttonColor(props.theme.palette)};
     cursor: pointer;
     font-size: 16px;
+    font-family: ${(props) => props.theme.font.family};
+    font-weight: ${(props) => props.theme.font.weight};
+    padding: 1px 6px;
   }
   & > div > p > button:focus {
     outline: none !important;
