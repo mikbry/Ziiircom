@@ -80,6 +80,7 @@ const messenger = async (initialState = {}, messageListener, root = document.bod
   }
   const messagingType = dataset ? 'dialog' : undefined;
   const messaging = await useMessaging(messagingType);
+  // console.log('global actions=', state.actions);
   const [store, getMessages, createMessage, sendMessage, commands, handleEventMessage] = await ziiirClient({
     state,
     messaging,
@@ -87,6 +88,7 @@ const messenger = async (initialState = {}, messageListener, root = document.bod
     messageListener,
     dataset,
     messages: state.messages,
+    actions: state.actions,
   });
   window.ziiircom = {
     name: 'Ziiircom',

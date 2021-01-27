@@ -15,5 +15,9 @@ module.exports = merge(exp, {
     https: true,
     historyApiFallback: { disableDotRule: true },
     port: config.port.dev,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    },
   },
 });

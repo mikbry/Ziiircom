@@ -13,6 +13,21 @@ import initFonts from './utils/styled/fonts';
 import createStore from './utils/store';
 import MessengerApp from './MessengerApp';
 
+const postFormAction = (url, variables, params, headers = {}) => {
+  const form = Object.keys(params)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(variables[params[key]])}`)
+    .join('&');
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: form,
+  });
+};
+
 const ZiiirClient = async ({
   state,
   messaging,
@@ -20,6 +35,7 @@ const ZiiirClient = async ({
   messageListener = ({ type, message }) => ({ type, message }),
   dataset,
   messages,
+  actions,
 }) => {
   setup({ html, createElement, styled, useRef });
   const ui = await useUI();
@@ -35,6 +51,7 @@ const ZiiirClient = async ({
   let handleAction;
   const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
+
     const createMessage = (msg, hasPrevious, hasNext) => {
       const m = createElement(
         ui.Message,
@@ -79,6 +96,13 @@ const ZiiirClient = async ({
       while (container.firstChild) {
         container.firstChild.remove();
       }
+    } else if (type === 'newAction') {
+      // console.log('new action', message);
+      message.forEach((action) => {
+        if (action.type === 'postform') {
+          postFormAction(action.url, action.variables, action.params, action.headers);
+        }
+      });
     }
     messageListener({ type, message });
   };
@@ -88,6 +112,7 @@ const ZiiirClient = async ({
     dataset,
     contexts: state.contexts,
     options: state.messenger.dialogOptions,
+    actions,
   });
   const handleNewMessage = (text) => {
     if (text.charAt(0) === '#') {

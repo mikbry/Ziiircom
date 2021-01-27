@@ -149,6 +149,7 @@ const generateOutput = (match, _context) => {
   let context = _context;
   const response = [];
   let quickReplies;
+  let actions;
   // Store in context all variables changed
   if (intent.set) {
     context = { ...context, ...intent.set };
@@ -174,9 +175,8 @@ const generateOutput = (match, _context) => {
     if (output.text) {
       ({ text } = output);
     }
-    if (output.quick_replies) {
-      quickReplies = output.quick_replies;
-    }
+    quickReplies = output.quick_replies;
+    ({ actions } = output);
     entities.forEach((e) => {
       if (e.name) {
         context[e.name] = e.value;
@@ -205,13 +205,14 @@ const generateOutput = (match, _context) => {
       });
     });
   }
-  return [response, context, quickReplies, entities];
+  return [response, context, quickReplies, entities, actions];
 };
 
 const Dialog = (_intents, initialContexts, options = { fallback: "I don't understand" }) => {
   let resp;
   const contexts = initialContexts || {};
-  const buildResponse = ({ matchs, context: c = {}, userId = 'user' }, renderer = htmlRenderer) => {
+
+  const buildResponse = ({ matchs, userId = 'user', context: c = contexts[userId] || {} }, renderer = htmlRenderer) => {
     let context = deepCopy(c);
     let matchIndex = 0;
     if (matchs && matchs.length > 1) {
@@ -226,20 +227,25 @@ const Dialog = (_intents, initialContexts, options = { fallback: "I don't unders
     let response = [];
     let entities;
     let quickReplies;
+    let actions;
     if (matchs[matchIndex]) {
-      [response, context, quickReplies, entities] = generateOutput(matchs[matchIndex], context);
-      contexts[userId] = deepCopy(context);
+      [response, context, quickReplies, entities, actions] = generateOutput(matchs[matchIndex], context);
+      contexts[userId] = context;
     }
     if (response.length === 0) {
       response.push(options.fallback);
     }
     response = response.map((m) => renderer(m));
-    const output = { response, context, entities };
+    const output = { response, context, entities, userId };
     if (quickReplies) {
       output.quick_replies = quickReplies;
     }
+    if (actions) {
+      output.actions = actions;
+    }
     return output;
   };
+
   if (_intents && Array.isArray(_intents) && _intents.length) {
     const intents = _intents.map((i) => preprocessIntent(i));
     let m;

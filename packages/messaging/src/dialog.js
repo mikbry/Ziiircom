@@ -10,7 +10,14 @@ import { deepCopy } from '@ziiircom/common';
 import useMessaging from './messaging';
 
 // simple Dialog Messaging service
-const useDialog = async ({ listener, dataset: intents, messages, contexts: _contexts = {}, options }) => {
+const useDialog = async ({
+  listener,
+  dataset: intents,
+  messages,
+  contexts: _contexts = {},
+  options,
+  actions: globalActions,
+}) => {
   const [addMessage, getMessages, createMessage, , cmds] = await useMessaging({ listener, messages });
   const contexts = deepCopy(_contexts);
   const [matchIntents, buildResponse] = Dialog(intents, contexts, options);
@@ -19,10 +26,11 @@ const useDialog = async ({ listener, dataset: intents, messages, contexts: _cont
     addMessage(message);
     await listener({ type: 'newMessage', message: deepCopy(message) });
     const matchs = matchIntents(message);
-    const { response, quick_replies: quickReplies } = buildResponse(matchs);
+    const { response, quick_replies: quickReplies, actions, userId } = buildResponse(matchs);
     const newMessages = [];
     response.forEach((r, i) => {
       const msg = createMessage('bot', r);
+      msg.to = userId;
       if (i === response.length - 1 && quickReplies) {
         msg.quick_replies = deepCopy(quickReplies);
       }
@@ -30,6 +38,22 @@ const useDialog = async ({ listener, dataset: intents, messages, contexts: _cont
       newMessages.push(deepCopy(msg));
     });
     await listener({ type: 'newMessage', message: newMessages });
+    if (actions) {
+      const newActions = actions.map((_action) => {
+        let action = _action;
+        if (!action.type) {
+          action = deepCopy(globalActions[action.name]);
+          // console.log('action from globalActions', _action.name, action);
+        }
+        const variables = {};
+        Object.keys(action.variables).forEach((name) => {
+          // console.log('context', name, contexts[userId][name]);
+          variables[name] = contexts[userId][name] || action.variables[name];
+        });
+        return { ...action, variables, userId };
+      });
+      await listener({ type: 'newAction', message: newActions });
+    }
   };
 
   const commands = async (type) => {
