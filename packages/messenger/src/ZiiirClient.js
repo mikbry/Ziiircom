@@ -7,6 +7,7 @@
  */
 import { setup } from '@ziiircom/components';
 import useUI from './hooks/ui';
+import useLocalStorage from './hooks/useLocalStorage';
 import { html, createElement, render, useRef } from './utils/builder';
 import { styled } from './utils/styled';
 import initFonts from './utils/styled/fonts';
@@ -34,13 +35,14 @@ const ZiiirClient = async ({
   root,
   messageListener = ({ type, message }) => ({ type, message }),
   dataset,
-  messages,
+  _messages,
   actions,
 }) => {
   setup({ html, createElement, styled, useRef });
   const ui = await useUI();
   const store = createStore(state);
   const personas = store.messenger.personas || {};
+
   const getAvatar = (message) => {
     let { avatar } = message;
     if (!avatar) {
@@ -48,37 +50,54 @@ const ZiiirClient = async ({
     }
     return avatar;
   };
+
   let handleAction;
+  let getMessages;
+
+  let messages = _messages;
+  let storeMessages = () => {};
+  if (store.messenger.localstorage) {
+    const [storedMessages, _storeMessages] = useLocalStorage('messages');
+    messages = storedMessages || _messages;
+    storeMessages = _storeMessages;
+  }
+
+  const saveMessages = () => {
+    const currentMessages = getMessages();
+    storeMessages(currentMessages);
+  };
+
+  const renderMessage = (message, hasPrevious, hasNext) => {
+    const container = document.getElementsByClassName('ziiir-conversation')[0];
+    const m = createElement(
+      ui.Message,
+      {
+        key: message.created_time,
+        createdtime: message.created_time,
+        avatar: getAvatar(message),
+        fromUser: message.from === 'user',
+        onAction: handleAction,
+        hideDate: state.messenger.hideDate,
+        hasPrevious,
+        hasNext,
+        quickReplies: message.quick_replies,
+      },
+      message.text,
+    );
+    let insert;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const c of container.children) {
+      const createdtime = parseInt(c.getAttribute('created-time'), 10);
+      if (message.created_time < createdtime) {
+        insert = { before: c };
+        break;
+      }
+    }
+    render(m, container, { ...store }, insert);
+  };
+
   const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
-
-    const createMessage = (msg, hasPrevious, hasNext) => {
-      const m = createElement(
-        ui.Message,
-        {
-          key: msg.created_time,
-          createdtime: msg.created_time,
-          avatar: getAvatar(msg),
-          fromUser: msg.from === 'user',
-          onAction: handleAction,
-          hideDate: state.messenger.hideDate,
-          hasPrevious,
-          hasNext,
-          quickReplies: msg.quick_replies,
-        },
-        msg.text,
-      );
-      let insert;
-      // eslint-disable-next-line no-restricted-syntax
-      for (const c of container.children) {
-        const createdtime = parseInt(c.getAttribute('created-time'), 10);
-        if (msg.created_time < createdtime) {
-          insert = { before: c };
-          break;
-        }
-      }
-      render(m, container, { ...store }, insert);
-    };
     if (type === 'newMessage') {
       if (Array.isArray(message)) {
         message.forEach((m, i, ms) => {
@@ -86,16 +105,18 @@ const ZiiirClient = async ({
           const hasPrevious = !!prev && prev.from === m.from && m.created_time - prev.created_time < 2000;
           const next = ms[i + 1];
           const hasNext = !!next && next.from === m.from && next.created_time - m.created_time < 2000;
-          createMessage(m, hasPrevious, hasNext);
+          renderMessage(m, hasPrevious, hasNext);
         });
       } else {
-        createMessage(message);
+        renderMessage(message);
       }
       container.scrollTop = container.scrollHeight;
+      saveMessages();
     } else if (type === 'resetMessages') {
       while (container.firstChild) {
         container.firstChild.remove();
       }
+      saveMessages();
     } else if (type === 'newAction') {
       // console.log('new action', message);
       message.forEach((action) => {
@@ -106,7 +127,7 @@ const ZiiirClient = async ({
     }
     messageListener({ type, message });
   };
-  const [getMessages, createMessage, sendMessage, commands] = await messaging({
+  const [_getMessages, createMessage, sendMessage, commands] = await messaging({
     listener: handleEventMessage,
     messages,
     dataset,
@@ -114,6 +135,7 @@ const ZiiirClient = async ({
     options: state.messenger.dialogOptions,
     actions,
   });
+  getMessages = _getMessages;
   const handleNewMessage = (text) => {
     if (text.charAt(0) === '#') {
       commands(text);
@@ -122,18 +144,21 @@ const ZiiirClient = async ({
       sendMessage(message);
     }
   };
-  let msgs = await getMessages();
-  msgs = msgs.map((_m) => {
-    const m = _m;
-    m.avatar = getAvatar(m);
-    return m;
-  });
+
   handleAction = (action, data) => {
     //  if (action === 'BUTTON') {
     const message = createMessage('user', data);
     sendMessage(message);
     // }
   };
+
+  let msgs = await getMessages();
+  msgs = msgs.map((_m) => {
+    const m = _m;
+    m.avatar = getAvatar(m);
+    return m;
+  });
+
   const el = await MessengerApp(msgs, handleNewMessage, handleAction, state.messenger.hideDate);
   render(el, root, { ...store });
   initFonts(state.theme, 'ziiircom-messenger-frame');
