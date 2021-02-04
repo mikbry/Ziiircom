@@ -106,3 +106,44 @@ test("Messaging dialog unknown input should return I don't understand", async ()
   expect(messages.length).toBe(2);
   expect(messages[1].text).toBe("I don't understand");
 });
+
+test('Messaging dialog actions shoud emit newAction event', async () => {
+  let blob;
+  const handleEventMessage = async (b) => {
+    blob = b;
+  };
+  const messaging = await useMessaging('dialog');
+  expect(messaging).toBeDefined();
+  const [, createMessage, sendMessage] = await messaging({
+    listener: handleEventMessage,
+    dataset: [
+      {
+        input: 'hello',
+        output: { text: 'ok', actions: [{ type: 'test', name: 'action', variables: { v1: 'value' } }] },
+      },
+    ],
+  });
+  await sendMessage(createMessage('user', 'hello'));
+  expect(blob.type).toBe('newAction');
+});
+
+test('Messaging dialog global actions shoud emit newAction event', async () => {
+  let blob;
+  const handleEventMessage = async (b) => {
+    blob = b;
+  };
+  const messaging = await useMessaging('dialog');
+  expect(messaging).toBeDefined();
+  const [, createMessage, sendMessage] = await messaging({
+    listener: handleEventMessage,
+    dataset: [
+      {
+        input: 'hello',
+        output: { text: 'ok', actions: [{ name: 'action' }] },
+      },
+    ],
+    actions: { action: { type: 'action', variables: { v1: 'value' } } },
+  });
+  await sendMessage(createMessage('user', 'hello'));
+  expect(blob.type).toBe('newAction');
+});

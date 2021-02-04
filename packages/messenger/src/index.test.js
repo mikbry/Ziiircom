@@ -13,6 +13,7 @@ import messenger from './index';
 
 beforeEach(() => {
   document.body.innerHTML = '<div></div>';
+  // fetch.mockClear();
 });
 
 test('client should be defined"', () => {
@@ -249,4 +250,46 @@ test('defaultClient should respond to input button', async (done) => {
   expect(input.value).toBe('');
   const button = await screen.findByRole('button');
   button.click();
+});
+
+test('defaultClient with postform action should call fetch', async (done) => {
+  global.encodeURIComponent = jest.fn();
+  const closeMockFetch = mockFetch({});
+  const messageListener = ({ type, message }) => {
+    if (type === 'newAction') {
+      expect(fetch).toHaveBeenCalledTimes(2);
+      done();
+      closeMockFetch();
+      delete global.encodeURIComponent;
+    }
+    return { type, message };
+  };
+  await messenger(
+    {
+      intents: [
+        {
+          input: 'hello',
+          output: {
+            text: 'ok',
+            actions: [
+              { type: 'postform', name: 'action', variables: { v1: 'value' }, params: { p: 'v' } },
+              { type: 'test', name: 'action', variables: { v1: 'value' }, params: {} },
+            ],
+          },
+        },
+      ],
+      messenger: {},
+    },
+    messageListener,
+  );
+  const input = await screen.findByPlaceholderText('Your message');
+  input.value = 'hello';
+  fireEvent(
+    input,
+    new MockupEvent('keyup', {
+      bubbles: true,
+      key: 'Enter',
+    }),
+  );
+  // expect(input.value).toBe('');
 });
