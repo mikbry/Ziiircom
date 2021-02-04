@@ -306,3 +306,10 @@ test("Dialog intent with empty conditional output should display 'i don't unders
   const { response } = buildOutput({ matchs, context });
   expect(response[0]).toBe("I don't understand");
 });
+
+test('Dialog intents with action should send back', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: { text: 'ok', actions: [{ name: 'action' }] } }]);
+  const { matchs } = matchIntent({ text: 'hello' });
+  const { actions } = buildOutput({ matchs });
+  expect(actions[0].name).toBe('action');
+});
