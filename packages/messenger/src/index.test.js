@@ -294,15 +294,23 @@ test('defaultClient with postform action should call fetch', async (done) => {
   // expect(input.value).toBe('');
 });
 
-test('Messenger with state.localstorage=true should call localstorage"', async () => {
+test('Messenger with state.localStorage=true should call localStorage"', async () => {
   Object.defineProperty(window, 'localStorage', {
     value: { getItem: jest.fn() },
   });
-  // eslint-disable-next-line no-proto
-  // jest.spyOn(window.localStorage.__proto__, 'getItem');
-  // localStorage.getItem = jest.fn();
-  // window.localStorage = { getItem: jest.fn() };
-  await messenger({ messenger: { localstorage: true } });
+  await messenger({ messenger: { localStorage: true } });
   expect(window.localStorage.getItem).toHaveBeenCalled();
+  delete window.localStorage;
+});
+
+test('Messenger with state.localStorage=true should return stored messages', async () => {
+  Object.defineProperty(window, 'localStorage', {
+    value: { getItem: jest.fn() },
+  });
+  window.localStorage.getItem = () =>
+    JSON.stringify([{ from: 'bot', avatar: { src: 'bot', name: 'bot' }, text: 'hello' }]);
+  await messenger({ messenger: { localStorage: true } });
+  const conversation = document.getElementsByClassName('ziiir-conversation')[0];
+  expect(conversation.children.length).toBe(1);
   delete window.localStorage;
 });

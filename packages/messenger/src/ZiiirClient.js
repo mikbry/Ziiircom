@@ -56,15 +56,21 @@ const ZiiirClient = async ({
 
   let messages = _messages;
   let storeMessages = () => {};
-  if (store.messenger.localstorage) {
+  if (store.messenger.localStorage) {
     const [storedMessages, _storeMessages] = useLocalStorage('messages');
-    messages = storedMessages || _messages;
+    if (Array.isArray(storedMessages) && storedMessages.length > 0) {
+      messages = storedMessages;
+    }
     storeMessages = _storeMessages;
   }
 
-  const saveMessages = () => {
-    const currentMessages = getMessages();
+  const saveMessages = async () => {
+    const currentMessages = await getMessages();
     storeMessages(currentMessages);
+  };
+
+  const resetMessages = async () => {
+    storeMessages([]);
   };
 
   const renderMessage = (message, hasPrevious, hasNext) => {
@@ -116,7 +122,7 @@ const ZiiirClient = async ({
       while (container.firstChild) {
         container.firstChild.remove();
       }
-      saveMessages();
+      resetMessages();
     } else if (type === 'newAction') {
       // console.log('new action', message);
       message.forEach((action) => {
