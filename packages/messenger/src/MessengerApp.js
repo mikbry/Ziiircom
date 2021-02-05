@@ -31,6 +31,7 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     messenger.firstChild.classList.remove('isexpanded');
     const fab = fabRef.current;
     fab.classList.toggle('isactive');
+    onAction('TOGGLE_MESSENGER', isOpen);
   };
 
   header.onClose = handleFabClick;
@@ -174,6 +175,8 @@ const MessengerApp = async (messages, onMessage, onAction, hideDate) => {
     bottom: 32px;
     z-index: 9;
   `;
+
+  onAction('INIT');
 
   return styled(
     'div',
