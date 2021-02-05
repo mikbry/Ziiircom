@@ -35,7 +35,7 @@ const ZiiirClient = async ({
   root,
   messageListener = ({ type, message }) => ({ type, message }),
   dataset,
-  _messages,
+  messages: _messages,
   actions,
 }) => {
   setup({ html, createElement, styled, useRef });

@@ -257,7 +257,7 @@ test('defaultClient with postform action should call fetch', async (done) => {
   const closeMockFetch = mockFetch({});
   const messageListener = ({ type, message }) => {
     if (type === 'newAction') {
-      expect(fetch).toHaveBeenCalledTimes(2);
+      expect(fetch).toHaveBeenCalled();
       done();
       closeMockFetch();
       delete global.encodeURIComponent;
@@ -292,4 +292,17 @@ test('defaultClient with postform action should call fetch', async (done) => {
     }),
   );
   // expect(input.value).toBe('');
+});
+
+test('Messenger with state.localstorage=true should call localstorage"', async () => {
+  Object.defineProperty(window, 'localStorage', {
+    value: { getItem: jest.fn() },
+  });
+  // eslint-disable-next-line no-proto
+  // jest.spyOn(window.localStorage.__proto__, 'getItem');
+  // localStorage.getItem = jest.fn();
+  // window.localStorage = { getItem: jest.fn() };
+  await messenger({ messenger: { localstorage: true } });
+  expect(window.localStorage.getItem).toHaveBeenCalled();
+  delete window.localStorage;
 });

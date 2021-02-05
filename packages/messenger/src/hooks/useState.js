@@ -1,10 +1,15 @@
 const dispatcher = {
   states: [],
   next: 0,
+  reset() {
+    dispatcher.states = [];
+    dispatcher.next = 0;
+  },
   useState(initialValue) {
     if (dispatcher.next === dispatcher.states.length) {
+      const value = typeof initialValue === 'function' ? initialValue() : initialValue;
       const state = {
-        value: initialValue,
+        value,
         setState(newValue) {
           state.value = newValue;
           dispatcher.next = 0;
@@ -19,3 +24,5 @@ const dispatcher = {
 };
 
 export default dispatcher.useState;
+
+export { dispatcher };
