@@ -11,7 +11,7 @@ import useLocalStorage from './hooks/useLocalStorage';
 import { html, createElement, render, useRef } from './utils/builder';
 import { styled } from './utils/styled';
 import initFonts from './utils/styled/fonts';
-import createStore from './utils/store';
+import useStore from './utils/store';
 import MessengerApp from './MessengerApp';
 
 const postFormAction = (url, variables, params, headers = {}) => {
@@ -40,7 +40,7 @@ const ZiiirClient = async ({
 }) => {
   setup({ html, createElement, styled, useRef });
   const ui = await useUI();
-  const store = createStore(state);
+  const [store, saveStore] = useStore(state);
   const personas = store.messenger.personas || {};
 
   const getAvatar = (message) => {
@@ -151,11 +151,14 @@ const ZiiirClient = async ({
     }
   };
 
-  handleAction = (action, data) => {
-    //  if (action === 'BUTTON') {
-    const message = createMessage('user', data);
-    sendMessage(message);
-    // }
+  handleAction = (action, payload) => {
+    if (action === 'BUTTON') {
+      const message = createMessage('user', payload);
+      sendMessage(message);
+    } else if (action === 'TOGGLE_MESSENGER') {
+      store.messenger.isOpen = payload;
+      saveStore(store);
+    }
   };
 
   let msgs = await getMessages();

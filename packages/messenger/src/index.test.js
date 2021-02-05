@@ -10,10 +10,14 @@
 import { screen, fireEvent } from '@testing-library/dom';
 import { MockupEvent, mockFetch } from '@ziiircom/test';
 import messenger from './index';
+import { dispatcher } from './hooks/useState';
 
 beforeEach(() => {
   document.body.innerHTML = '<div></div>';
-  // fetch.mockClear();
+});
+
+afterEach(() => {
+  dispatcher.reset();
 });
 
 test('client should be defined"', () => {
@@ -307,8 +311,10 @@ test('Messenger with state.localStorage=true should return stored messages', asy
   Object.defineProperty(window, 'localStorage', {
     value: { getItem: jest.fn() },
   });
-  window.localStorage.getItem = () =>
-    JSON.stringify([{ from: 'bot', avatar: { src: 'bot', name: 'bot' }, text: 'hello' }]);
+  window.localStorage.getItem = (key) =>
+    key === 'messages'
+      ? JSON.stringify([{ from: 'bot', avatar: { src: 'bot', name: 'bot' }, text: 'hello' }])
+      : undefined;
   await messenger({ messenger: { localStorage: true } });
   const conversation = document.getElementsByClassName('ziiir-conversation')[0];
   expect(conversation.children.length).toBe(1);
