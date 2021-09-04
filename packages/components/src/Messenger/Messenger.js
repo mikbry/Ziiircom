@@ -209,7 +209,7 @@ const Messenger = ({
 
   if (input.display) {
     inputComponent = e(FooterInput, {
-      className: 'ziir-input',
+      className: 'ziiir-input',
       onKeyUp: handleKey,
       ref: inputRef,
       placeholder: input.placeholder || 'Your message',
