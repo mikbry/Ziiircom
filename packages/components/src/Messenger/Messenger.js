@@ -49,6 +49,7 @@ const StyledMessenger = Interface.styled(Box)`
     padding: 16px;
     width: calc(100% - 32px);
     height: calc(100% - 32px);
+    overflow-x: hidden;
   }
 
   & .ziiir-conversation > div {
@@ -147,10 +148,21 @@ SendButton.defaultProps = {
 };
 
 const e = Interface.createElement;
-const m = (createdtime, msg, fromUser, avatar, onAction, hideDate, hasPrevious, hasNext, quickReplies) =>
+const m = (createdtime, msg, fromUser, avatar, onAction, hideDate, hasPrevious, hasNext, quickReplies, template) =>
   e(
     Message,
-    { key: createdtime, createdtime, avatar, fromUser, onAction, hideDate, hasPrevious, hasNext, quickReplies },
+    {
+      key: createdtime,
+      createdtime,
+      avatar,
+      fromUser,
+      onAction,
+      hideDate,
+      hasPrevious,
+      hasNext,
+      quickReplies,
+      template,
+    },
     msg,
   );
 const Messenger = ({
@@ -185,6 +197,7 @@ const Messenger = ({
           hasPrevious,
           hasNext,
           msg.quick_replies,
+          msg.template,
         );
       }),
   );

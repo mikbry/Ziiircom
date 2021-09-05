@@ -14,7 +14,7 @@ const Theme = {
     surface: '#F0F0F0',
     onPrimary: 'white',
     onSecondary: 'white',
-    onBackground: 'dark',
+    onBackground: 'black',
     onSurface: 'gray',
     disabledText: 'lightGrey',
     border: '#EAEAEA',
