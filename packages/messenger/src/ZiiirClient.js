@@ -87,6 +87,7 @@ const ZiiirClient = async ({
         hasPrevious,
         hasNext,
         quickReplies: message.quick_replies,
+        template: message.template,
       },
       message.text,
     );

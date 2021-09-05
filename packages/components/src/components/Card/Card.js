@@ -76,7 +76,7 @@ const Card = ({ title, imageUrl, buttons = [], onAction = () => {}, defaultActio
     { onClick: handleDefaultAction },
     e('img', { src: imageUrl }),
     e('p', null, title),
-    buttonsComponents,
+    ...buttonsComponents,
   );
 };
 export default Card;

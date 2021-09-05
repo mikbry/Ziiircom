@@ -149,6 +149,7 @@ const generateOutput = (match, _context) => {
   let context = _context;
   const response = [];
   let quickReplies;
+  let template;
   let actions;
   // Store in context all variables changed
   if (intent.set) {
@@ -176,6 +177,7 @@ const generateOutput = (match, _context) => {
       ({ text } = output);
     }
     quickReplies = output.quick_replies;
+    template = output.template;
     ({ actions } = output);
     entities.forEach((e) => {
       if (e.name) {
@@ -205,7 +207,7 @@ const generateOutput = (match, _context) => {
       });
     });
   }
-  return [response, context, quickReplies, entities, actions];
+  return [response, context, quickReplies, template, entities, actions];
 };
 
 const Dialog = (_intents, initialContexts, options = { fallback: "I don't understand" }) => {
@@ -227,9 +229,10 @@ const Dialog = (_intents, initialContexts, options = { fallback: "I don't unders
     let response = [];
     let entities;
     let quickReplies;
+    let template;
     let actions;
     if (matchs[matchIndex]) {
-      [response, context, quickReplies, entities, actions] = generateOutput(matchs[matchIndex], context);
+      [response, context, quickReplies, template, entities, actions] = generateOutput(matchs[matchIndex], context);
       contexts[userId] = context;
     }
     if (response.length === 0) {
@@ -239,6 +242,9 @@ const Dialog = (_intents, initialContexts, options = { fallback: "I don't unders
     const output = { response, context, entities, userId };
     if (quickReplies) {
       output.quick_replies = quickReplies;
+    }
+    if (template) {
+      output.template = template;
     }
     if (actions) {
       output.actions = actions;

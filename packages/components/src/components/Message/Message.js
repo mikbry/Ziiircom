@@ -221,7 +221,7 @@ const Message = ({
   const handleTemplateAction = (event, payload) => {
     event.stopPropagation();
     event.preventDefault();
-    onAction(event.target.tagName, payload);
+    onAction('BUTTON', payload);
     const parent = event.target.parentNode;
     parent.parentNode.style.display = 'none';
   };
