@@ -7,6 +7,7 @@
  */
 import { friendlyDate } from '@ziiircom/common';
 import Interface from '../../interface';
+import Carousel from '../Carousel';
 import Theme from '../../Theme';
 
 const buttonBorder = (palette, border = 'none') =>
@@ -19,7 +20,6 @@ const Styled = Interface.styled('div')`
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 80%;
   margin: ${(props) => (props.hasPrevious ? '-16px' : '12px')} 0px 0px;
 
   cursor: default;
@@ -31,9 +31,12 @@ const Styled = Interface.styled('div')`
   }
 
   & > div {
-    margin-left: ${(props) => (props.fromUser ? 'auto' : '0px')};
+    display: flex;
+    flex-direction: column;
+    align-items: ${(props) => (props.fromUser ? 'flex-end' : 'flex-start')};
     animation: 0.3s cubic-bezier(0, 0, 0.2, 1) 0s 1 normal both running ${(props) =>
       props.fromUser ? 'enterMessageFromUser' : 'enterMessageFromBot'};
+    width: 100%;
   }
   & > div > p {
     background-color: ${(props) => (props.fromUser ? props.theme.palette.surface : props.theme.palette.secondary)};
@@ -51,6 +54,7 @@ const Styled = Interface.styled('div')`
     }};
     overflow-wrap: break-word;
     line-height: 1.44;
+    width: fit-content;
   }
   & > div > span {
     text-align: ${(props) => (props.fromUser ? 'right' : 'left')};
@@ -179,11 +183,12 @@ const Message = ({
   avatar,
   fromUser = true,
   children,
-  onAction,
+  onAction = () => {},
   hideDate = false,
   hasPrevious = false,
   hasNext = false,
   quickReplies,
+  template,
 }) => {
   const meta = friendlyDate(createdtime);
   let html = children;
@@ -213,6 +218,26 @@ const Message = ({
     parent.style.display = 'none';
   };
 
+  const handleTemplateAction = (event, payload) => {
+    event.stopPropagation();
+    event.preventDefault();
+    onAction(event.target.tagName, payload);
+    const parent = event.target.parentNode;
+    parent.parentNode.style.display = 'none';
+  };
+
+  let lastComponent;
+  if (quickReplies) {
+    lastComponent = e(
+      StyledReplies,
+      {},
+      quickReplies.map((qr) => e('button', { key: qr.title, onClick: handleQuickClick }, qr.title)),
+    );
+  } else if (template) {
+    lastComponent = e(Carousel, { ...template, onAction: handleTemplateAction });
+  } else if (!hideDate && !hasNext) {
+    lastComponent = e('span', null, meta);
+  }
   return e(
     Styled,
     { fromUser, 'created-time': createdtime, hasPrevious, hasNext },
@@ -221,13 +246,14 @@ const Message = ({
       'div',
       { onClick: handleClick },
       e('p', { dangerouslySetInnerHTML: html }, body),
-      !hideDate && !quickReplies && !hasNext && e('span', null, meta),
+      lastComponent,
+      /* !hideDate && !quickReplies && !hasNext && e('span', null, meta),
       quickReplies &&
         e(
           StyledReplies,
           {},
           quickReplies.map((qr) => e('button', { key: qr.title, onClick: handleQuickClick }, qr.title)),
-        ),
+        ), */
     ),
   );
 };
