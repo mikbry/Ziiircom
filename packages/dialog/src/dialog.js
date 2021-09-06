@@ -7,59 +7,6 @@
  */
 import { deepCopy } from '@ziiircom/common';
 
-const preprocessSentence = (sentence, set = {}) => {
-  const text = sentence.replace(/<<\s*([\w.]+)\s*=\s*(.+?)\s*>>/g, (match, name, value) => {
-    // eslint-disable-next-line no-param-reassign
-    set[name] = value;
-    return '';
-  });
-  return { text, set };
-};
-
-const preprocessOutput = (output) => {
-  let sentence;
-  if (Array.isArray(output)) {
-    // Sentence is an Array
-    sentence = output.map((s) => preprocessOutput(s));
-  } else if (output.text) {
-    // Sentence is an object
-    sentence = output;
-    if (Array.isArray(sentence.text)) {
-      // Sentence.text is an array
-      sentence.text.forEach((t, j) => {
-        ({ text: sentence.text[j], set: sentence.set } = preprocessSentence(t, sentence.set));
-      });
-    } else {
-      // Sentence.text is a string
-      ({ text: sentence.text, set: sentence.set } = preprocessSentence(sentence.text, sentence.set));
-    }
-    if (Object.keys(sentence.set).length === 0) {
-      delete sentence.set;
-    }
-  } else {
-    // Sentence is a string
-    const { text, set } = preprocessSentence(output);
-    if (Object.keys(set).length) {
-      sentence = { text, set };
-    } else {
-      sentence = text;
-    }
-  }
-  return sentence;
-};
-
-const preprocessIntent = (_intent) => {
-  const intent = deepCopy(_intent);
-  const { output } = intent;
-  if (Array.isArray(output) && output.length && output[0].type === 'condition') {
-    intent.output = intent.output.map((o) => ({ ...o, children: preprocessOutput(o.children) }));
-  } else {
-    intent.output = preprocessOutput(output);
-  }
-
-  return intent;
-};
-
 const getValue = (_value, entities) => {
   let value = _value;
   /* istanbul ignore next */
@@ -71,14 +18,21 @@ const getValue = (_value, entities) => {
 
 const renderTemplate = (template, context, entities) => {
   const set = {};
-  const response = template.replace(/{{\s*([\w.]+)\s*(=\s*(.+?)\s*)*}}/g, (match, _name, eq, replace) => {
-    const name = _name.trim();
-    if (eq) {
-      set[name] = getValue(replace, entities);
-    }
-    const value = set[name] || context[name] || '';
-    return value;
-  });
+  const response = template.replace(
+    /(<<|{{)\s*([\w.]+)\s*(=\s*(.+?)\s*)*(}}|>>)/g,
+    (match, first, _name, eq, replace) => {
+      const name = _name.trim();
+      if (first === '<<') {
+        set[name] = getValue(replace, entities);
+        return '';
+      }
+      if (eq) {
+        set[name] = getValue(replace, entities);
+      }
+      const value = set[name] || context[name] || '';
+      return value;
+    },
+  );
   return { response, set };
 };
 
@@ -192,6 +146,7 @@ const generateOutput = (match, _context) => {
       if (txt.text) {
         txt = txt.text;
       }
+
       const r = renderTemplate(txt, context, entities);
       response.push(r.response);
       if (Object.keys(r.set).length) {
@@ -253,7 +208,7 @@ const Dialog = (_intents, initialContexts, options = { fallback: "I don't unders
   };
 
   if (_intents && Array.isArray(_intents) && _intents.length) {
-    const intents = _intents.map((i) => preprocessIntent(i));
+    const intents = _intents;
     let m;
     let entities;
     const matchIntent = (message, userId = 'user') => {

@@ -184,6 +184,17 @@ test('Dialog intents inline assigned variable should display correctly', () => {
   expect(ctx.var).toBe('hello');
 });
 
+test('Dialog intents previous inline assigned variable should display correctly', () => {
+  const [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: ['<<var=*>>ok {{var}}'] }]);
+  const { matchs, context } = matchIntent({ text: 'hello' });
+  const { response, entities, context: ctx } = buildOutput({ matchs, context });
+  expect(response[0]).toBe('ok hello');
+  expect(entities.length).toBe(1);
+  expect(entities[0].type).toBe('any');
+  expect(entities[0].value).toBe('hello');
+  expect(ctx.var).toBe('hello');
+});
+
 test('Dialog links should display correctly', () => {
   let [matchIntent, buildOutput] = Dialog([{ input: ['*'], output: 'ok [link](https://url)' }]);
   let { matchs, context } = matchIntent({ text: 'hello' });
