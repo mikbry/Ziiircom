@@ -58,6 +58,10 @@ CarouselStyled.defaultProps = {
   theme: Theme,
 };
 
+CarouselStyledAlt.defaultProps = {
+  theme: Theme,
+};
+
 const Scroll = Interface.styled('div')`
    width: calc(100% + 18px);
    margin-left: -8px;
