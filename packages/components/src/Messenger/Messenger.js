@@ -255,7 +255,7 @@ const Messenger = ({
     { className: isExpanded ? 'isexpanded' : undefined, onClick },
     e(MessengerHeader, header, headerText),
     Messages,
-    e('p', null, 'Powered by ', e('a', { href: 'https://ziiir.com', target: '_blank' }, 'ziiir.com')),
+    // e('p', null, 'Powered by ', e('a', { href: 'https://ziiir.com', target: '_blank' }, 'ziiir.com')),
     e(MessengerFooter, null, inputComponent),
   );
 };

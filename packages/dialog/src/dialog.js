@@ -50,6 +50,9 @@ const htmlRenderer = (message) => {
       label = label.substring(label.lastIndexOf('/') + 1, label.lastIndexOf('.'));
     }
     if (imgUrl) {
+      if (complexLabel && (!complexUrl || complexUrl.length === 0)) {
+        return `<img src="${imgUrl}" alt="${label}" />`;
+      }
       return `<a href="${url}" target="_blank" rel="noopener noreferrer"><img src="${imgUrl}" alt="${label}" /></a>`;
     }
     return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;

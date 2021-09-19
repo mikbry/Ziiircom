@@ -37,12 +37,30 @@ const CarouselStyled = Interface.styled('div')`
     }
   `;
 
+const CarouselStyledAlt = Interface.styled('div')`
+  font-size: 1em;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  font-family: ${(props) => props.theme.font.family};
+  font-weight: ${(props) => props.theme.font.weight};
+  margin: 0;
+  padding: 0;
+  & > div {
+   margin-right: 8px;
+   margin-bottom: 8px;
+   margin-top: 16px;
+   border-radius: ${(props) => props.theme.message.radius}px;
+  }
+`;
+
 CarouselStyled.defaultProps = {
   theme: Theme,
 };
 
 const Scroll = Interface.styled('div')`
-   width: 100%;
+   width: calc(100% + 18px);
+   margin-left: -8px;
    overflow-x: auto;
 `;
 
@@ -51,7 +69,7 @@ CarouselStyled.defaultProps = {
 };
 
 const e = Interface.createElement;
-const Carousel = ({ elements, onAction = () => {} }) => {
+const Carousel = ({ elements, onAction = () => {}, alt = true }) => {
   const cardsComponents = [];
   elements.forEach((element, index) => {
     const button = e(Card, {
@@ -62,7 +80,11 @@ const Carousel = ({ elements, onAction = () => {} }) => {
     });
     cardsComponents.push(button);
   });
-  const scrollContainer = e(CarouselStyled, undefined, cardsComponents);
+  let Styled = CarouselStyled;
+  if (alt) {
+    Styled = CarouselStyledAlt;
+  }
+  const scrollContainer = e(Styled, undefined, cardsComponents);
   return e(Scroll, undefined, scrollContainer);
 };
 export default Carousel;

@@ -36,7 +36,7 @@ const Styled = Interface.styled('div')`
     align-items: ${(props) => (props.fromUser ? 'flex-end' : 'flex-start')};
     animation: 0.3s cubic-bezier(0, 0, 0.2, 1) 0s 1 normal both running ${(props) =>
       props.fromUser ? 'enterMessageFromUser' : 'enterMessageFromBot'};
-    width: 100%;
+    width: 96%;
   }
   & > div > p {
     background-color: ${(props) => (props.fromUser ? props.theme.palette.surface : props.theme.palette.secondary)};
@@ -55,6 +55,7 @@ const Styled = Interface.styled('div')`
     overflow-wrap: break-word;
     line-height: 1.44;
     width: fit-content;
+    max-width: 82%;
   }
   & > div > span {
     text-align: ${(props) => (props.fromUser ? 'right' : 'left')};
@@ -70,9 +71,10 @@ const Styled = Interface.styled('div')`
     color: ${(props) => props.theme.palette.link || 'inherit'};
   }
   & > div > p > a > img {
+    max-width: 100%;
     display: initial;
   }
-  & > div > p > button {
+  & > div button {
     border: ${(props) => buttonBorder(props.theme.palette)};
     border-radius: 4px;
     min-height: 24px;
@@ -85,7 +87,7 @@ const Styled = Interface.styled('div')`
     font-weight: ${(props) => props.theme.font.weight};
     padding: 1px 6px;
   }
-  & > div > p > button:focus {
+  & > div button:focus {
     outline: none !important;
   }
   @keyframes enterMessageFromUser {
@@ -110,6 +112,26 @@ const Styled = Interface.styled('div')`
       transform: translate( 0, 0 );
       opacity: 1;
     }
+  }
+`;
+
+const Template = Interface.styled('div')`
+  background: none;
+  & button {
+    border: ${(props) => buttonBorder(props.theme.palette)};
+    border-radius: 4px;
+    min-height: 24px;
+    margin: 8px 4px;
+    background: ${(props) => buttonBackgroundColor(props.theme.palette)};
+    color: ${(props) => buttonColor(props.theme.palette)};
+    cursor: pointer;
+    font-size: 16px;
+    font-family: ${(props) => props.theme.font.family};
+    font-weight: ${(props) => props.theme.font.weight};
+    padding: 1px 6px;
+  }
+  & button:focus {
+    outline: none !important;
   }
 `;
 
@@ -231,31 +253,28 @@ const Message = ({
     lastComponent = e(
       StyledReplies,
       {},
-      quickReplies.map((qr) => e('button', { key: qr.title, onClick: handleQuickClick }, qr.title)),
+      quickReplies.map((qr) =>
+        e('button', { key: qr.title, className: 'ziiir-quickreply', onClick: handleQuickClick }, qr.title),
+      ),
     );
-  } else if (template) {
+  } /* else if (template) {
     lastComponent = e(Carousel, { ...template, onAction: handleTemplateAction });
-  } else if (!hideDate && !hasNext) {
+  } */ else if (
+    !hideDate &&
+    !hasNext
+  ) {
     lastComponent = e('span', null, meta);
   }
-  return e(
+  const messageContainer = e(
     Styled,
     { fromUser, 'created-time': createdtime, hasPrevious, hasNext },
     avatar && (hasNext ? e(EmptyAvatar) : e(Avatar, { src: avatar.src, alt: avatar.name })),
-    e(
-      'div',
-      { onClick: handleClick },
-      e('p', { dangerouslySetInnerHTML: html }, body),
-      lastComponent,
-      /* !hideDate && !quickReplies && !hasNext && e('span', null, meta),
-      quickReplies &&
-        e(
-          StyledReplies,
-          {},
-          quickReplies.map((qr) => e('button', { key: qr.title, onClick: handleQuickClick }, qr.title)),
-        ), */
-    ),
+    e('div', { onClick: handleClick }, e('p', { dangerouslySetInnerHTML: html }, body), lastComponent),
   );
+  if (template) {
+    return e(Template, {}, messageContainer, e(Carousel, { ...template, onAction: handleTemplateAction }));
+  }
+  return messageContainer;
 };
 
 export default Message;

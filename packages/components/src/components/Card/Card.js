@@ -17,17 +17,17 @@ const CardStyled = Interface.styled('div')`
    font-weight: ${(props) => props.theme.font.weight};
    margin: 0;
    padding: 0;
-   border-radius: 3px;
    color: ${(props) => props.theme.palette.secondary};
    border: 1px solid ${(props) => props.theme.palette.border};
-   background: none;
+   background-color: ${(props) => props.theme.palette.secondary};
    cursor: pointer;
    & > p {
-    margin: 0.6em 0.3em;
-    color: ${(props) => props.theme.palette.onBackground};
+    margin: 8px;
+    color: ${(props) => props.theme.palette.onSecondary};
    }
    & > img {
-    max-width: 180px;
+    max-width: 200px;
+    margin: 8px;
    }
  `;
 
@@ -39,18 +39,16 @@ const ButtonStyled = Interface.styled('button')`
    font-size: 1em;
    font-family: ${(props) => props.theme.font.family};
    font-weight: ${(props) => props.theme.font.weight};
-   margin: 0;
-   padding: 0.6em 1em;
+   margin: 8px;
+   padding: 0.3em 1em;
+   border-radius: 3px;
    color: ${(props) => props.theme.palette.secondary};
-   border-top: 1px solid ${(props) => props.theme.palette.border} !important;
-   border: none;
    background: none;
    cursor: pointer;
    &:hover {
-     color: ${(props) => props.theme.palette.onSecondary};
-     border-top: 1px solid ${(props) => props.theme.palette.secondary};
-     background: ${(props) => props.theme.palette.secondary};
-   }
+    color: ${(props) => props.theme.palette.onSecondary};
+    border: 2px solid ${(props) => props.theme.palette.secondary};
+    background: ${(props) => props.theme.palette.secondary};   }
  `;
 
 ButtonStyled.defaultProps = {
