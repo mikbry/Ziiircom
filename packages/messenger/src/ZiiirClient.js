@@ -29,6 +29,53 @@ const postFormAction = (url, variables, params, headers = {}) => {
   });
 };
 
+const postJSONAction = async (url, variables, params, headers = {}, type = 'json') => {
+  const json = {};
+  Object.keys(params).forEach((key) => {
+    const a = key.split('.');
+    let value = variables[params[key]];
+    if (value[0] === '[') {
+      value = JSON.parse(value);
+    }
+    if (a.length === 1) {
+      json[a[0]] = value;
+    } else if (a.length === 2) {
+      if (!json[a[0]]) {
+        json[a[0]] = {};
+      }
+      json[a[0]][a[1]] = value;
+    }
+  });
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(json),
+    });
+    if (!response.ok) {
+      const payload = await response.text();
+      throw new Error(`${response.statusText} ${payload}`);
+    }
+    if (type === 'json') {
+      return response.json();
+    }
+    if (type === 'blob') {
+      const blob = await response.blob();
+      const file = window.URL.createObjectURL(blob);
+      window.location.assign(file);
+    }
+    return undefined;
+  } catch (error) {
+    console.error(error);
+    return error.toString();
+  }
+};
+
 const ZiiirClient = async ({
   state,
   messaging,
@@ -56,12 +103,24 @@ const ZiiirClient = async ({
 
   let messages = _messages;
   let storeMessages = () => {};
+  let { contexts } = state;
+  let storeContexts = () => {};
   if (store.messenger.localStorage) {
     const [storedMessages, _storeMessages] = useLocalStorage('messages');
     if (Array.isArray(storedMessages) && storedMessages.length > 0) {
-      messages = storedMessages;
+      messages = storedMessages.map((m, index) => {
+        if (index < storedMessages.length - 1) {
+          return { ...m, quick_replies: undefined };
+        }
+        return m;
+      });
     }
     storeMessages = _storeMessages;
+    const [storedContexts, _storeContexts] = useLocalStorage('contexts');
+    if (storedContexts && Object.keys(storedContexts).length > 0) {
+      contexts = storedContexts;
+    }
+    storeContexts = _storeContexts;
   }
 
   const saveMessages = async () => {
@@ -105,6 +164,7 @@ const ZiiirClient = async ({
 
   const handleEventMessage = async ({ type, message }) => {
     const container = document.getElementsByClassName('ziiir-conversation')[0];
+    let response;
     if (type === 'newMessage') {
       if (Array.isArray(message)) {
         message.forEach((m, i, ms) => {
@@ -125,22 +185,35 @@ const ZiiirClient = async ({
       }
       resetMessages();
     } else if (type === 'newAction') {
-      // console.log('new action', message);
-      message.forEach((action) => {
+      const handle = async (action) => {
         if (action.type === 'postform') {
           postFormAction(action.url, action.variables, action.params, action.headers);
+        } else if (action.type === 'postjson') {
+          response = await postJSONAction(action.url, action.variables, action.params, action.headers);
+        } else if (action.type === 'postjsondownload') {
+          response = await postJSONAction(action.url, action.variables, action.params, action.headers, 'blob');
         }
-      });
+      };
+      if (message.length === 1) {
+        await handle(message[0]);
+      } else {
+        message.forEach((action) => {
+          handle(action);
+        });
+      }
     }
     messageListener({ type, message });
+    return response;
   };
+
   const [_getMessages, createMessage, sendMessage, commands] = await messaging({
     listener: handleEventMessage,
     messages,
     dataset,
-    contexts: state.contexts,
+    contexts,
     options: state.messenger.dialogOptions,
     actions,
+    storeContexts,
   });
   getMessages = _getMessages;
   const handleNewMessage = (text) => {

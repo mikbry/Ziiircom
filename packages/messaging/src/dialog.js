@@ -15,6 +15,7 @@ const useDialog = async ({
   dataset: intents,
   messages,
   contexts: _contexts = {},
+  storeContexts,
   options,
   actions: globalActions,
 }) => {
@@ -55,14 +56,22 @@ const useDialog = async ({
         });
         return { ...action, variables, userId };
       });
-      await listener({ type: 'newAction', message: newActions });
+      const payload = await listener({ type: 'newAction', message: newActions });
+      if (payload) {
+        const msg = createMessage('bot', payload);
+        msg.to = userId;
+        addMessage(msg);
+        await listener({ type: 'newMessage', message: [msg] });
+      }
     }
+    storeContexts(contexts);
   };
 
   const commands = async (type) => {
     if (type === '#reset') {
       Object.keys(contexts).forEach((id) => {
         delete contexts[id];
+        storeContexts(contexts);
       });
     }
     return cmds(type);

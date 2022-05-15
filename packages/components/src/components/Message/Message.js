@@ -74,6 +74,10 @@ const Styled = Interface.styled('div')`
     max-width: 100%;
     display: initial;
   }
+  & > div > p > img {
+    max-width: 100%;
+    display: initial;
+  }
   & > div button {
     border: ${(props) => buttonBorder(props.theme.palette)};
     border-radius: 4px;
